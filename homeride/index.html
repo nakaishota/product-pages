@@ -1,637 +1,378 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>HomeRide — ロック画面だけで、乗換が完結。</title>
-<meta name="description" content="HomeRide は Live Activity を活かした iOS 向け乗換支援アプリ。アプリを開かず、ロック画面のひと目で次に乗る電車・行き先・発車時刻が分かる。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>HomeRide — ロック画面だけで、乗換が完結。</title>
+  <meta name="description" content="HomeRide は Live Activity を活かした iOS 向け乗換支援アプリ。アプリを開かず、ロック画面のひと目で次に乗る電車・行き先・発車時刻が分かる。">
+  <meta name="theme-color" content="#000000">
+  <link rel="canonical" href="https://nakaishota.github.io/product-pages/homeride/">
+
+  <!-- OGP / SNS シェア -->
+  <meta property="og:title" content="HomeRide — ロック画面だけで、乗換が完結。">
+  <meta property="og:description" content="HomeRide は Live Activity を活かした iOS 向け乗換支援アプリ。アプリを開かず、ロック画面のひと目で次に乗る電車・行き先・発車時刻が分かる。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nakaishota.github.io/product-pages/homeride/">
+  <meta property="og:image" content="https://nakaishota.github.io/product-pages/homeride/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HomeRide — ロック画面だけで、乗換が完結。">
+  <meta name="twitter:description" content="HomeRide は Live Activity を活かした iOS 向け乗換支援アプリ。アプリを開かず、ロック画面のひと目で次に乗る電車・行き先・発車時刻が分かる。">
+  <meta name="twitter:image" content="https://nakaishota.github.io/product-pages/homeride/og-image.png">
+
+  <!-- ファビコン（外部ファイルを増やさないインライン SVG） -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000000'/%3E%3Ctext x='16' y='24' font-family='Arial,Helvetica,sans-serif' font-size='23' font-weight='900' fill='%23ff8a00' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body id="top">
 
-<!-- ───────── DEV NOTICE ───────── -->
-<div class="dev-notice" role="note">
-  <div class="dev-notice__inner">
-    <span class="dev-notice__tag">DEVELOPMENT</span>
-    <span class="dev-notice__text">本アプリは現在開発中です。デザイン・機能・画面構成は今後変更される可能性があります。</span>
+  <!-- ======= 開発中注記 ======= -->
+  <div class="notice" role="note">
+    <span class="notice__tag">DEVELOPMENT</span>
+    <p class="notice__text">本アプリは現在開発中です。デザイン・機能・画面構成は今後変更される可能性があります。</p>
   </div>
-</div>
 
-<!-- ───────── NAV ───────── -->
-<header class="nav" id="nav">
-  <div class="nav__inner">
-    <a class="brand" href="#top" aria-label="HomeRide">
-      <span class="brand__mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="20" height="20">
-          <path d="M3 11 L12 4 L21 11 V20 a1 1 0 0 1-1 1 H14 V14 H10 V21 H4 a1 1 0 0 1-1-1 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-        </svg>
-      </span>
-      <span class="brand__name">HomeRide</span>
-    </a>
-    <nav class="nav__links" aria-label="セクション">
-      <a href="#concept">コンセプト</a>
-      <a href="#compare">比較</a>
-      <a href="#breakdown">情報設計</a>
-      <a href="#screens">画面</a>
-      <a href="#testflight" class="nav__cta">TestFlight</a>
-    </nav>
-  </div>
-</header>
+  <!-- ======= ナビ ======= -->
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__logo" href="#top">HomeRide</a>
+      <nav class="nav__links" aria-label="ページ内ナビゲーション">
+        <a href="#concept">コンセプト</a>
+        <a href="#compare">比較</a>
+        <a href="#breakdown">情報設計</a>
+        <a href="#screens">画面</a>
+      </nav>
+      <a class="btn btn--primary btn--sm" href="#testflight">TestFlight</a>
+    </div>
+  </header>
 
-<main id="top">
+  <main>
 
-<!-- ───────── HERO ───────── -->
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero__grid">
+    <!-- ======= HERO : ページ自体がロック画面 ======= -->
+    <section class="hero" data-screen-label="ヒーロー（ロック画面）">
+      <div class="hero__ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="hero__edge" aria-hidden="true"></div>
+      <div class="hero__stage" aria-label="ロック画面の Live Activity 表示イメージ">
+        <p class="hero__date">6月12日 金曜日</p>
+        <p class="hero__clock">19:43</p>
 
-    <div class="hero__copy reveal">
-      <div class="eyebrow">
-        <span class="eyebrow__dot"></span>
-        Coming soon to the App Store
-      </div>
-      <h1 id="hero-title" class="display">
-        ロック画面だけで、<br>
-        <span class="accent">乗換が完結。</span>
-      </h1>
-      <p class="lede">
-        HomeRide は、アプリを開かなくていい乗換アプリ。<br>
-        次に乗る電車・行き先・発車時刻を、<br>
-        ロック画面の Live Activity に常駐させます。
-      </p>
+        <div class="la-card la-card--hero">
+          <p class="la-card__next">次の乗換：<strong>三越前</strong> 19:46着</p>
+          <div class="la-card__main">
+            <span class="line-badge line-badge--ginza" aria-hidden="true">G</span>
+            <span class="la-card__train">銀座線 浅草方面</span>
+            <span class="la-card__time">19:50<small>発</small></span>
+          </div>
+          <div class="route" aria-hidden="true">
+            <span class="route__stop route__stop--done"></span><span class="route__seg route__seg--done"></span><span class="route__stop route__stop--done"></span><span class="route__seg route__seg--done"></span><span class="route__stop route__stop--next"></span><span class="route__seg"></span><span class="route__stop"></span><span class="route__seg"></span><span class="route__stop"></span>
+          </div>
+          <div class="route-labels" aria-hidden="true">
+            <span>渋谷</span><span>大手町</span><span class="is-next">三越前</span><span>上野</span><span>浅草</span>
+          </div>
+          <div class="la-card__now">
+            <span class="line-badge line-badge--sm line-badge--hanzomon" aria-hidden="true">Z</span>
+            <span>現在乗車中　半蔵門線 押上方面（各駅停車）</span>
+          </div>
+        </div>
 
-      <div class="hero__cta">
-        <a class="btn btn--primary" href="#testflight">TestFlight で試す</a>
-        <a class="btn btn--ghost" href="#concept">コンセプトを見る</a>
+        <p class="hero__hint">スワイプして開く</p>
       </div>
 
-      <ul class="hero__meta">
-        <li><strong>iOS 16.1+</strong><span>Live Activity 対応</span></li>
-        <li><strong>0 タップ</strong><span>アプリ起動不要</span></li>
-        <li><strong>首都圏 13 路線+</strong><span>東京メトロ・都営ほか</span></li>
-      </ul>
-    </div>
-
-    <!-- iPhone with Lock Screen Live Activity (CSS-rendered for crispness) -->
-    <div class="hero__device reveal" aria-hidden="true">
-      <div class="device device--lock">
-        <div class="device__notch"></div>
-        <div class="device__side device__side--vol-up"></div>
-        <div class="device__side device__side--vol-down"></div>
-        <div class="device__side device__side--power"></div>
-        <div class="device__power-label">電源ボタン<br>1 押し</div>
-
-        <div class="device__screen lockscreen">
-          <div class="lockscreen__statusbar">
-            <span class="lockscreen__signal">
-              <span></span><span></span><span></span><span></span>
-            </span>
-            <span class="lockscreen__wifi">
-              <svg viewBox="0 0 16 12" width="15" height="11" fill="currentColor"><path d="M8 11.5a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4ZM3.4 7.2l1.1 1.1a5 5 0 0 1 7 0l1.1-1.1a6.6 6.6 0 0 0-9.2 0ZM.7 4.5l1.1 1.1a8.9 8.9 0 0 1 12.4 0l1.1-1.1a10.5 10.5 0 0 0-14.6 0Z"/></svg>
-            </span>
-            <span class="lockscreen__battery"><span></span></span>
-          </div>
-
-          <div class="lockscreen__clock">
-            <div class="lockscreen__date">6月12日 金曜日</div>
-            <div class="lockscreen__time">19<span class="colon">:</span>43</div>
-          </div>
-
-          <!-- Live Activity widget -->
-          <div class="la">
-            <div class="la__row la__row--next">
-              <span class="la__bolt" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-              </span>
-              <span class="la__label">次の乗換：三越前</span>
-              <span class="la__time">19:46着</span>
-            </div>
-
-            <div class="la__train">
-              <div class="la__badge">G</div>
-              <div class="la__train-meta">
-                <div class="la__line">銀座線 <span class="la__dir">浅草方面</span></div>
-                <div class="la__depart"><span class="la__depart-time">19:50発</span></div>
-              </div>
-            </div>
-
-            <div class="la__steps" role="img" aria-label="乗換ステップ">
-              <span class="la__step la__step--past">渋谷</span>
-              <span class="la__line-track"><span></span></span>
-              <span class="la__step la__step--past">大手町</span>
-              <span class="la__line-track"><span></span></span>
-              <span class="la__step la__step--current">
-                <svg viewBox="0 0 24 24" width="11" height="11" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-                三越前
-              </span>
-              <span class="la__line-track"><span></span></span>
-              <span class="la__step">上野</span>
-              <span class="la__line-track"><span></span></span>
-              <span class="la__step">浅草</span>
-            </div>
-
-            <div class="la__divider"><span>現在乗車中</span></div>
-            <div class="la__now">半蔵門線　押上方面（各駅停車）</div>
-          </div>
-
-          <div class="lockscreen__hint">スワイプして開く</div>
+      <div class="hero__copy">
+        <p class="eyebrow"><span class="eyebrow__dot" aria-hidden="true"></span>COMING SOON — iOS 16.1+</p>
+        <h1 class="hero__title">ロック画面だけで、<br>乗換が<em>完結</em>。</h1>
+        <p class="hero__lead">HomeRide は、アプリを開かなくていい乗換アプリ。<br class="u-br">次に乗る電車・行き先・発車時刻を、<br class="u-br">ロック画面の Live Activity に常駐させます。</p>
+        <div class="cta-row">
+          <a class="btn btn--primary" href="#testflight">TestFlight で試す</a>
+          <a class="btn btn--ghost" href="#concept">コンセプトを見る</a>
         </div>
-      </div>
-
-      <!-- side annotation -->
-      <div class="hero__callout">
-        <div class="hero__callout-dot"></div>
-        <div>
-          <div class="hero__callout-title">アプリは、開かない。</div>
-          <div class="hero__callout-sub">ロック画面で、ここまで分かる。</div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="hero__scroll">scroll</div>
-</section>
-
-
-<!-- ───────── BIG STATEMENT ───────── -->
-<section class="statement" id="concept">
-  <div class="container">
-    <p class="statement__kicker">CONCEPT</p>
-    <h2 class="statement__h">
-      これからの乗換は、<br>
-      <em>「開く」</em>ものじゃなく、<br>
-      <em>「見える」</em>もの。
-    </h2>
-    <p class="statement__p">
-      改札の前で立ち止まり、画面の小さな文字を追う時間を、<br>
-      HomeRide はゼロにする。次に乗るべき電車だけを、最初に、最大で見せる。
-    </p>
-  </div>
-</section>
-
-
-<!-- ───────── COMPARE ───────── -->
-<section class="compare" id="compare">
-  <div class="container">
-    <header class="section-head">
-      <p class="kicker">SECTION 02</p>
-      <h2 class="section-title">乗換確認 5 ステップが、<span class="accent">1 ステップ</span>に。</h2>
-      <p class="section-sub">「次の電車を確認する」という同じ目的。スタートはどちらも電源ボタンから。HomeRide は、そこで終わる。</p>
-    </header>
-
-    <div class="compare__grid">
-      <article class="compare__card compare__card--old">
-        <div class="compare__tag">従来の乗換アプリ</div>
-        <ol class="flow">
-          <li class="flow__item">
-            <span class="flow__n">1</span>
-            <div>
-              <div class="flow__name">スマホを取り出し、電源ボタンを押す</div>
-              <div class="flow__desc">ロック画面を点灯させる</div>
-            </div>
-          </li>
-          <li class="flow__item">
-            <span class="flow__n">2</span>
-            <div>
-              <div class="flow__name">Face ID でロックを解除</div>
-              <div class="flow__desc">ホーム画面まで遷移</div>
-            </div>
-          </li>
-          <li class="flow__item">
-            <span class="flow__n">3</span>
-            <div>
-              <div class="flow__name">アプリを探して起動</div>
-              <div class="flow__desc">ホーム画面のアイコンをタップ</div>
-            </div>
-          </li>
-          <li class="flow__item">
-            <span class="flow__n">4</span>
-            <div>
-              <div class="flow__name">経路をタップして展開</div>
-              <div class="flow__desc">スクロールして詳細を探す</div>
-            </div>
-          </li>
-          <li class="flow__item">
-            <span class="flow__n">5</span>
-            <div>
-              <div class="flow__name">小さな文字を読む</div>
-              <div class="flow__desc">発車時刻・行き先を目で追う</div>
-            </div>
-          </li>
-        </ol>
-        <div class="compare__stat">
-          <div class="compare__stat-n">~12<span>秒</span></div>
-          <div class="compare__stat-l">タップ操作 6 回 / 歩きスマホ発生</div>
-        </div>
-      </article>
-
-      <article class="compare__card compare__card--new">
-        <div class="compare__tag compare__tag--accent">HomeRide</div>
-        <ol class="flow flow--new">
-          <li class="flow__item flow__item--solo">
-            <span class="flow__n flow__n--accent">1</span>
-            <div>
-              <div class="flow__name">スマホを取り出し、電源ボタンを押す</div>
-              <div class="flow__desc">ロック画面の Live Activity を見るだけ。<br>解除も、起動も、検索も、しない。</div>
-            </div>
-          </li>
-        </ol>
-        <div class="compare__visual">
-          <div class="compare__mini la la--mini">
-            <div class="la__row la__row--next">
-              <span class="la__bolt"><svg viewBox="0 0 24 24" width="12" height="12" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
-              <span class="la__label">次の乗換：三越前</span>
-              <span class="la__time">19:46着</span>
-            </div>
-            <div class="la__train">
-              <div class="la__badge">G</div>
-              <div class="la__train-meta">
-                <div class="la__line">銀座線 <span class="la__dir">浅草方面</span></div>
-                <div class="la__depart"><span class="la__depart-time">19:50発</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="compare__stat compare__stat--accent">
-          <div class="compare__stat-n">~1<span>秒</span></div>
-          <div class="compare__stat-l">タップ操作 0 回 / 歩きスマホ ゼロ</div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-
-<!-- ───────── BREAKDOWN ───────── -->
-<section class="breakdown" id="breakdown">
-  <div class="container">
-    <header class="section-head">
-      <p class="kicker">SECTION 03</p>
-      <h2 class="section-title">「次に乗る電車」だけを、<br>最優先で見せる情報設計。</h2>
-      <p class="section-sub">現在乗車中の情報は、あえて小さく。判断に必要な情報を、ピラミッドの頂点に。</p>
-    </header>
-
-    <div class="breakdown__stage">
-      <div class="breakdown__device">
-        <div class="device device--portrait">
-          <div class="device__notch"></div>
-          <div class="device__screen device__screen--white">
-            <div class="appbar">
-              <div class="appbar__time">9:41</div>
-              <div class="appbar__icons">
-                <span class="appbar__signal"><span></span><span></span><span></span><span></span></span>
-                <svg viewBox="0 0 16 12" width="13" height="10" fill="currentColor"><path d="M8 11.5a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4ZM3.4 7.2l1.1 1.1a5 5 0 0 1 7 0l1.1-1.1a6.6 6.6 0 0 0-9.2 0ZM.7 4.5l1.1 1.1a8.9 8.9 0 0 1 12.4 0l1.1-1.1a10.5 10.5 0 0 0-14.6 0Z"/></svg>
-                <span class="appbar__battery"><span></span></span>
-              </div>
-            </div>
-
-            <div class="apphome">
-              <div class="apphome__title">HomeRide</div>
-
-              <div class="apphome__search">
-                <div class="apphome__search-label">経路を検索</div>
-                <div class="apphome__field"><span class="apphome__field-k">出発</span>渋谷</div>
-                <div class="apphome__field"><span class="apphome__field-k">到着</span>浅草</div>
-                <div class="apphome__seg"><span class="apphome__seg-on">今すぐ</span><span>時刻指定</span></div>
-                <div class="apphome__go">検索する</div>
-              </div>
-
-              <div class="apphome__sub">お気に入り経路（5件まで）</div>
-              <div class="apphome__list">
-                <div class="apphome__row"><span class="apphome__n">1</span><div><div class="apphome__route">渋谷 → 大手町　出張</div><div class="apphome__detail">半蔵門線・1 区間</div></div></div>
-                <div class="apphome__row"><span class="apphome__n">2</span><div><div class="apphome__route">銀座 → 浅草　観光</div><div class="apphome__detail">銀座線・1 区間</div></div></div>
-              </div>
-
-              <div class="apphome__la-label">Live Activity プレビュー</div>
-
-              <div class="la la--in-app" data-target="full">
-                <div class="la__row la__row--next">
-                  <span class="la__bolt"><svg viewBox="0 0 24 24" width="13" height="13" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
-                  <span class="la__label">次の乗換：三越前</span>
-                  <span class="la__time">19:46着</span>
-                </div>
-                <div class="la__train" data-target="train">
-                  <div class="la__badge">G</div>
-                  <div class="la__train-meta">
-                    <div class="la__line">銀座線 <span class="la__dir">浅草方面</span></div>
-                    <div class="la__depart"><span class="la__depart-time">19:50発</span></div>
-                  </div>
-                </div>
-                <div class="la__steps" data-target="steps">
-                  <span class="la__step la__step--past">渋谷</span>
-                  <span class="la__line-track"><span></span></span>
-                  <span class="la__step la__step--past">大手町</span>
-                  <span class="la__line-track"><span></span></span>
-                  <span class="la__step la__step--current">
-                    <svg viewBox="0 0 24 24" width="10" height="10" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-                    三越前
-                  </span>
-                  <span class="la__line-track"><span></span></span>
-                  <span class="la__step">上野</span>
-                  <span class="la__line-track"><span></span></span>
-                  <span class="la__step">浅草</span>
-                </div>
-                <div class="la__divider" data-target="now"><span>現在乗車中</span></div>
-                <div class="la__now" data-target="now-text">半蔵門線　押上方面（各駅停車）</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- annotations -->
-      <ul class="annot">
-        <li class="annot__item annot__item--1">
-          <span class="annot__num">01</span>
-          <div>
-            <h3>次の乗換駅と到着時刻</h3>
-            <p>判断に最も近い情報を、最上段に。「何時にどこへ着くか」をひと目で。</p>
-          </div>
-        </li>
-        <li class="annot__item annot__item--2">
-          <span class="annot__num">02</span>
-          <div>
-            <h3>乗換後の電車情報（主役）</h3>
-            <p>路線・行き先・発車時刻。<br>主役として、最も大きく、最も濃く表示。</p>
-          </div>
-        </li>
-        <li class="annot__item annot__item--3">
-          <span class="annot__num">03</span>
-          <div>
-            <h3>乗換ステップの可視化</h3>
-            <p>出発から到着までを 1 本のラインで。<br>「今どこ」「あといくつ」が直感的に分かる。</p>
-          </div>
-        </li>
-        <li class="annot__item annot__item--4">
-          <span class="annot__num">04</span>
-          <div>
-            <h3>現在乗車中はコンパクトに</h3>
-            <p>すでに乗っている電車は、見ない情報。あえて小さく扱う設計判断。</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-
-<!-- ───────── SCREENS ───────── -->
-<section class="screens" id="screens">
-  <div class="container">
-    <header class="section-head section-head--center">
-      <p class="kicker">SECTION 04</p>
-      <h2 class="section-title">必要な機能を、<br>必要なだけ。</h2>
-      <p class="section-sub">検索・駅選択・結果・運行中。４つの画面で、はじめての駅でもそのまま完結する。</p>
-    </header>
-
-    <div class="screens__rail">
-      <figure class="screens__card">
-        <div class="screens__shot">
-          <div class="ms" role="img" aria-label="検索画面：出発駅・到着駅・時刻を入力">
-            <div class="ms__bar"><span>9:41</span></div>
-            <div class="ms__title">HomeRide</div>
-            <div class="ms__card">
-              <div class="ms__h">経路を検索</div>
-              <div class="ms__field"><span class="ms__k">出発</span>渋谷</div>
-              <div class="ms__field"><span class="ms__k">到着</span>浅草</div>
-              <div class="ms__seg"><span class="ms__seg-on">今すぐ</span><span>時刻指定</span></div>
-              <div class="ms__go">検索する</div>
-            </div>
-            <div class="ms__h ms__h--pad">お気に入り経路 (5件まで)</div>
-            <div class="ms__rowcard"><div><div class="ms__strong">渋谷→大手町 出張</div><div class="ms__dim">渋谷 → 大手町・1 区間</div></div><span class="ms__chev">›</span></div>
-            <div class="ms__rowcard"><div><div class="ms__strong">銀座→浅草 観光</div><div class="ms__dim">銀座 → 浅草・1 区間</div></div><span class="ms__chev">›</span></div>
-          </div>
-        </div>
-        <figcaption>
-          <span class="screens__n">01</span>
-          <span class="screens__t">経路検索</span>
-          <span class="screens__d">出発駅と到着駅を入れて、<br>すぐ検索</span>
-        </figcaption>
-      </figure>
-      <figure class="screens__card">
-        <div class="screens__shot">
-          <div class="ms" role="img" aria-label="駅選択画面：駅名サジェストから選ぶ">
-            <div class="ms__bar"><span>9:41</span></div>
-            <div class="ms__navrow"><span class="ms__cancel">キャンセル</span><span class="ms__navtitle">到着駅を選択</span></div>
-            <div class="ms__searchbox">浅<span class="ms__caret"></span></div>
-            <div class="ms__listrow"><div class="ms__strong">浅草</div><div class="ms__dim">銀座線 / 都営浅草線</div></div>
-            <div class="ms__listrow"><div class="ms__strong">浅草橋</div><div class="ms__dim">都営浅草線</div></div>
-            <div class="ms__listrow"><div class="ms__strong">本所吾妻橋</div><div class="ms__dim">都営浅草線</div></div>
-            <div class="ms__listrow"><div class="ms__strong">押上</div><div class="ms__dim">半蔵門線 / 都営浅草線</div></div>
-          </div>
-        </div>
-        <figcaption>
-          <span class="screens__n">02</span>
-          <span class="screens__t">駅えらび</span>
-          <span class="screens__d">駅名サジェストで<br>迷わない</span>
-        </figcaption>
-      </figure>
-      <figure class="screens__card">
-        <div class="screens__shot">
-          <div class="ms" role="img" aria-label="検索結果画面：候補をタップで Live Activity 起動">
-            <div class="ms__bar"><span>9:41</span></div>
-            <div class="ms__title">HomeRide</div>
-            <div class="ms__h ms__h--pad">検索結果</div>
-            <div class="ms__rowcard"><div><div class="ms__time">9:46 <i>→</i> 10:04</div><div class="ms__lineinfo"><span class="ms__cap"></span>銀座線 <em>浅草方面・各駅停車</em></div></div><span class="ms__chev">›</span></div>
-            <div class="ms__rowcard"><div><div class="ms__time">9:51 <i>→</i> 10:09</div><div class="ms__lineinfo"><span class="ms__cap"></span>銀座線 <em>浅草方面・各駅停車</em></div></div><span class="ms__chev">›</span></div>
-            <div class="ms__rowcard"><div><div class="ms__time">9:56 <i>→</i> 10:14 <span class="ms__est">到着は目安</span></div><div class="ms__lineinfo"><span class="ms__cap"></span>銀座線 <em>浅草方面・各駅停車</em></div></div><span class="ms__chev">›</span></div>
-          </div>
-        </div>
-        <figcaption>
-          <span class="screens__n">03</span>
-          <span class="screens__t">検索結果</span>
-          <span class="screens__d">タップひとつで<br>Live Activity 起動</span>
-        </figcaption>
-      </figure>
-      <figure class="screens__card">
-        <div class="screens__shot">
-          <div class="ms ms--dark" role="img" aria-label="ロック画面：運行中は Live Activity を見るだけ">
-            <div class="ms__lockdate">6月12日 金曜日</div>
-            <div class="ms__locktime">9:58</div>
-            <div class="ms__la">
-              <div class="ms__la-next">⚡ 次の乗換：三越前　10:08着</div>
-              <div class="ms__la-train"><span class="ms__la-line">銀座線 浅草方面</span><span class="ms__la-dep">10:12発</span></div>
-              <div class="ms__la-steps"><span class="ms__dot ms__dot--on"></span><span class="ms__track"></span><span class="ms__dot"></span></div>
-              <div class="ms__la-now">現在乗車中：半蔵門線 押上方面</div>
-            </div>
-          </div>
-        </div>
-        <figcaption>
-          <span class="screens__n">04</span>
-          <span class="screens__t">ロック画面</span>
-          <span class="screens__d">運行中は、<br>見るだけ</span>
-        </figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-
-<!-- ───────── LIVE ACTIVITY HIGHLIGHT ───────── -->
-<section class="liveact">
-  <div class="container">
-    <div class="liveact__grid">
-      <div class="liveact__copy">
-        <p class="kicker kicker--light">SECTION 05</p>
-        <h2 class="section-title section-title--light">
-          電源ボタン、1 押し。<br>
-          それ以上は、いらない。
-        </h2>
-        <p class="liveact__lede">
-          旅行先、出張先、はじめての駅。改札前、人混みの中。<br>
-          画面を点けるだけで、次の行動が分かる。<br>
-          歩きスマホをしなくていい、新しい乗換の体験。
-        </p>
-
-        <ul class="bullet bullet--light">
-          <li>Live Activity でロック画面に常駐</li>
-          <li>Dynamic Island に乗換情報を表示</li>
-          <li>「あと◯分」のカウントダウンは表示しない — 時刻表に忠実な、誤解のない情報だけ</li>
+        <ul class="stats">
+          <li class="stats__item"><strong>iOS 16.1+</strong><span>Live Activity 対応</span></li>
+          <li class="stats__item"><strong>0 タップ</strong><span>アプリ起動不要</span></li>
+          <li class="stats__item"><strong>首都圏 13 路線+</strong><span>東京メトロ・都営ほか</span></li>
         </ul>
       </div>
+    </section>
 
-      <div class="liveact__device">
-        <div class="device device--lock device--lg">
-          <div class="device__notch"></div>
-          <div class="device__side device__side--vol-up"></div>
-          <div class="device__side device__side--vol-down"></div>
-          <div class="device__side device__side--power"></div>
+    <!-- ======= CONCEPT ======= -->
+    <section id="concept" class="section section--light" data-screen-label="コンセプト">
+      <div class="container container--narrow reveal">
+        <p class="eyebrow eyebrow--accent">CONCEPT</p>
+        <h2 class="section__title">これからの乗換は、<br>「開く」ものじゃなく、<br>「見える」もの。</h2>
+        <p class="section__lead">改札の前で立ち止まり、画面の小さな文字を追う時間を、HomeRide はゼロにする。次に乗るべき電車だけを、最初に、最大で見せる。</p>
+      </div>
+    </section>
 
-          <div class="device__screen lockscreen lockscreen--dim">
-            <div class="lockscreen__statusbar">
-              <span class="lockscreen__signal">
-                <span></span><span></span><span></span><span></span>
-              </span>
-              <span class="lockscreen__wifi">
-                <svg viewBox="0 0 16 12" width="15" height="11" fill="currentColor"><path d="M8 11.5a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4ZM3.4 7.2l1.1 1.1a5 5 0 0 1 7 0l1.1-1.1a6.6 6.6 0 0 0-9.2 0ZM.7 4.5l1.1 1.1a8.9 8.9 0 0 1 12.4 0l1.1-1.1a10.5 10.5 0 0 0-14.6 0Z"/></svg>
-              </span>
-              <span class="lockscreen__battery"><span></span></span>
+    <!-- ======= COMPARE ======= -->
+    <section id="compare" class="section section--dark" data-screen-label="従来アプリ比較">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow eyebrow--accent">SECTION 02 — COMPARE</p>
+          <h2 class="section__title">乗換確認 5 ステップが、<br>1 ステップに。</h2>
+          <p class="section__lead">「次の電車を確認する」という同じ目的。スタートはどちらも電源ボタンから。HomeRide は、そこで終わる。</p>
+        </div>
+
+        <div class="compare">
+          <!-- 従来 -->
+          <div class="compare__card reveal">
+            <p class="compare__label">従来の乗換アプリ</p>
+            <ol class="steps">
+              <li class="steps__item"><span class="steps__num">1</span><div><strong>スマホを取り出し、電源ボタンを押す</strong><span>ロック画面を点灯させる</span></div></li>
+              <li class="steps__item"><span class="steps__num">2</span><div><strong>Face ID でロックを解除</strong><span>ホーム画面まで遷移</span></div></li>
+              <li class="steps__item"><span class="steps__num">3</span><div><strong>アプリを探して起動</strong><span>ホーム画面のアイコンをタップ</span></div></li>
+              <li class="steps__item"><span class="steps__num">4</span><div><strong>経路をタップして展開</strong><span>スクロールして詳細を探す</span></div></li>
+              <li class="steps__item"><span class="steps__num">5</span><div><strong>小さな文字を読む</strong><span>発車時刻・行き先を目で追う</span></div></li>
+            </ol>
+            <div class="compare__result">
+              <strong class="compare__metric">~12秒</strong>
+              <span>タップ操作 6 回 / 歩きスマホ発生</span>
             </div>
-
-            <div class="lockscreen__clock">
-              <div class="lockscreen__date">6月12日 金曜日</div>
-              <div class="lockscreen__time">19<span class="colon">:</span>43</div>
-            </div>
-
-            <div class="la la--dim">
-              <div class="la__row la__row--next">
-                <span class="la__bolt"><svg viewBox="0 0 24 24" width="14" height="14" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
-                <span class="la__label">次の乗換：三越前</span>
-                <span class="la__time">19:46着</span>
-              </div>
-              <div class="la__train">
-                <div class="la__badge">G</div>
-                <div class="la__train-meta">
-                  <div class="la__line">銀座線 <span class="la__dir">浅草方面</span></div>
-                  <div class="la__depart"><span class="la__depart-time">19:50発</span></div>
-                </div>
-              </div>
-              <div class="la__steps">
-                <span class="la__step la__step--past">渋谷</span>
-                <span class="la__line-track"><span></span></span>
-                <span class="la__step la__step--past">大手町</span>
-                <span class="la__line-track"><span></span></span>
-                <span class="la__step la__step--current">
-                  <svg viewBox="0 0 24 24" width="11" height="11" fill="#FF8A00"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>
-                  三越前
-                </span>
-                <span class="la__line-track"><span></span></span>
-                <span class="la__step">上野</span>
-                <span class="la__line-track"><span></span></span>
-                <span class="la__step">浅草</span>
-              </div>
-              <div class="la__divider"><span>現在乗車中</span></div>
-              <div class="la__now">半蔵門線　押上方面（各駅停車）</div>
-            </div>
-
-            <div class="lockscreen__hint lockscreen__hint--light">スワイプして開く</div>
           </div>
-          <div class="press-indicator">
-            <span class="press-indicator__dot"></span>
-            <span class="press-indicator__line"></span>
-            <span class="press-indicator__label">電源ボタンを 1 回</span>
+
+          <!-- HomeRide -->
+          <div class="compare__card compare__card--hr reveal">
+            <p class="compare__label compare__label--hr">HomeRide</p>
+            <ol class="steps">
+              <li class="steps__item"><span class="steps__num steps__num--hr">1</span><div><strong>スマホを取り出し、電源ボタンを押す</strong><span>ロック画面の Live Activity を見るだけ。解除も、起動も、検索も、しない。</span></div></li>
+            </ol>
+            <div class="la-card la-card--mini" aria-label="Live Activity 表示イメージ">
+              <p class="la-card__next">次の乗換：<strong>三越前</strong> 19:46着</p>
+              <div class="la-card__main">
+                <span class="line-badge line-badge--ginza" aria-hidden="true">G</span>
+                <span class="la-card__train">銀座線 浅草方面</span>
+                <span class="la-card__time">19:50<small>発</small></span>
+              </div>
+            </div>
+            <div class="compare__result compare__result--hr">
+              <strong class="compare__metric">~1秒</strong>
+              <span>タップ操作 0 回 / 歩きスマホ ゼロ</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
+    <!-- ======= 情報設計 ======= -->
+    <section id="breakdown" class="section section--light" data-screen-label="情報設計">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow eyebrow--accent">SECTION 03 — DESIGN</p>
+          <h2 class="section__title">「次に乗る電車」だけを、<br>最優先で見せる情報設計。</h2>
+          <p class="section__lead">現在乗車中の情報は、あえて小さく。判断に必要な情報を、ピラミッドの頂点に。</p>
+        </div>
 
-<!-- ───────── CTA ───────── -->
-<section class="cta" id="testflight">
-  <div class="container">
-    <p class="kicker">GET EARLY ACCESS</p>
-    <h2 class="cta__h">あなたの移動を、<br>ロック画面に解放する。</h2>
-    <p class="cta__p">TestFlight ベータ募集中。下記フォームよりご登録ください。<br>準備が整い次第、ご登録のメールアドレスへ TestFlight 招待リンクをお送りします。</p>
+        <div class="breakdown">
+          <div class="breakdown__phone reveal">
+            <div class="phone">
+              <div class="phone__island" aria-hidden="true"></div>
+              <p class="lock__date">6月12日 金曜日</p>
+              <p class="lock__clock">19:43</p>
+              <div class="la-card">
+                <p class="la-card__next">次の乗換：<strong>三越前</strong> 19:46着</p>
+                <div class="la-card__main">
+                  <span class="line-badge line-badge--ginza" aria-hidden="true">G</span>
+                  <span class="la-card__train">銀座線 浅草方面</span>
+                  <span class="la-card__time">19:50<small>発</small></span>
+                </div>
+                <div class="route" aria-hidden="true">
+                  <span class="route__stop route__stop--done"></span><span class="route__seg route__seg--done"></span><span class="route__stop route__stop--done"></span><span class="route__seg route__seg--done"></span><span class="route__stop route__stop--next"></span><span class="route__seg"></span><span class="route__stop"></span><span class="route__seg"></span><span class="route__stop"></span>
+                </div>
+                <div class="route-labels" aria-hidden="true">
+                  <span>渋谷</span><span>大手町</span><span class="is-next">三越前</span><span>上野</span><span>浅草</span>
+                </div>
+                <div class="la-card__now">
+                  <span class="line-badge line-badge--sm line-badge--hanzomon" aria-hidden="true">Z</span>
+                  <span>現在乗車中　半蔵門線 押上方面（各駅停車）</span>
+                </div>
+              </div>
+              <p class="lock__hint">スワイプして開く</p>
+            </div>
+          </div>
 
-    <form
-      class="cta__form cta__form--full"
-      id="signupForm"
-      action="https://formspree.io/f/xaqkoeod"
-      method="POST"
-    >
-      <div class="cta__field">
-        <label for="signup-nickname">ニックネーム <span class="cta__req">必須</span></label>
-        <input id="signup-nickname" name="nickname" type="text" required placeholder="例：たろう" autocomplete="nickname" maxlength="40">
+          <ol class="callouts reveal">
+            <li class="callouts__item">
+              <span class="callouts__num">01</span>
+              <div><h3>次の乗換駅と到着時刻</h3><p>判断に最も近い情報を、最上段に。「何時にどこへ着くか」をひと目で。</p></div>
+            </li>
+            <li class="callouts__item">
+              <span class="callouts__num">02</span>
+              <div><h3>乗換後の電車情報（主役）</h3><p>路線・行き先・発車時刻。主役として、最も大きく、最も濃く表示。</p></div>
+            </li>
+            <li class="callouts__item">
+              <span class="callouts__num">03</span>
+              <div><h3>乗換ステップの可視化</h3><p>出発から到着までを 1 本のラインで。「今どこ」「あといくつ」が直感的に分かる。</p></div>
+            </li>
+            <li class="callouts__item">
+              <span class="callouts__num">04</span>
+              <div><h3>現在乗車中はコンパクトに</h3><p>すでに乗っている電車は、見ない情報。あえて小さく扱う設計判断。</p></div>
+            </li>
+          </ol>
+        </div>
       </div>
-      <div class="cta__field">
-        <label for="signup-email">メールアドレス <span class="cta__req">必須</span></label>
-        <input id="signup-email" name="email" type="email" required placeholder="your@email.com" autocomplete="email">
-        <p class="cta__hint">Apple ID と同じメールアドレスをご入力ください。TestFlight 招待に使用します。</p>
+    </section>
+
+    <!-- ======= 4画面 ======= -->
+    <section id="screens" class="section section--dark" data-screen-label="4画面紹介">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow eyebrow--accent">SECTION 04 — SCREENS</p>
+          <h2 class="section__title">必要な機能を、<br>必要なだけ。</h2>
+          <p class="section__lead">検索・駅選択・結果・運行中。4 つの画面で、はじめての駅でもそのまま完結する。</p>
+        </div>
+
+        <div class="shots reveal">
+
+          <!-- 01 経路検索 -->
+          <figure class="shot">
+            <div class="app">
+              <p class="app__status">9:41</p>
+              <p class="app__brand">HomeRide</p>
+              <div class="app__panel">
+                <p class="app__panel-title">経路を検索</p>
+                <div class="app__field"><span class="app__field-label">出発</span><span class="app__field-value">渋谷</span></div>
+                <div class="app__field"><span class="app__field-label">到着</span><span class="app__field-value">浅草</span></div>
+                <div class="app__seg"><span class="is-on">今すぐ</span><span>時刻指定</span></div>
+                <p class="app__cta">検索する</p>
+              </div>
+              <p class="app__list-head">お気に入り経路（5件まで）</p>
+              <div class="app__row"><div><strong>渋谷 → 大手町　出張</strong><span>半蔵門線・1 区間</span></div><span class="app__chev" aria-hidden="true">›</span></div>
+              <div class="app__row"><div><strong>銀座 → 浅草　観光</strong><span>銀座線・1 区間</span></div><span class="app__chev" aria-hidden="true">›</span></div>
+            </div>
+            <figcaption class="shot__cap"><span class="shot__num">01</span><strong>経路検索</strong><span>出発駅と到着駅を入れて、すぐ検索</span></figcaption>
+          </figure>
+
+          <!-- 02 駅えらび -->
+          <figure class="shot">
+            <div class="app">
+              <p class="app__status">9:41</p>
+              <div class="app__bar"><span class="app__bar-cancel">キャンセル</span><span class="app__bar-title">到着駅を選択</span></div>
+              <div class="app__search"><span>浅</span><span class="app__caret" aria-hidden="true"></span></div>
+              <div class="app__row"><div><strong>浅草</strong><span>銀座線 / 都営浅草線</span></div><span class="app__badges"><span class="line-badge line-badge--sm line-badge--ginza">G</span><span class="line-badge line-badge--sm line-badge--asakusa">A</span></span></div>
+              <div class="app__row"><div><strong>浅草橋</strong><span>都営浅草線</span></div><span class="app__badges"><span class="line-badge line-badge--sm line-badge--asakusa">A</span></span></div>
+              <div class="app__row"><div><strong>本所吾妻橋</strong><span>都営浅草線</span></div><span class="app__badges"><span class="line-badge line-badge--sm line-badge--asakusa">A</span></span></div>
+              <div class="app__row"><div><strong>押上</strong><span>半蔵門線 / 都営浅草線</span></div><span class="app__badges"><span class="line-badge line-badge--sm line-badge--hanzomon">Z</span><span class="line-badge line-badge--sm line-badge--asakusa">A</span></span></div>
+            </div>
+            <figcaption class="shot__cap"><span class="shot__num">02</span><strong>駅えらび</strong><span>駅名サジェストで迷わない</span></figcaption>
+          </figure>
+
+          <!-- 03 検索結果 -->
+          <figure class="shot">
+            <div class="app">
+              <p class="app__status">9:41</p>
+              <p class="app__brand">HomeRide</p>
+              <p class="app__list-head">検索結果</p>
+              <div class="app__row app__row--result"><div><strong>9:46 <span class="app__arrow">→</span> 10:04</strong><span>銀座線 浅草方面・各駅停車</span></div><span class="app__chev" aria-hidden="true">›</span></div>
+              <div class="app__row app__row--result"><div><strong>9:51 <span class="app__arrow">→</span> 10:09</strong><span>銀座線 浅草方面・各駅停車</span></div><span class="app__chev" aria-hidden="true">›</span></div>
+              <div class="app__row app__row--result"><div><strong>9:56 <span class="app__arrow">→</span> 10:14</strong><span>銀座線 浅草方面・各駅停車　<em>到着は目安</em></span></div><span class="app__chev" aria-hidden="true">›</span></div>
+              <p class="app__hint">タップひとつで Live Activity 起動</p>
+            </div>
+            <figcaption class="shot__cap"><span class="shot__num">03</span><strong>検索結果</strong><span>タップひとつで Live Activity 起動</span></figcaption>
+          </figure>
+
+          <!-- 04 ロック画面 -->
+          <figure class="shot">
+            <div class="app app--lock">
+              <p class="lock__date">6月12日 金曜日</p>
+              <p class="lock__clock lock__clock--sm">9:58</p>
+              <div class="la-card la-card--mini">
+                <p class="la-card__next">次の乗換：<strong>三越前</strong> 10:08着</p>
+                <div class="la-card__main">
+                  <span class="line-badge line-badge--ginza" aria-hidden="true">G</span>
+                  <span class="la-card__train">銀座線 浅草方面</span>
+                  <span class="la-card__time">10:12<small>発</small></span>
+                </div>
+                <div class="la-card__now">
+                  <span class="line-badge line-badge--sm line-badge--hanzomon" aria-hidden="true">Z</span>
+                  <span>現在乗車中　半蔵門線 押上方面</span>
+                </div>
+              </div>
+            </div>
+            <figcaption class="shot__cap"><span class="shot__num">04</span><strong>ロック画面</strong><span>運行中は、見るだけ</span></figcaption>
+          </figure>
+
+        </div>
+        <p class="shots-hint" aria-hidden="true">← 横にスワイプ →</p>
       </div>
-      <div class="cta__field">
-        <label for="signup-comment">一言コメント <span class="cta__opt">任意</span></label>
-        <textarea id="signup-comment" name="comment" rows="3" maxlength="300" placeholder="ご意見・ご要望・期待していることなど、お気軽にどうぞ。"></textarea>
+    </section>
+
+    <!-- ======= LIVE ACTIVITY 訴求 ======= -->
+    <section id="activity" class="section section--light" data-screen-label="Live Activity 訴求">
+      <div class="container">
+        <div class="activity">
+          <div class="activity__copy reveal">
+            <p class="eyebrow eyebrow--accent">SECTION 05 — LIVE ACTIVITY</p>
+            <h2 class="section__title">電源ボタン、1 押し。<br>それ以上は、いらない。</h2>
+            <p class="section__lead">旅行先、出張先、はじめての駅。改札前、人混みの中。画面を点けるだけで、次の行動が分かる。歩きスマホをしなくていい、新しい乗換の体験。</p>
+            <ul class="features">
+              <li><span class="features__dot" aria-hidden="true"></span>Live Activity でロック画面に常駐</li>
+              <li><span class="features__dot" aria-hidden="true"></span>Dynamic Island に乗換情報を表示</li>
+              <li><span class="features__dot" aria-hidden="true"></span>「あと◯分」のカウントダウンは表示しない — 時刻表に忠実な、誤解のない情報だけ</li>
+            </ul>
+          </div>
+          <div class="activity__visual reveal">
+            <div class="island-demo" aria-label="Dynamic Island 表示イメージ">
+              <span class="line-badge line-badge--ginza" aria-hidden="true">G</span>
+              <div class="island-demo__text"><strong>銀座線 浅草方面</strong><span>次の乗換：三越前 19:46着</span></div>
+              <span class="island-demo__time">19:50<small>発</small></span>
+            </div>
+            <p class="island-demo__cap">Dynamic Island 表示イメージ</p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <!-- Honeypot (bot filter) -->
-      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-      <input type="hidden" name="_subject" value="HomeRide TestFlight 申込">
+    <!-- ======= TESTFLIGHT フォーム ======= -->
+    <section id="testflight" class="section section--form" data-screen-label="TestFlight 登録">
+      <div class="container container--narrow">
+        <div class="section__head section__head--center reveal">
+          <p class="eyebrow eyebrow--accent">GET EARLY ACCESS</p>
+          <h2 class="section__title">あなたの移動を、<br>ロック画面に解放する。</h2>
+          <p class="section__lead">TestFlight ベータ募集中。下記フォームよりご登録ください。準備が整い次第、ご登録のメールアドレスへ TestFlight 招待リンクをお送りします。</p>
+        </div>
 
-      <button class="btn btn--primary cta__submit" type="submit">
-        <span class="cta__submit-label">TestFlight への参加を申請する</span>
-      </button>
+        <form class="form reveal" id="tf-form" action="https://formspree.io/f/xaqkoeod" method="POST">
+          <label class="form__label">
+            <span class="form__label-text">ニックネーム <em class="form__req">必須</em></span>
+            <input class="form__input" type="text" name="nickname" required autocomplete="nickname" placeholder="例：たろう" maxlength="40">
+          </label>
+          <label class="form__label">
+            <span class="form__label-text">メールアドレス <em class="form__req">必須</em></span>
+            <input class="form__input" type="email" name="email" required autocomplete="email" inputmode="email" placeholder="your@email.com">
+            <small class="form__help">Apple ID と同じメールアドレスをご入力ください。TestFlight 招待に使用します。</small>
+          </label>
+          <label class="form__label">
+            <span class="form__label-text">一言コメント <em class="form__opt">任意</em></span>
+            <textarea class="form__input form__input--area" name="comment" rows="3" placeholder="ご意見・ご要望・期待していることなど、お気軽にどうぞ。" maxlength="300"></textarea>
+          </label>
+          <input type="hidden" name="_subject" value="HomeRide TestFlight 申込">
+          <input class="form__hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn--primary btn--block" type="submit">TestFlight への参加を申請する</button>
+          <p class="form__status" id="tf-status" role="status" aria-live="polite" hidden></p>
+          <p class="form__note">送信いただいた情報は TestFlight 招待と HomeRide の開発・運営に関する連絡のみに利用します。</p>
+        </form>
 
-      <p class="cta__privacy">
-        送信いただいた情報は TestFlight 招待と HomeRide の開発・運営に関する連絡のみに利用します。
-      </p>
-    </form>
-    <div class="cta__status" role="status" aria-live="polite"></div>
+        <p class="route-note reveal">対応路線（初期リリース予定）: 東京メトロ全 9 路線・都営地下鉄・りんかい線・つくばエクスプレス・ゆりかもめ・多摩モノレール・横浜市営地下鉄ほか首都圏の地下鉄・新交通。<br>JR・大手私鉄各線への対応は、今後のアップデートで検討中です。</p>
+      </div>
+    </section>
 
-    <p class="cta__coverage">
-      対応路線（初期リリース予定）: 東京メトロ全 9 路線・都営地下鉄・りんかい線・つくばエクスプレス・ゆりかもめ・多摩モノレール・横浜市営地下鉄ほか首都圏の地下鉄・新交通。<br>
-      JR・大手私鉄各線への対応は、今後のアップデートで検討中です。
-    </p>
-  </div>
-</section>
+  </main>
 
-
-<!-- ───────── FOOTER ───────── -->
-<footer class="foot">
-  <div class="container foot__inner">
-    <div class="foot__brand">
-      <span class="brand__mark">
-        <svg viewBox="0 0 24 24" width="18" height="18">
-          <path d="M3 11 L12 4 L21 11 V20 a1 1 0 0 1-1 1 H14 V14 H10 V21 H4 a1 1 0 0 1-1-1 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-        </svg>
-      </span>
-      <span>HomeRide</span>
+  <!-- ======= フッター ======= -->
+  <footer class="footer" data-screen-label="フッター">
+    <div class="container footer__inner">
+      <p class="footer__logo">HomeRide</p>
+      <p class="footer__legal">© 2026 HomeRide. App Store と TestFlight は Apple Inc. の商標です。</p>
+      <nav class="footer__links" aria-label="フッターリンク">
+        <a href="#">プライバシー</a>
+        <a href="#">利用規約</a>
+        <a href="#">お問い合わせ</a>
+      </nav>
     </div>
-    <div class="foot__copy">© 2026 HomeRide. App Store と TestFlight は Apple Inc. の商標です。</div>
-    <div class="foot__links">
-      <a href="#">プライバシー</a>
-      <a href="#">利用規約</a>
-      <a href="#">お問い合わせ</a>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-</main>
-
-<script src="script.js"></script>
 </body>
 </html>
