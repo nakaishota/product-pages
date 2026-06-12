@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneTimer — いつもの時間を、ワンタップで。</title>
+<meta name="description" content="ロック画面ワンタップタイマー OneTimer。マナーモードでも鳴る、買い切り¥500。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#006241;
+  --accent:#00754A;
+  --house:#1E3932;
+  --uplift:#2b5148;
+  --green-light:#d4e9e2;
+  --gold:#cba258;
+  --gold-light:#dfc49d;
+  --gold-lightest:#faf6ee;
+  --cream:#f2f0eb;
+  --ceramic:#edebe9;
+  --ink:rgba(0,0,0,.87);
+  --ink-soft:rgba(0,0,0,.58);
+  --white-soft:rgba(255,255,255,.70);
+  --card-shadow:0 0 .5px rgba(0,0,0,.14),0 1px 1px rgba(0,0,0,.24);
+  --maxw:1200px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:62.5%}
+[id]{scroll-margin-top:10rem}
+body{
+  font-family:Inter,"Noto Sans JP","Hiragino Sans",sans-serif;
+  font-size:1.6rem;line-height:1.5;letter-spacing:-0.01em;
+  color:var(--ink);background:var(--cream);
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 4rem}
+@media(max-width:767px){.wrap{padding:0 1.6rem}}
+
+/* ---------- pills ---------- */
+.pill{
+  display:inline-block;border-radius:50px;padding:9px 18px;
+  font-size:1.5rem;font-weight:600;letter-spacing:-0.01em;
+  text-decoration:none;cursor:pointer;transition:all .2s ease;border:1px solid transparent;
+}
+.pill:active{transform:scale(.95)}
+.pill-filled{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pill-outline{background:transparent;color:var(--accent);border-color:var(--accent)}
+.pill-black{background:#000;color:#fff;border-color:#000;font-size:1.4rem}
+.pill-dark-outline{background:transparent;color:var(--ink);border-color:rgba(0,0,0,.87);font-size:1.4rem}
+.pill-white{background:#fff;color:var(--accent);border-color:#fff}
+.pill-white-outline{background:transparent;color:#fff;border-color:#fff}
+.pill-gold{background:transparent;color:var(--gold);border-color:var(--gold);font-size:1.3rem;font-weight:700;letter-spacing:.5px;padding:4px 12px}
+
+/* ---------- top strip ---------- */
+.strip{background:#000;color:#fff;text-align:center;padding:1.2rem 1.6rem;font-size:1.4rem}
+.strip b{font-weight:600}
+.strip .pill{margin-left:1.6rem;padding:5px 14px}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:40;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.1),0 2px 2px rgba(0,0,0,.06),0 0 2px rgba(0,0,0,.07);
+}
+.nav-inner{display:flex;align-items:center;gap:3.2rem;height:8rem;max-width:var(--maxw);margin:0 auto;padding:0 4rem}
+.logo{display:flex;align-items:center;gap:1rem;text-decoration:none}
+.logo-cup{
+  width:4rem;height:4rem;border-radius:50%;background:var(--green);
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:1.7rem;
+}
+.logo b{color:var(--ink);font-size:1.8rem;font-weight:700}
+.nav-links{display:flex;gap:2.4rem;flex:1}
+.nav-links a{color:var(--ink);text-decoration:none;font-size:1.5rem;font-weight:600}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{display:flex;gap:1.2rem;align-items:center}
+@media(max-width:767px){
+  .nav-inner{height:6.4rem;padding:0 1.6rem;gap:1.6rem}
+  .nav-links{display:none}
+}
+
+/* ---------- hero ---------- */
+.hero{padding:6.4rem 0;background:var(--cream)}
+.hero-grid{display:grid;grid-template-columns:60fr 40fr;gap:4rem;align-items:center}
+.hero .eyebrow{
+  display:inline-block;font-size:1.4rem;font-weight:700;color:var(--accent);
+  letter-spacing:.1em;margin-bottom:1.6rem;
+}
+h1{
+  color:var(--green);font-size:5.8rem;font-weight:700;line-height:1.25;letter-spacing:-0.16px;
+}
+.hero p.lead{margin-top:2.8rem;font-size:2.1rem;line-height:1.8;color:var(--ink)}
+.hero p.lead strong{font-weight:700;color:var(--green)}
+.hero p.sub{margin-top:1.4rem;font-size:1.5rem;color:var(--ink-soft)}
+.cta-row{margin-top:3.2rem;display:flex;gap:1.6rem;flex-wrap:wrap}
+
+.hero-visual{display:flex;justify-content:center;position:relative}
+.hero-disc{
+  width:38rem;height:38rem;border-radius:50%;background:var(--green-light);
+  display:grid;place-items:center;
+}
+/* phone mock */
+.phone{
+  width:21rem;border-radius:3.4rem;background:#000;border:5px solid #2e2e36;
+  overflow:hidden;filter:drop-shadow(0 4px 1px rgba(0,0,0,.11)) drop-shadow(0 0 2px rgba(0,0,0,.24));
+}
+.phone .scr{
+  background:linear-gradient(170deg,#1b2336 0%,#14463f 100%);
+  padding:1.2rem 1.2rem 1.8rem;min-height:40rem;display:flex;flex-direction:column;
+}
+.phone .island{width:6rem;height:1.8rem;border-radius:99px;background:#000;margin:0 auto .8rem}
+.phone .d{text-align:center;color:#cfd6e6;font-size:1.1rem}
+.phone .t{text-align:center;color:#eef1f9;font-size:4.6rem;font-weight:200;line-height:1.05}
+.phone .la{
+  margin-top:1.4rem;background:rgba(10,14,22,.65);border-radius:1.6rem;padding:1.1rem 1.2rem;
+  display:flex;gap:1rem;align-items:center;
+}
+.phone .la .ic{width:3rem;height:3rem;border-radius:50%;background:rgba(0,117,74,.35);display:grid;place-items:center;font-size:1.3rem}
+.phone .la .nm{color:#fff;font-size:1.1rem;font-weight:700}
+.phone .la .cd{color:#7fd6b4;font-size:2rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15}
+.phone .ws{display:flex;justify-content:center;gap:1rem;margin-top:auto;padding-top:2rem}
+.phone .w{
+  width:4.2rem;height:4.2rem;border-radius:50%;background:rgba(255,255,255,.2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;
+}
+.phone .w em{font-style:normal;font-size:1.3rem}
+.phone .w span{font-size:.9rem;font-weight:700}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:2.4rem}
+  h1{font-size:4rem}
+  .hero p.lead{font-size:1.8rem}
+  .hero-disc{width:30rem;height:30rem}
+  .hero-visual{margin-top:7rem}
+}
+
+/* ---------- white sections ---------- */
+.section{padding:6.4rem 0}
+.section.white{background:#fff}
+.section.ceramic{background:var(--ceramic)}
+h2.sec{color:var(--green);font-size:2.4rem;font-weight:600;letter-spacing:-0.16px}
+p.sec-sub{margin-top:.8rem;color:var(--ink-soft);font-size:1.5rem}
+
+.card-grid{margin-top:4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2.4rem}
+@media(max-width:900px){.card-grid{grid-template-columns:1fr}}
+.card{
+  background:#fff;border-radius:12px;box-shadow:var(--card-shadow);overflow:hidden;
+}
+.section.white .card{background:var(--cream)}
+.card .thumb{height:16rem;display:grid;place-items:center;position:relative}
+.card .bd{padding:2.4rem}
+.card h3{font-size:1.9rem;font-weight:600;color:var(--ink)}
+.card p{margin-top:.8rem;font-size:1.4rem;color:var(--ink-soft);line-height:1.6}
+.card .more{display:inline-block;margin-top:1.6rem;color:var(--accent);font-size:1.4rem;font-weight:700;text-decoration:none}
+.card .more:hover{text-decoration:underline}
+
+/* thumbs (CSS product photography) */
+.th-lock{background:#cfe3da}
+.th-cc{background:#f3d9c4}
+.th-ab{background:#dcd4ec}
+.mini-lock{
+  width:9rem;border-radius:1.6rem;background:linear-gradient(170deg,#1b2336,#14463f);
+  padding:.8rem .7rem 1rem;box-shadow:0 6px 14px rgba(0,0,0,.18);
+}
+.mini-lock .mt{color:#eef1f9;font-size:1.7rem;font-weight:200;text-align:center;line-height:1}
+.mini-lock .md{color:#cfd6e6;font-size:.7rem;text-align:center;margin-bottom:.2rem}
+.mini-lock .mw{display:flex;justify-content:center;gap:.4rem;margin-top:1.2rem}
+.mini-lock .mw i{width:1.6rem;height:1.6rem;border-radius:50%;background:rgba(255,255,255,.35)}
+.mini-cc{
+  width:10rem;border-radius:1.4rem;background:#23232d;padding:1rem;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;box-shadow:0 6px 14px rgba(0,0,0,.18);
+}
+.mini-cc i{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.3);display:block}
+.mini-cc i.hot{background:var(--accent)}
+.mini-ab{
+  width:4.2rem;height:12rem;border-radius:2rem;background:#2c2c35;position:relative;
+  box-shadow:0 6px 14px rgba(0,0,0,.18);
+}
+.mini-ab::before{
+  content:"";position:absolute;left:-0.6rem;top:2.4rem;width:.7rem;height:4.2rem;border-radius:.4rem;
+  background:var(--accent);box-shadow:0 0 10px rgba(0,117,74,.7);
+}
+
+/* ---------- feature band ---------- */
+.band{background:var(--house);color:#fff;padding:6.4rem 0}
+.band-grid{display:grid;grid-template-columns:55fr 45fr;gap:4rem;align-items:center}
+.band h2{font-size:2.8rem;font-weight:600;line-height:1.3;letter-spacing:-0.16px}
+.band p{margin-top:1.6rem;color:var(--white-soft);font-size:1.6rem;line-height:1.75;max-width:46rem}
+.band .cta-row{margin-top:2.8rem}
+.alert-card{
+  width:26rem;margin:0 auto;background:#fff;border-radius:12px;padding:2.8rem 2.4rem;text-align:center;
+  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
+}
+.alert-card .bell{
+  width:5.6rem;height:5.6rem;margin:0 auto 1.4rem;border-radius:50%;background:var(--green-light);
+  display:grid;place-items:center;color:var(--green);font-size:2.4rem;
+}
+.alert-card .ti{font-size:1.9rem;font-weight:700;color:var(--ink)}
+.alert-card .su{font-size:1.3rem;color:var(--ink-soft);margin-top:.4rem}
+.alert-card .stop{
+  margin-top:2rem;background:var(--accent);color:#fff;border:none;border-radius:50px;
+  padding:1rem;width:100%;font-size:1.5rem;font-weight:600;cursor:pointer;transition:all .2s ease;
+}
+.alert-card .stop:active{transform:scale(.95)}
+.alert-card .mute{margin-top:1.4rem;font-size:1.2rem;color:var(--ink-soft)}
+@media(max-width:900px){.band-grid{grid-template-columns:1fr;gap:4.8rem}}
+
+/* ---------- silent / commute ---------- */
+.silent-grid{margin-top:4rem;display:grid;grid-template-columns:1fr 1fr;gap:4.8rem;align-items:center}
+.silent-lead{font-size:2rem;font-weight:700;color:var(--green);line-height:1.5}
+.silent-list{list-style:none;margin-top:2.4rem;display:flex;flex-direction:column;gap:1.6rem}
+.silent-list li{font-size:1.5rem;color:var(--ink);line-height:1.7;padding-left:2.4rem;position:relative}
+.silent-list li::before{content:"✓";position:absolute;left:0;top:0;color:var(--accent);font-weight:700}
+.silent-list b{font-weight:700}
+.silent-note{margin-top:2.4rem;font-size:1.4rem;color:var(--ink-soft);line-height:1.8}
+.commute-card{
+  max-width:32rem;margin:0 auto;background:var(--house);border-radius:12px;padding:2.8rem;color:#fff;
+  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
+}
+.commute-head{display:flex;align-items:center;gap:1.2rem}
+.commute-ic{font-size:2.6rem}
+.commute-nm{font-size:1.7rem;font-weight:700}
+.commute-sub{font-size:1.3rem;color:var(--white-soft)}
+.commute-mute{margin-left:auto;font-size:2rem}
+.commute-time{font-size:5.6rem;font-weight:600;font-family:Inter,sans-serif;letter-spacing:-.02em;margin:1.2rem 0 1.6rem;color:#7fd6b4}
+.commute-tags{display:flex;flex-wrap:wrap;gap:.8rem}
+.ctag{font-size:1.2rem;font-weight:600;padding:.5rem 1rem;border-radius:50px;border:1px solid rgba(255,255,255,.3);color:var(--white-soft)}
+.ctag.on{border-color:var(--gold);color:var(--gold)}
+@media(max-width:900px){.silent-grid{grid-template-columns:1fr;gap:3.2rem}}
+
+/* ---------- scenes ---------- */
+.scene-grid{margin-top:4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.scene{
+  background:#fff;border-radius:12px;box-shadow:var(--card-shadow);padding:2.4rem;
+  display:flex;flex-direction:column;gap:1rem;
+}
+.scene-top{display:flex;align-items:center;gap:1.2rem}
+.scene-ic{
+  width:4.4rem;height:4.4rem;border-radius:50%;display:grid;place-items:center;
+  font-size:2.2rem;flex-shrink:0;background:var(--green-light);
+}
+.scene-nm{font-size:1.7rem;font-weight:700;color:var(--ink)}
+.scene-time{font-size:1.3rem;color:var(--ink-soft);font-weight:600}
+.scene-time .mute{color:var(--accent);margin-left:.4rem}
+.scene p{font-size:1.4rem;color:var(--ink-soft);line-height:1.7}
+@media(max-width:900px){.scene-grid{grid-template-columns:1fr}}
+
+/* ---------- size selector (PDP parody) ---------- */
+.pdp-card{
+  margin-top:4rem;background:#fff;border-radius:12px;box-shadow:var(--card-shadow);padding:4rem;
+}
+.size-row{display:flex;gap:4rem;justify-content:center;flex-wrap:wrap}
+.size{
+  display:flex;flex-direction:column;align-items:center;gap:1rem;cursor:pointer;
+  background:none;border:none;font-family:inherit;
+}
+.size .cup{
+  width:7.2rem;height:7.2rem;border-radius:50%;display:grid;place-items:center;
+  background:var(--cream);position:relative;transition:all .2s ease;
+}
+.size.sel .cup{outline:2px solid var(--accent);outline-offset:3px}
+.size .cup span{font-size:2rem;font-weight:600;color:var(--green)}
+.size .nm{font-size:1.6rem;font-weight:700;color:var(--green)}
+.size .oz{font-size:1.3rem;color:var(--ink-soft)}
+.size:active .cup{transform:scale(.95)}
+.pdp-note{text-align:center;margin-top:2.8rem;font-size:1.4rem;color:var(--ink-soft)}
+.pdp-ctas{display:flex;gap:1.6rem;justify-content:center;margin-top:2.4rem;flex-wrap:wrap}
+.pill-customize{padding:12px 36px;border-width:1.5px}
+.pill-customize .spark{color:var(--gold)}
+
+/* ---------- spec table ---------- */
+#spec h2.sec{text-align:center}
+.spec-card{
+  margin:4rem auto 0;background:#fff;border-radius:12px;box-shadow:var(--card-shadow);
+  padding:3.2rem 4rem;max-width:72rem;
+}
+.spec-foot{text-align:center}
+.spec-row{display:flex;justify-content:space-between;gap:2.4rem;padding:1.3rem 0;border-bottom:1px solid #e7e7e7;font-size:1.4rem}
+.spec-row:last-child{border-bottom:none}
+.spec-row .k{color:var(--ink-soft)}
+.spec-row .v{font-weight:700;text-align:right}
+.spec-foot{margin-top:1.6rem;font-size:1.3rem;color:var(--ink-soft)}
+
+/* ---------- gold / pro ---------- */
+.gold-sec{background:var(--gold-lightest);padding:8rem 0}
+.gold-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.8rem;align-items:center}
+.gold-sec h2.serif{
+  font-family:"Noto Serif JP","Iowan Old Style",Georgia,serif;
+  font-size:3.4rem;font-weight:600;line-height:1.45;color:#33433d;letter-spacing:0;
+}
+.gold-sec p{margin-top:1.6rem;color:#33433d;font-size:1.6rem;line-height:1.8}
+.gold-benefits{margin-top:2.4rem;list-style:none;display:flex;flex-direction:column;gap:1.2rem}
+.gold-benefits li{display:flex;gap:1.2rem;align-items:center;font-size:1.5rem;color:#33433d}
+.gold-benefits li::before{content:"★";color:var(--gold);font-size:1.4rem}
+.pro-card{
+  background:var(--house);border-radius:12px;padding:4.8rem 4rem;text-align:center;color:#fff;
+  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);position:relative;overflow:hidden;
+}
+.pro-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:.8rem;
+  background:linear-gradient(90deg,var(--gold-light),var(--gold),var(--gold-light));
+}
+.pro-card .lv{
+  display:inline-grid;place-items:center;width:3.2rem;height:3.2rem;border-radius:50%;
+  background:var(--gold);color:var(--house);font-weight:700;font-size:1.5rem;margin-bottom:1.6rem;
+}
+.pro-card h3{font-size:2.4rem;font-weight:600}
+.pro-card .pr{font-size:4.4rem;font-weight:700;margin-top:1.2rem}
+.pro-card .pr small{font-size:1.4rem;font-weight:400;color:var(--white-soft);margin-left:.6rem}
+.pro-card ul{list-style:none;margin-top:2.4rem;display:flex;flex-direction:column;gap:1rem;text-align:left}
+.pro-card ul li{font-size:1.4rem;color:var(--white-soft);display:flex;gap:1rem}
+.pro-card ul li::before{content:"✓";color:var(--gold)}
+.pro-card .pill{margin-top:2.8rem;width:100%}
+@media(max-width:900px){.gold-grid{grid-template-columns:1fr}}
+
+/* ---------- footer ---------- */
+footer{background:var(--house);color:#fff;padding:5.6rem 0 4rem}
+.foot-grid{display:flex;justify-content:space-between;gap:3.2rem;flex-wrap:wrap}
+.foot-grid a{color:var(--white-soft);text-decoration:none;font-size:1.4rem;display:block;margin-top:1rem}
+.foot-grid a:hover{color:#fff}
+.foot-col b{font-size:1.5rem;font-weight:600}
+.foot-bottom{margin-top:4rem;padding-top:2.4rem;border-top:1px solid rgba(255,255,255,.15);font-size:1.2rem;color:var(--white-soft);display:flex;justify-content:space-between;gap:1.6rem;flex-wrap:wrap}
+.foot-bottom .gold{color:var(--gold);font-weight:600}
+
+/* ---------- frap ---------- */
+.frap{
+  position:fixed;right:2.4rem;bottom:2.4rem;z-index:60;
+  width:5.6rem;height:5.6rem;border-radius:50%;border:none;cursor:pointer;
+  background:var(--accent);color:#fff;font-size:2rem;
+  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
+  transition:all .2s ease;display:grid;place-items:center;
+}
+.frap:active{transform:scale(.95);box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,0)}
+.frap-toast{
+  position:fixed;right:2.4rem;bottom:9.6rem;z-index:60;
+  background:#fff;border-radius:12px;box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
+  padding:1.4rem 1.8rem;display:none;align-items:center;gap:1.2rem;
+}
+.frap-toast.on{display:flex}
+.frap-toast .ic{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--green-light);display:grid;place-items:center;color:var(--green)}
+.frap-toast .tt{font-size:1.3rem;font-weight:700;color:var(--ink)}
+.frap-toast .cd{font-size:1.8rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<!-- top strip -->
+<div class="strip">
+  <b>App Storeで近日公開。</b>無料で1スロットから。
+  <a class="pill pill-black" style="border-color:#fff" href="#pro">公開通知を受け取る</a>
+</div>
+
+<!-- nav -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#"><span class="logo-cup">1</span><b>OneTimer</b></a>
+    <div class="nav-links">
+      <a href="#surfaces">起動場所</a>
+      <a href="#ring">鳴り方</a>
+      <a href="#silent">静音モード</a>
+      <a href="#scenes">使う場面</a>
+      <a href="#sizes">プリセット</a>
+      <a href="#spec">スペック</a>
+    </div>
+    <div class="nav-cta">
+      <a class="pill pill-dark-outline" href="#spec">ヘルプ</a>
+      <a class="pill pill-black" href="#pro">近日公開</a>
+    </div>
+  </div>
+</nav>
+
+<!-- hero -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">ロック画面ワンタップタイマー</span>
+      <h1>いつもの時間を、<br>ワンタップで。</h1>
+      <p class="lead">昼寝20分。カップ麺3分。通勤23分。よく使うタイマーをロック画面に置いておけば、<strong>タップ一回でスタート</strong>。声も出さず、アプリも開かず。</p>
+      <p class="sub">iOS 26対応 / 無料で1スロット / サブスクなし</p>
+      <div class="cta-row">
+        <a class="pill pill-filled" href="#surfaces">どこから起動できるか見る</a>
+        <a class="pill pill-outline" href="#sizes">プリセットを見る</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-disc">
+        <div class="phone">
+          <div class="scr">
+            <div class="island"></div>
+            <div class="d">6月10日 水曜日</div>
+            <div class="t">13:33</div>
+            <div class="la">
+              <span class="ic">🌙</span>
+              <div><div class="nm">昼寝</div><div class="cd" id="heroCd">19:58</div></div>
+            </div>
+            <div class="ws">
+              <span class="w"><em>☾</em><span>20分</span></span>
+              <span class="w"><em>♨</em><span>3分</span></span>
+              <span class="w"><em>♥</em><span>1分</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- surfaces -->
+<section class="section white" id="surfaces">
+  <div class="wrap">
+    <h2 class="sec">iPhoneのいちばん近い場所から。</h2>
+    <p class="sec-sub">タイマーを「探す」工程を、設計からなくしました。</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="thumb th-lock">
+          <div class="mini-lock">
+            <div class="md">6月10日 水曜日</div>
+            <div class="mt">13:33</div>
+            <div class="mw"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+        <div class="bd">
+          <h3>ロック画面ウィジェット</h3>
+          <p>時計の下に最大3つのボタン。画面を点けたら、もう目の前に。タップ一回でカウントダウンが始まります。</p>
+          <a class="more" href="#sizes">プリセットの作り方 →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb th-cc">
+          <div class="mini-cc"><i class="hot"></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="bd">
+          <h3>コントロールセンター</h3>
+          <p>右上からスワイプして1タップ。アプリを開かずその場で開始。ロック中でも動作します。</p>
+          <a class="more" href="#ring">どう鳴るかを見る →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb th-ab">
+          <div class="mini-ab"></div>
+        </div>
+        <div class="bd">
+          <h3>アクションボタン</h3>
+          <p>側面の物理ボタンに割り当てれば、画面を見ずに開始。ポケットの中からでも、いつもの時間。</p>
+          <a class="more" href="#spec">対応機種を見る →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- dark green band -->
+<section class="band" id="ring">
+  <div class="wrap band-grid">
+    <div>
+      <h2>マナーモードでも、鳴る。</h2>
+      <p>OneTimerは通知ではなく、iOS 26の新機能 AlarmKit — 純正アラームと同じ仕組みで鳴ります。消音スイッチも集中モードも貫通して、止めるまで鳴り続ける。「気づかなくて麺がのびた」は、もう起きません。</p>
+      <div class="cta-row">
+        <a class="pill pill-white" href="#sizes">プリセットを見る</a>
+        <a class="pill pill-white-outline" href="#spec">仕組みを詳しく</a>
+      </div>
+    </div>
+    <div>
+      <div class="alert-card">
+        <div class="bell">🔔</div>
+        <div class="ti">昼寝 終了</div>
+        <div class="su">OneTimer — 20:00</div>
+        <button class="stop">停止</button>
+        <div class="mute">🔇 消音モード中でも、この画面と音でお知らせ</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- silent mode / commute -->
+<section class="section white" id="silent">
+  <div class="wrap">
+    <h2 class="sec">音を出せない場所には、静音モード。</h2>
+    <p class="sec-sub">電車で。オフィスで。図書館で。鳴らさずに、ちゃんと気づく。</p>
+    <div class="silent-grid">
+      <div class="silent-copy">
+        <p class="silent-lead">「ヘイ Siri」と言えない場所こそ、OneTimer の出番です。</p>
+        <ul class="silent-list">
+          <li><b>音は鳴らさない。</b>本体スピーカーからは音を出しません。満員電車でも気まずくならない。</li>
+          <li><b>バイブで知らせる。</b>ポケットの中の振動で、そっとお知らせ。</li>
+          <li><b>音楽が止まる。</b>イヤホンで聴いていた音楽が一時停止。「急な無音」が目を覚まします。</li>
+        </ul>
+        <p class="silent-note">通勤の電車で「降りる駅の少し前」にセットしておけば、うっかり寝過ごしも防げます。プリセットごとに切り替えられます。</p>
+      </div>
+      <div class="silent-visual">
+        <div class="commute-card">
+          <div class="commute-head">
+            <span class="commute-ic">🚃</span>
+            <div>
+              <div class="commute-nm">通勤</div>
+              <div class="commute-sub">静音モード ON</div>
+            </div>
+            <span class="commute-mute">🔇</span>
+          </div>
+          <div class="commute-time">23:00</div>
+          <div class="commute-tags">
+            <span class="ctag">スピーカー音 なし</span>
+            <span class="ctag on">バイブ あり</span>
+            <span class="ctag on">音楽 停止</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- scenes -->
+<section class="section ceramic" id="scenes">
+  <div class="wrap">
+    <h2 class="sec">声を出せない場所で、いちばん役に立つ。</h2>
+    <p class="sec-sub">「いつもの時間」は、毎日くり返す場面にこそ宿ります。</p>
+    <div class="scene-grid">
+      <div class="scene">
+        <div class="scene-top">
+          <span class="scene-ic">👶</span>
+          <div>
+            <div class="scene-nm">寝かしつけ・授乳</div>
+            <div class="scene-time">30:00<span class="mute">🔇 静音</span></div>
+          </div>
+        </div>
+        <p>暗い部屋で声は出せない。片手も塞がっている。ロック画面をタップするだけ。静音モードのバイブで、子を起こさず親だけが気づけます。</p>
+      </div>
+      <div class="scene">
+        <div class="scene-top">
+          <span class="scene-ic">🏋️</span>
+          <div>
+            <div class="scene-nm">ジムのインターバル</div>
+            <div class="scene-time">1:30<span class="mute">🔇 静音</span></div>
+          </div>
+        </div>
+        <p>セット間のレスト90秒。音楽を聴きながら、声も出さずに。静音モードなら音楽が止まって、次のセットの合図になります。</p>
+      </div>
+      <div class="scene">
+        <div class="scene-top">
+          <span class="scene-ic">🎤</span>
+          <div>
+            <div class="scene-nm">登壇・プレゼン</div>
+            <div class="scene-time">5:00<span class="mute">🔇 静音</span></div>
+          </div>
+        </div>
+        <p>「5分で話す」持ち時間。話している最中だから声は出せず、聴衆の前で音も鳴らせない。アクションボタンでこっそり開始、残り時間は自分だけにバイブで。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PDP parody: size selector -->
+<section class="section white" id="sizes">
+  <div class="wrap">
+    <h2 class="sec">サイズをお選びください。</h2>
+    <p class="sec-sub">プリセットは3スロット。名前・時間・アイコン・カラーはお好みで。</p>
+    <div class="pdp-card">
+      <div class="size-row">
+        <button class="size sel" data-name="昼寝" data-time="20:00">
+          <span class="cup"><span>☾</span></span>
+          <span class="nm">昼寝</span>
+          <span class="oz">20 min</span>
+        </button>
+        <button class="size" data-name="カップ麺" data-time="3:00">
+          <span class="cup"><span>♨</span></span>
+          <span class="nm">カップ麺</span>
+          <span class="oz">3 min</span>
+        </button>
+        <button class="size" data-name="筋トレ" data-time="1:00">
+          <span class="cup"><span>♥</span></span>
+          <span class="nm">筋トレ</span>
+          <span class="oz">60 sec</span>
+        </button>
+        <button class="size" data-name="通勤" data-time="23:00" data-silent="1">
+          <span class="cup"><span>🚃</span></span>
+          <span class="nm">通勤 🔇</span>
+          <span class="oz">23 min</span>
+        </button>
+      </div>
+      <p class="pdp-note" id="pdpNote">「昼寝 20:00」— ロック画面のスロット1に置けます。</p>
+      <div class="pdp-ctas">
+        <a class="pill pill-outline pill-customize" href="#pro"><span class="spark">✦</span> カスタマイズ</a>
+        <a class="pill pill-filled" style="padding:12px 32px" href="#pro">スロットに登録</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- spec -->
+<section class="section ceramic" id="spec">
+  <div class="wrap">
+    <h2 class="sec">スペック</h2>
+    <div class="spec-card">
+      <div class="spec-row"><span class="k">対応OS</span><span class="v">iOS 26以降</span></div>
+      <div class="spec-row"><span class="k">アラーム方式</span><span class="v">AlarmKit(消音・集中モード貫通)</span></div>
+      <div class="spec-row"><span class="k">静音モード</span><span class="v">プリセットごとに切替(バイブ+音楽停止)</span></div>
+      <div class="spec-row"><span class="k">スロット数</span><span class="v">無料1 / Pro 3</span></div>
+      <div class="spec-row"><span class="k">残り時間表示</span><span class="v">ロック画面 / Dynamic Island / アプリ内(秒単位)</span></div>
+      <div class="spec-row"><span class="k">停止</span><span class="v">ウィジェット / Live Activity / アプリから</span></div>
+      <div class="spec-row"><span class="k">同時実行</span><span class="v">1本(開始時に自動で置き換え)**</span></div>
+      <div class="spec-row"><span class="k">価格</span><span class="v">無料 / Pro ¥500(買い切り)</span></div>
+      <div class="spec-foot">** 「シンプルであること」は仕様です。複数同時実行の予定はいまのところありません。</div>
+    </div>
+  </div>
+</section>
+
+<!-- gold pro section -->
+<section class="gold-sec" id="pro">
+  <div class="wrap gold-grid">
+    <div>
+      <h2 class="serif">無料の1スロットは、<br>はじまりにすぎない。</h2>
+      <p>OneTimerは無料のままでも完成品です。タイマー1個、ロック画面、ちゃんと鳴る。それでも「昼寝とカップ麺と筋トレ、ぜんぶ置きたい」と思ったら、そのときだけ。</p>
+      <ul class="gold-benefits">
+        <li>3スロットすべて解放</li>
+        <li>アイコンとカラーのフルカスタマイズ</li>
+        <li>今後の機能追加もそのまま使える</li>
+      </ul>
+    </div>
+    <div>
+      <div class="pro-card">
+        <span class="lv">★</span>
+        <h3>OneTimer Pro</h3>
+        <div class="pr">¥500<small>一度だけ</small></div>
+        <ul>
+          <li>タイマー3スロット</li>
+          <li>アイコン・カラーカスタマイズ</li>
+          <li>サブスクではありません</li>
+        </ul>
+        <a class="pill pill-white" href="#">App Storeで近日公開</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <b>OneTimer</b>
+        <a href="#surfaces">起動場所</a>
+        <a href="#sizes">プリセット</a>
+        <a href="#pro">価格</a>
+      </div>
+      <div class="foot-col">
+        <b>サポート</b>
+        <a href="#spec">スペック</a>
+        <a href="#">ヘルプ / FAQ</a>
+        <a href="#">お問い合わせ</a>
+      </div>
+      <div class="foot-col">
+        <b>開発</b>
+        <a href="#">開発者より</a>
+        <a href="./privacy.html">プライバシーポリシー</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 OneTimer — ロック画面ワンタップタイマー</span>
+      <span class="gold">★ NO SUBSCRIPTION — 買い切り¥500</span>
+    </div>
+  </div>
+</footer>
+
+<!-- frap floating demo button -->
+<div class="frap-toast" id="frapToast">
+  <span class="ic">☾</span>
+  <div>
+    <div class="tt">昼寝 — カウントダウン中</div>
+    <div class="cd" id="frapCd">20:00</div>
+  </div>
+</div>
+<button class="frap" id="frap" aria-label="ワンタップ開始デモ">▶</button>
+
+<script>
+// hero countdown ticking
+(function(){
+  let s=19*60+58;
+  setInterval(()=>{
+    s=s>0?s-1:20*60;
+    document.getElementById('heroCd').textContent=
+      Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+  },1000);
+})();
+
+// size selector
+document.querySelectorAll('.size').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.size').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+    document.getElementById('pdpNote').textContent= btn.dataset.silent
+      ? '「'+btn.dataset.name+' '+btn.dataset.time+'」— 静音モードで、音を出さずにバイブでお知らせ。'
+      : '「'+btn.dataset.name+' '+btn.dataset.time+'」— ロック画面のスロットに置けます。';
+  });
+});
+
+// frap: one-tap demo
+(function(){
+  const toast=document.getElementById('frapToast');
+  const cd=document.getElementById('frapCd');
+  let timer=null;
+  document.getElementById('frap').addEventListener('click',()=>{
+    clearInterval(timer);
+    let s=20*60;
+    cd.textContent='20:00';
+    toast.classList.add('on');
+    timer=setInterval(()=>{
+      s--;
+      cd.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+      if(s<=0)clearInterval(timer);
+    },1000);
+    setTimeout(()=>toast.classList.remove('on'),6000);
+  });
+})();
+</script>
+</body>
+</html>
