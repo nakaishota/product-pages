@@ -12,4 +12,4 @@
 
 | プロダクト | パス | 状態 |
 |---|---|---|
-| HomeRide（乗換ナビ iOS アプリ） | `homeride/` | 制作中 |
+| HomeRide（乗換ナビ iOS アプリ） | `homeride/` | 公開中 — https://nakaishota.github.io/product-pages/homeride/ |
