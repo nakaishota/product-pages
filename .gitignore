@@ -1,1 +1,5 @@
 .DS_Store
+
+# Claude Code 関連はローカル限定(public リポジトリ + GitHub Pages 配信のため)
+CLAUDE.md
+.claude/
