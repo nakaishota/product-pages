@@ -14,6 +14,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    html {
+      /* block-size: 0 → auto のアニメーションを有効化(対応ブラウザのみ) */
+      interpolate-size: allow-keywords;
+    }
     body {
       margin: 0;
       background: #fcfcfb;
@@ -23,6 +27,23 @@
     @keyframes introReveal {
       from { opacity: 0; transform: translateY(28px); }
       to   { opacity: 1; transform: none; }
+    }
+
+    /* スクロールで画面に入ったセクションをふわっと表示(CSSのみ。非対応ブラウザは即時表示) */
+    .reveal {
+      opacity: 1;
+      animation: introReveal both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 60%;
+    }
+    /* 最下部の要素はスクロールを最後まで進められないため、画面に入り切る前に完了させる */
+    footer.reveal {
+      animation-range: entry 0% entry 60%;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        animation: none;
+      }
     }
 
     /* 背景: 部屋の写真を固定(コンテンツが上に流れてくる) */
@@ -130,45 +151,122 @@
       letter-spacing: 0;
     }
 
-    /* PROFILE */
-    .profile {
+    /* CAREER */
+    .career {
       border-top: 1px solid #e6e6e3;
-      padding: 36px 0;
+      padding: 48px 0;
     }
-    .profile__table {
-      width: fit-content;
-      max-width: 100%;
-      margin: 0 auto;
+    .career .section-title {
+      margin-bottom: 20px;
     }
-    .profile__timeline {
+    .career__lead {
+      margin: 0 auto 40px;
+      max-width: 440px;
+      font-size: 13px;
+      color: #8c8c87;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .career__steps {
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 26px;
+      max-width: 620px;
+      margin: 0 auto;
     }
-    .profile__row {
+    .career__summary {
       display: flex;
       gap: 24px;
-      font-size: 13px;
-      line-height: 1.5;
+      align-items: baseline;
+      cursor: pointer;
+      list-style: none;
     }
-    .profile__date {
-      flex: 0 0 84px;
+    .career__summary::-webkit-details-marker {
+      display: none;
+    }
+    /* 開閉インジケータ(+/−) */
+    .career__summary::after {
+      content: "+";
+      flex: none;
+      width: 16px;
+      text-align: center;
+      font-size: 14px;
       color: oklch(0.55 0.1 255);
-      font-weight: 500;
     }
-    .profile__text {
+    .career__step[open] .career__summary::after {
+      content: "−";
+    }
+    .career__summary:hover .career__gist {
+      color: #2a2a28;
+    }
+    /* 開閉アニメーション(CSSのみ。非対応ブラウザは即時開閉) */
+    .career__step::details-content {
+      opacity: 0;
+      block-size: 0;
+      overflow: hidden;
+      transition:
+        content-visibility 0.35s allow-discrete,
+        opacity 0.35s ease,
+        block-size 0.35s ease;
+    }
+    .career__step[open]::details-content {
+      opacity: 1;
+      block-size: auto;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .career__step::details-content {
+        transition: none;
+      }
+    }
+    .career__label {
+      margin: 0;
+      flex: 0 0 150px;
+      font-size: 13px;
+      font-weight: 700;
+      color: oklch(0.45 0.13 255);
+      line-height: 1.55;
+    }
+    .career__gist {
+      flex: 1;
+      font-size: 13px;
+      color: #6f6f69;
+      line-height: 1.55;
+    }
+    .career__text {
+      margin: 8px 0 0 174px;
+      font-size: 13px;
       color: #44443f;
+      line-height: 1.7;
     }
-    .profile__hobbies {
-      margin-top: 18px;
+    .career__skills {
+      max-width: 620px;
+      margin: 40px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-top: 1px dashed #e6e6e3;
+      padding-top: 30px;
+    }
+    .career__skills-row {
+      display: flex;
+      gap: 24px;
+      align-items: baseline;
+    }
+    .career__skills-head {
+      flex: 0 0 150px;
+      font-size: 12px;
+      font-weight: 500;
+      color: oklch(0.55 0.1 255);
+    }
+    .career__skills-tags {
+      flex: 1;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
     }
 
     /* 30min. */
     .minutes {
-      opacity: 1;
-      animation: introReveal both;
-      animation-timeline: view();
-      animation-range: entry 5% cover 35%;
       border-top: 1px solid #e6e6e3;
       padding: 72px 0;
       display: flex;
@@ -274,7 +372,7 @@
     .tag {
       font-size: 11px;
       border-radius: 999px;
-      padding: 2px 10px;
+      padding: 2px 8px;
       border: 1px solid transparent;
     }
     /* 技術: ブルー */
@@ -360,6 +458,24 @@
       .work__thumb {
         flex: none;
       }
+      .career__summary {
+        flex-wrap: wrap;
+        gap: 4px 12px;
+      }
+      .career__label {
+        flex: none;
+        width: 100%;
+      }
+      .career__text {
+        margin-left: 0;
+      }
+      .career__skills-row {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .career__skills-head {
+        flex: none;
+      }
     }
   </style>
 </head>
@@ -384,48 +500,7 @@
   <div class="sheet">
     <main>
 
-      <section class="profile">
-        <h2 class="section-title">PROFILE <span>私について</span></h2>
-        <div class="profile__table">
-          <div class="profile__timeline">
-            <div class="profile__row">
-              <div class="profile__date">2015年04月</div>
-              <div class="profile__text">情報系学部の大学に入学。プログラミングに初めて触れる。</div>
-            </div>
-            <div class="profile__row">
-              <div class="profile__date">2019年04月</div>
-              <div class="profile__text">大学卒業。エンジニアとして新卒入社。医療機器の開発に携わる。</div>
-            </div>
-            <div class="profile__row">
-              <div class="profile__date">2023年07月</div>
-              <div class="profile__text">退職し起業。フリーSEとして企業の開発チームに参画する。</div>
-            </div>
-            <div class="profile__row">
-              <div class="profile__date">2024年10月</div>
-              <div class="profile__text">デイトラライトニング受講。ノーコードツール「STUDIO」を学ぶ。</div>
-            </div>
-            <div class="profile__row">
-              <div class="profile__date">2025年01月</div>
-              <div class="profile__text">デイトラWeb制作コース受講。サイト制作に必要なスキルを学ぶ。</div>
-            </div>
-          </div>
-          <div class="profile__row profile__hobbies">
-            <div class="profile__date">趣味</div>
-            <div class="profile__text">サウナ / 飲み会 / スノボ / 家系ラーメン巡り / 断捨離 / ぷよぷよ / アニメ</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="minutes">
-        <div class="minutes__figure">
-          <span class="minutes__num">30</span>
-          <span class="minutes__unit">min.</span>
-        </div>
-        <p class="minutes__title">このポートフォリオに、かけた時間。</p>
-        <p class="minutes__note">このサイトも、AIを活用して最短で。<br>本質を見極め、速さと質を両立させること。それがわたしの流儀です。</p>
-      </section>
-
-      <section class="works">
+      <section class="works reveal">
         <h2 class="section-title">WORKS <span>制作物</span></h2>
         <div class="works__list">
 
@@ -480,7 +555,89 @@
         </div>
       </section>
 
-      <footer>
+      <section class="minutes reveal">
+        <div class="minutes__figure">
+          <span class="minutes__num">60</span>
+          <span class="minutes__unit">min.</span>
+        </div>
+        <p class="minutes__title">このポートフォリオに、かけた時間。</p>
+        <p class="minutes__note">このサイトも、AIを活用して最短で。<br>本質を見極め、速さと質を両立させること。それがわたしの流儀です。</p>
+      </section>
+
+      <section class="career reveal">
+        <h2 class="section-title">CAREER <span>開発を通じた成長</span></h2>
+        <p class="career__lead">新しい言語、新しい環境。何度でもゼロから始める力を磨いてきました。</p>
+        <div class="career__steps">
+          <details class="career__step">
+            <summary class="career__summary">
+              <h3 class="career__label">はじめての実務</h3>
+              <span class="career__gist">低レイヤの視点と、伝わる説明</span>
+            </summary>
+            <p class="career__text">医療機器の開発からキャリアを開始。C# と WPF で UI 実装の基礎を固め、ハードウェア制御やメモリ管理で<strong>低レイヤの視点</strong>を養った。経営層への報告を通じて、伝わる説明の大切さも学んだ。</p>
+          </details>
+          <details class="career__step">
+            <summary class="career__summary">
+              <h3 class="career__label">複雑な設計への挑戦</h3>
+              <span class="career__gist">パフォーマンスとドキュメント品質</span>
+            </summary>
+            <p class="career__text">膨大な波形データをメモリ効率よく扱う実装で<strong>パフォーマンス意識</strong>を磨く。設計書レビューを重ね、ドキュメントの品質にこだわるようになった。</p>
+          </details>
+          <details class="career__step">
+            <summary class="career__summary">
+              <h3 class="career__label">ゼロからの Web 開発</h3>
+              <span class="career__gist">0→1 で形にする力</span>
+            </summary>
+            <p class="career__text">職場全員が未経験の中、Web アプリケーションを単独で構築。<strong>0→1 で形にする力</strong>と、新しい技術を素早くキャッチアップする自信がついた。</p>
+          </details>
+          <details class="career__step">
+            <summary class="career__summary">
+              <h3 class="career__label">技術の統合と信頼</h3>
+              <span class="career__gist">複数言語をつなぐ設計力</span>
+            </summary>
+            <p class="career__text">C#・C++・C を組み合わせたシステム開発で<strong>複数言語の連携</strong>を得意に。通信プロトコルの設計から客先会議の進行まで、品質とスケジュールの両立を担った。</p>
+          </details>
+          <details class="career__step">
+            <summary class="career__summary">
+              <h3 class="career__label">現在 — SaaS 開発</h3>
+              <span class="career__gist">フロントとバックの両側から</span>
+            </summary>
+            <p class="career__text">React と Ruby on Rails による SaaS 開発で、<strong>フロントとバックの両側</strong>から機能改善・新機能に携わる。データフロー全体を理解した提案で、<strong>チームの技術相談の中核</strong>を担う。シンプルに、論理的に。学び続ける姿勢を大切にしています。</p>
+          </details>
+        </div>
+        <div class="career__skills">
+          <div class="career__skills-row">
+            <span class="career__skills-head">言語</span>
+            <div class="career__skills-tags">
+              <span class="tag tag--tech">C#</span>
+              <span class="tag tag--tech">C++</span>
+              <span class="tag tag--tech">C</span>
+              <span class="tag tag--tech">JavaScript</span>
+              <span class="tag tag--tech">TypeScript</span>
+              <span class="tag tag--tech">Ruby</span>
+              <span class="tag tag--tech">Swift</span>
+              <span class="tag tag--tech">HTML/CSS</span>
+            </div>
+          </div>
+          <div class="career__skills-row">
+            <span class="career__skills-head">フレームワーク</span>
+            <div class="career__skills-tags">
+              <span class="tag tag--tech">React</span>
+              <span class="tag tag--tech">Ruby on Rails</span>
+              <span class="tag tag--tech">ASP.NET</span>
+              <span class="tag tag--tech">.NET Framework</span>
+            </div>
+          </div>
+          <div class="career__skills-row">
+            <span class="career__skills-head">利用AI</span>
+            <div class="career__skills-tags">
+              <span class="tag tag--ai">Claude Code</span>
+              <span class="tag tag--ai">ChatGPT Codex</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="reveal">
         <div class="footer__row">
           <div class="footer__id">
             <span class="footer__name">なかい</span>
