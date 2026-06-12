@@ -10,6 +10,7 @@
 
 ## LP 一覧
 
-| プロダクト | パス | 状態 |
+| コンテンツ | パス | 状態 |
 |---|---|---|
+| ポートフォリオ（トップページ） | `/`（ルート直下） | 制作中 — https://nakaishota.github.io/product-pages/ |
 | HomeRide（乗換ナビ iOS アプリ） | `homeride/` | 公開中 — https://nakaishota.github.io/product-pages/homeride/ |
