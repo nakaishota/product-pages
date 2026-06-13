@@ -315,8 +315,8 @@
       margin-bottom: 32px;
     }
     .works__list {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-auto-rows: 1fr;
       gap: 44px;
     }
     .work {
@@ -344,6 +344,13 @@
       object-fit: cover;
       object-position: top;
       display: block;
+    }
+    /* PC(横並び): サムネをカード高さに合わせて伸ばし、隙間をなくす */
+    @media (min-width: 561px) {
+      .work__thumb {
+        aspect-ratio: auto;
+        align-self: stretch;
+      }
     }
     .work__body {
       flex: 1;
@@ -452,6 +459,10 @@
         align-items: flex-start;
         gap: 14px;
       }
+      /* スマホ(縦積み): 高さ統一を解除し、各カードは内容なりの高さに */
+      .works__list {
+        grid-auto-rows: auto;
+      }
       .work {
         flex-direction: column;
       }
@@ -506,7 +517,7 @@
 
           <article class="work">
             <div class="work__thumb">
-              <img src="./images/works/kanricost.svg" alt="管理コスト診断のサムネイル" loading="lazy">
+              <img src="./images/works/kanricost.svg" alt="管理コスト診断のサムネイル" loading="lazy" style="object-position: center;">
             </div>
             <div class="work__body">
               <h3 class="work__title">管理コスト診断(自社プロダクト)</h3>
