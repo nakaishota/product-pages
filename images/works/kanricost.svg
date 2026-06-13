@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="管理コスト診断">
+  <defs>
+    <radialGradient id="kc-g1" cx="22%" cy="26%" r="55%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="kc-g2" cx="84%" cy="18%" r="52%">
+      <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="kc-g3" cx="80%" cy="86%" r="55%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="kc-ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cbd5f5"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="640" height="400" fill="#171717"/>
+  <rect width="640" height="400" fill="url(#kc-g1)"/>
+  <rect width="640" height="400" fill="url(#kc-g2)"/>
+  <rect width="640" height="400" fill="url(#kc-g3)"/>
+
+  <!-- eyebrow -->
+  <g transform="translate(56 70)">
+    <circle cx="4" cy="-4" r="4" fill="#ffffff"/>
+    <text x="18" y="0" font-family="'Helvetica Neue', Arial, sans-serif" font-size="15" letter-spacing="3.4" fill="#c7c7c7">MINIMALIST DIAGNOSIS</text>
+  </g>
+
+  <!-- title -->
+  <text x="56" y="176" font-family="'Hiragino Kaku Gothic Pro', 'Noto Sans JP', sans-serif" font-size="46" font-weight="700" letter-spacing="1" fill="#ffffff">管理コスト診断</text>
+  <text x="58" y="226" font-family="'Hiragino Kaku Gothic Pro', 'Noto Sans JP', sans-serif" font-size="19" font-weight="400" fill="#bdbdbd">あなたのミニマリスト度を占う</text>
+
+  <!-- score gauge -->
+  <g transform="translate(504 198)">
+    <circle r="74" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="9"/>
+    <circle r="74" fill="none" stroke="url(#kc-ring)" stroke-width="9" stroke-linecap="round"
+            stroke-dasharray="464.9" stroke-dashoffset="83.7" transform="rotate(-90)"/>
+    <text x="0" y="6" text-anchor="middle" font-family="'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="700" letter-spacing="-1" fill="#ffffff">82<tspan font-size="22" fill="#9a9a9a">%</tspan></text>
+    <text x="0" y="34" text-anchor="middle" font-family="'Hiragino Kaku Gothic Pro', 'Noto Sans JP', sans-serif" font-size="13" fill="#9a9a9a">ミニマリスト度</text>
+  </g>
+
+  <!-- domain mini bars -->
+  <g transform="translate(56 296)" font-family="'Helvetica Neue', Arial, sans-serif" font-size="12" letter-spacing="1.5">
+    <g transform="translate(0 0)">
+      <text x="0" y="4" fill="#8a8a8a">PHYSICAL</text>
+      <rect x="92" y="-2" width="200" height="6" rx="3" fill="rgba(255,255,255,0.14)"/>
+      <rect x="92" y="-2" width="150" height="6" rx="3" fill="rgba(255,255,255,0.5)"/>
+    </g>
+    <g transform="translate(0 24)">
+      <text x="0" y="4" fill="#ffffff">DIGITAL</text>
+      <rect x="92" y="-2" width="200" height="6" rx="3" fill="rgba(255,255,255,0.14)"/>
+      <rect x="92" y="-2" width="186" height="6" rx="3" fill="#ffffff"/>
+    </g>
+    <g transform="translate(0 48)">
+      <text x="0" y="4" fill="#8a8a8a">SOCIAL</text>
+      <rect x="92" y="-2" width="200" height="6" rx="3" fill="rgba(255,255,255,0.14)"/>
+      <rect x="92" y="-2" width="168" height="6" rx="3" fill="rgba(255,255,255,0.5)"/>
+    </g>
+  </g>
+
+  <!-- footer brand -->
+  <text x="56" y="372" font-family="'Hiragino Kaku Gothic Pro', 'Noto Sans JP', sans-serif" font-size="13" fill="#cfcfcf">#管理コスト診断</text>
+  <text x="584" y="372" text-anchor="end" font-family="'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#8a8a8a">nakaishota.github.io/kanricost</text>
+</svg>
