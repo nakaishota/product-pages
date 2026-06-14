@@ -13,6 +13,7 @@
 | コンテンツ | パス | 状態 |
 |---|---|---|
 | ポートフォリオ（トップページ） | `/`（ルート直下） | 公開中 — https://nakaishota.github.io/product-pages/ |
+| CSS clamp() ジェネレーター（Web ツール・SEO 対応） | `clamp-generator/` | 公開中 — https://nakaicode.com/clamp-generator/ |
 | HomeRide（乗換ナビ iOS アプリ） | `homeride/` | 公開中 — https://nakaishota.github.io/product-pages/homeride/ |
 | 尾道レトロキャンペーン（架空・サンプル LP） | `onomichi/` | 移植済み — https://nakaishota.github.io/product-pages/onomichi/ |
 | OneTimer（ロック画面ワンタップタイマー iOS アプリ） | `onetimer/` | 公開中 — https://nakaishota.github.io/product-pages/onetimer/ |

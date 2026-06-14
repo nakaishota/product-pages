@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200" font-family="'JetBrains Mono','SF Mono',ui-monospace,monospace">
+  <rect width="320" height="200" fill="#f4f6fb"/>
+  <!-- ヘッダー -->
+  <rect x="0" y="0" width="320" height="34" fill="#ffffff"/>
+  <line x1="0" y1="34" x2="320" y2="34" stroke="#e2e6ee" stroke-width="1"/>
+  <text x="20" y="22" font-size="13" font-weight="600" fill="#2b3340">clamp()<tspan fill="#9aa2b2" font-weight="500"> generator</tspan></text>
+  <rect x="250" y="11" width="22" height="13" rx="3" fill="#eef1f7"/>
+  <rect x="274" y="11" width="26" height="13" rx="3" fill="#3b5bdb"/>
+  <!-- 入力カード -->
+  <rect x="20" y="54" width="280" height="74" rx="8" fill="#ffffff" stroke="#e2e6ee"/>
+  <text x="36" y="76" font-size="9" font-weight="600" fill="#3b4250">最小側 <tspan fill="#8b93f0" font-size="7">MIN</tspan></text>
+  <text x="180" y="76" font-size="9" font-weight="600" fill="#3b4250">最大側 <tspan fill="#8b93f0" font-size="7">MAX</tspan></text>
+  <rect x="36" y="84" width="120" height="16" rx="4" fill="#f7f8fb" stroke="#e2e6ee"/>
+  <rect x="36" y="104" width="120" height="16" rx="4" fill="#f7f8fb" stroke="#e2e6ee"/>
+  <rect x="180" y="84" width="120" height="16" rx="4" fill="#f7f8fb" stroke="#e2e6ee"/>
+  <rect x="180" y="104" width="120" height="16" rx="4" fill="#f7f8fb" stroke="#e2e6ee"/>
+  <text x="44" y="95" font-size="8" fill="#5a6373">320</text>
+  <text x="44" y="115" font-size="8" fill="#5a6373">24</text>
+  <text x="188" y="95" font-size="8" fill="#5a6373">1280</text>
+  <text x="188" y="115" font-size="8" fill="#5a6373">44</text>
+  <!-- 出力バー -->
+  <rect x="20" y="142" width="280" height="38" rx="8" fill="#1e2330"/>
+  <text x="34" y="159" font-size="6.5" font-weight="600" letter-spacing="1" fill="#7c93f0">CSS</text>
+  <text x="34" y="172" font-size="8.5" fill="#cfd6e6">clamp(24px, calc(17.3px + 2.08vw), 44px)</text>
+</svg>
