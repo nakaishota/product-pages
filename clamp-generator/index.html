@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS clamp() ジェネレーター｜画面幅から最小・最大サイズを自動計算</title>
+  <meta name="description" content="画面幅とサイズを入力するだけで、レスポンシブな CSS clamp() の値を自動計算する無料ツール。フォントサイズや余白の clamp(vw) 計算に対応。px / rem 切替・複数まとめ計算・ワンクリックコピー対応の clamp ジェネレーターです。">
+  <meta name="theme-color" content="#3b5bdb">
+  <link rel="canonical" href="https://nakaicode.com/clamp-generator/">
+
+  <!-- OGP / SNS シェア -->
+  <meta property="og:title" content="CSS clamp() ジェネレーター｜画面幅から最小・最大サイズを自動計算">
+  <meta property="og:description" content="画面幅とサイズを入れるだけでレスポンシブな clamp() を自動計算。フォント・余白の clamp(vw) 計算に。px/rem 切替・複数まとめ計算・コピー対応の無料ツール。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nakaicode.com/clamp-generator/">
+  <meta property="og:image" content="https://nakaicode.com/clamp-generator/og-image.png">
+  <meta property="og:site_name" content="nakaicode">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSS clamp() ジェネレーター｜画面幅から最小・最大サイズを自動計算">
+  <meta name="twitter:description" content="画面幅とサイズを入れるだけでレスポンシブな clamp() を自動計算。フォント・余白の clamp(vw) 計算に対応した無料ツール。">
+  <meta name="twitter:image" content="https://nakaicode.com/clamp-generator/og-image.png">
+
+  <!-- ファビコン(外部ファイルを増やさないインライン SVG) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233b5bdb'/%3E%3Ctext x='16' y='23' font-family='monospace' font-size='17' font-weight='700' fill='%23ffffff' text-anchor='middle'%3E%7B%7D%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- 構造化データ: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CSS clamp() ジェネレーター",
+    "url": "https://nakaicode.com/clamp-generator/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "description": "画面幅とサイズを入力するだけで、レスポンシブな CSS clamp() の値を自動計算する無料ツール。フォントサイズや余白の clamp(vw) 計算に対応し、px / rem 切替・複数まとめ計算・ワンクリックコピーが可能。",
+    "inLanguage": "ja",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "nakaicode",
+      "url": "https://nakaicode.com/"
+    }
+  }
+  </script>
+
+  <!-- 構造化データ: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "CSS の clamp() 関数とは何ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "clamp() は clamp(最小値, 推奨値, 最大値) の3つの引数を取る CSS 関数です。推奨値が最小値を下回ると最小値で、最大値を上回ると最大値で止まります。推奨値に vw(画面幅の割合)を含めることで、画面幅に応じてフォントサイズや余白をなめらかに変化させつつ、小さすぎ・大きすぎを防げます。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "clamp() の推奨値(vw の計算式)はどうやって求めますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "2つの画面幅 W1・W2 と、それぞれで欲しいサイズ S1・S2 から一次関数を引きます。傾き slope = (S2 - S1) / (W2 - W1)、切片 b = S1 - slope × W1 とすると、推奨値は calc(b px + slope×100 vw) になります。このツールはこの計算を自動で行い、px / rem どちらの単位でも出力します。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "clamp() の単位は px と rem のどちらを使うべきですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "アクセシビリティを重視するなら rem を推奨します。rem はユーザーがブラウザの文字サイズ設定を変えたときに追従するため、特にフォントサイズでは rem が安全です。固定の余白や装飾サイズでは px でも構いません。このツールは px / rem を切り替えると、ルートフォントサイズ(既定 16px)を基準に値を自動換算します。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "メディアクエリ(ブレークポイント)と clamp() はどう使い分けますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "clamp() は『画面幅に応じて連続的にサイズを変えたい』場合に向いています。フォントサイズ・余白・行間などは clamp() でメディアクエリを書かずに済みます。一方、レイアウトの段組みを切り替える(1カラム→2カラム)など不連続な変化はメディアクエリが適しています。両者は併用でき、サイズは clamp()、構造はメディアクエリと役割分担するのが定番です。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "レスポンシブなフォントサイズの計算にも使えますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。フォントサイズの clamp 計算はこのツールの主用途です。たとえば『画面幅 320px で 24px、1280px で 44px』のように入力すると、その間をなめらかに変化し画面外では止まる clamp() が得られます。複数の見出し・本文サイズをカードで並べて一度に計算できます。"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:oklch(0.976 0.004 255);
+      --fg:oklch(0.26 0.02 255);
+      --muted:oklch(0.5 0.02 255);
+      --line:oklch(0.9 0.012 255);
+      --accent:oklch(0.5 0.16 262);
+      --accent-soft:oklch(0.62 0.15 262);
+      --card:#fff;
+      --code-bg:oklch(0.255 0.014 255);
+    }
+    html,body{margin:0}
+    body{
+      font-family:'Noto Sans JP',system-ui,sans-serif;
+      background:var(--bg);color:var(--fg);
+      line-height:1.8;-webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--accent)}
+    input{font-family:inherit}
+    input:focus{outline:none;border-color:var(--accent-soft)}
+    button{font-family:inherit;cursor:pointer}
+    ::selection{background:oklch(0.88 0.06 262)}
+    .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+    /* ヘッダー */
+    .site-header{background:#fff;border-bottom:1px solid var(--line)}
+    .site-header .wrap{display:flex;align-items:center;justify-content:space-between;padding:15px 20px}
+    .logo{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;letter-spacing:-0.01em}
+    .logo span{color:var(--muted);font-weight:500}
+    .home-link{font-size:12.5px;color:var(--muted);text-decoration:none}
+    .home-link:hover{color:var(--accent)}
+
+    /* イントロ */
+    .intro{padding:40px 0 8px}
+    h1{font-size:clamp(26px,3.6vw,38px);line-height:1.3;margin:0 0 14px;letter-spacing:-0.01em}
+    .lead{font-size:clamp(15px,1.6vw,17px);color:oklch(0.38 0.02 255);margin:0}
+
+    /* ツール本体 */
+    .tool{margin:26px 0 8px}
+    .tool-bar{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+    .root-field{display:flex;align-items:center;gap:8px}
+    .root-field[hidden]{display:none}
+    .root-field label{font-size:12px;color:var(--muted);font-weight:500}
+    .num-inp{width:74px;padding:7px 28px 7px 10px;border:1px solid var(--line);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff}
+    .field{position:relative;display:flex;align-items:center}
+    .field .unit{position:absolute;right:9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);pointer-events:none}
+    .seg{display:flex;padding:3px;background:oklch(0.94 0.012 255);border-radius:5px;gap:2px}
+    .seg button{padding:7px 15px;border:none;border-radius:4px;font-size:13px;font-weight:600;background:transparent;color:var(--muted)}
+    .seg button.active{background:#fff;color:oklch(0.34 0.03 255);box-shadow:0 1px 1px oklch(0.5 0.02 255 / 0.14)}
+
+    .cards{display:flex;flex-direction:column;gap:16px}
+    .ccard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+    .ccard__del{position:absolute;top:9px;right:9px;z-index:2;width:24px;height:24px;border:none;border-radius:5px;background:transparent;color:oklch(0.6 0.02 255);font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
+    .ccard__del:hover{background:oklch(0.95 0.02 30);color:oklch(0.52 0.15 30)}
+    .ccard__grid{display:grid;grid-template-columns:1fr 1px 1fr}
+    .ccard__col{padding:20px}
+    .ccard__divider{background:oklch(0.93 0.01 255)}
+    .ccard__label{display:flex;align-items:baseline;gap:8px;margin-bottom:16px}
+    .ccard__label b{font-size:12.5px;font-weight:600;color:oklch(0.34 0.02 255)}
+    .ccard__label em{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.1em;color:oklch(0.62 0.04 262);font-style:normal}
+    .row{display:flex;flex-direction:column;gap:14px}
+    .row label{display:flex;align-items:center;gap:10px}
+    .row label > span:first-child{font-size:11.5px;color:var(--muted);width:42px;flex-shrink:0}
+    .row .field{flex:1;min-width:0}
+    .row .field input{width:100%;padding:8px 34px 8px 9px;border:1px solid var(--line);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff}
+
+    .ccard__out{display:flex;align-items:center;gap:12px;padding:13px 16px;border-top:1px solid var(--line);background:var(--code-bg)}
+    .ccard__out .tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.14em;color:oklch(0.7 0.12 262);flex-shrink:0}
+    .ccard__out code{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:oklch(0.89 0.02 255);word-break:break-all;line-height:1.55}
+    .ccard__copy{flex-shrink:0;border:1px solid oklch(0.42 0.012 255);background:transparent;color:oklch(0.8 0.015 255);font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:4px}
+    .ccard__copy:hover{border-color:var(--accent-soft);background:var(--accent-soft);color:#fff}
+
+    .add-btn{align-self:flex-start;margin-top:16px;border:none;background:var(--accent-soft);color:#fff;font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
+    .add-btn:hover{background:var(--accent)}
+
+    /* 解説コンテンツ */
+    article.doc{padding:34px 0 10px}
+    article.doc section{padding:14px 0}
+    h2{font-size:clamp(20px,2.4vw,25px);margin:30px 0 10px;letter-spacing:-0.01em;padding-bottom:8px;border-bottom:1px solid var(--line)}
+    h3{font-size:16px;margin:22px 0 6px}
+    article.doc p{margin:10px 0;font-size:15px}
+    article.doc ul{padding-left:1.3em;margin:10px 0}
+    article.doc li{margin:6px 0;font-size:15px}
+    code.inline{font-family:'JetBrains Mono',monospace;font-size:0.9em;background:oklch(0.93 0.012 262);padding:2px 6px;border-radius:4px;color:oklch(0.4 0.1 262)}
+    pre{background:var(--code-bg);color:oklch(0.89 0.02 255);font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;padding:16px 18px;border-radius:8px;overflow-x:auto;margin:14px 0}
+    .faq dt{font-weight:600;margin:18px 0 4px;font-size:15.5px}
+    .faq dd{margin:0 0 6px;font-size:15px;color:oklch(0.34 0.02 255)}
+
+    /* フッター */
+    .site-footer{margin-top:30px;padding:26px 0 50px;border-top:1px solid var(--line);text-align:center}
+    .site-footer a{font-size:12px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+    .site-footer a:hover{color:var(--accent)}
+
+    @media (max-width:560px){
+      .ccard__grid{grid-template-columns:1fr}
+      .ccard__divider{display:none}
+      .ccard__col + .ccard__col{border-top:1px solid var(--line)}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+      <div class="logo">clamp()<span> generator</span></div>
+      <a class="home-link" href="https://nakaicode.com/">← nakaicode</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <div class="intro">
+      <h1>CSS clamp() ジェネレーター</h1>
+      <p class="lead">画面幅とサイズを入力するだけで、レスポンシブな <code class="inline">clamp()</code> の値を自動計算します。フォントサイズや余白の <code class="inline">clamp(vw)</code> 計算に。px / rem 切替・複数まとめ計算・ワンクリックコピーに対応した無料ツールです。</p>
+    </div>
+
+    <!-- ============ ツール本体(JS で動的更新。初期状態はHTMLに記述) ============ -->
+    <section class="tool" aria-label="clamp() 計算ツール">
+      <div class="tool-bar">
+        <div class="root-field" id="rootField" hidden>
+          <label for="rootInput">ルート</label>
+          <span class="field">
+            <input class="num-inp" type="number" id="rootInput" value="16">
+            <span class="unit">px</span>
+          </span>
+        </div>
+        <div class="seg" role="tablist" aria-label="単位の切り替え">
+          <button id="unitPx" class="active" type="button">px</button>
+          <button id="unitRem" type="button">rem</button>
+        </div>
+      </div>
+
+      <div class="cards" id="cards"><!-- カードを JS で描画 --></div>
+
+      <button class="add-btn" id="addCard" type="button">＋ カードを追加</button>
+    </section>
+
+    <!-- ============ 解説コンテンツ(静的 HTML。ここが SEO の本丸) ============ -->
+    <article class="doc">
+
+      <section id="about">
+        <h2>CSS の clamp() 関数とは</h2>
+        <p><code class="inline">clamp()</code> は、サイズを「下限・推奨値・上限」の3つで指定できる CSS 関数です。書式は次のとおりです。</p>
+        <pre>clamp(最小値, 推奨値, 最大値)</pre>
+        <p>推奨値が最小値より小さくなれば最小値で、最大値より大きくなれば最大値で止まります。この推奨値に <code class="inline">vw</code>(ビューポート幅の 1% を表す単位)を含めることで、画面幅に応じてフォントサイズや余白を<strong>なめらかに変化させつつ、小さすぎ・大きすぎを自動で防ぐ</strong>ことができます。メディアクエリを何段も書かずに、1行でレスポンシブなサイズを表現できるのが最大の利点です。</p>
+      </section>
+
+      <section id="formula">
+        <h2>clamp(vw) の計算式 — このツールが自動化していること</h2>
+        <p>「画面幅が小さいときのサイズ」と「大きいときのサイズ」の2点を決めると、その間は一次関数(直線)で結べます。2点を <code class="inline">(W1, S1)</code>・<code class="inline">(W2, S2)</code> とすると、推奨値は次のように求まります。</p>
+        <pre>傾き  slope = (S2 - S1) / (W2 - W1)
+切片  b     = S1 - slope × W1
+推奨値      = calc( b px + slope×100 vw )</pre>
+        <p>例として「画面幅 320px で 24px、1280px で 44px」を入れると、次の <code class="inline">clamp()</code> が得られます。</p>
+        <pre>clamp(24px, calc(17.333px + 2.083vw), 44px)</pre>
+        <p>このツールは、上の <code class="inline">calc()</code> の係数計算と、px / rem の単位換算(ルートフォントサイズ基準)をまとめて自動で行います。手計算で間違えやすい傾きと切片を、入力した瞬間に正確に出力します。</p>
+      </section>
+
+      <section id="howto">
+        <h2>使い方</h2>
+        <ul>
+          <li><strong>最小側・最大側それぞれに「画面幅」と「サイズ」を入力</strong>します。最小側は小さい画面、最大側は大きい画面の値です。</li>
+          <li>右上の <code class="inline">px / rem</code> ボタンで<strong>出力単位を切り替え</strong>られます。rem を選ぶとルートフォントサイズ(既定 16px)を基準に自動換算します。</li>
+          <li><strong>「コピー」ボタン</strong>で生成された <code class="inline">clamp()</code> をクリップボードに保存できます。</li>
+          <li><strong>「カードを追加」</strong>で、見出し・本文・余白など複数のサイズを一度にまとめて計算できます。入力内容はブラウザに自動保存されます。</li>
+        </ul>
+      </section>
+
+      <section id="examples">
+        <h2>実例 — よく使う clamp() の値</h2>
+        <p>レスポンシブ設計でそのまま使える典型値の例です。いずれも画面幅 320px〜1280px を想定しています。</p>
+        <h3>見出し(h1)のフォントサイズ</h3>
+        <pre>font-size: clamp(28px, calc(17.333px + 3.333vw), 60px);</pre>
+        <h3>本文のフォントサイズ</h3>
+        <pre>font-size: clamp(15px, calc(13.667px + 0.417vw), 18px);</pre>
+        <h3>セクションの上下余白</h3>
+        <pre>padding-block: clamp(40px, calc(13.333px + 8.333vw), 120px);</pre>
+        <p>本文のフォントサイズは rem 指定にしておくと、ユーザーのブラウザ文字サイズ設定にも追従でき、アクセシビリティ面で安全です。</p>
+      </section>
+
+      <section id="faq">
+        <h2>よくある質問(FAQ)</h2>
+        <dl class="faq">
+          <dt>clamp() の単位は px と rem どちらを使うべき？</dt>
+          <dd>フォントサイズはアクセシビリティの観点から rem を推奨します。rem はユーザーのブラウザ文字サイズ設定に追従するためです。固定の装飾や余白では px でも問題ありません。このツールは px / rem をワンクリックで切り替えて換算できます。</dd>
+
+          <dt>ブレークポイント(メディアクエリ)と併用するには？</dt>
+          <dd>サイズの連続的な変化は clamp()、レイアウト構造の不連続な切り替え(1カラム→2カラムなど)はメディアクエリ、と役割分担します。clamp() でフォント・余白を制御すれば、メディアクエリの記述量を大きく減らせます。</dd>
+
+          <dt>vw だけ・calc() だけと何が違う？</dt>
+          <dd>vw 単体は画面幅に比例して無限に拡大・縮小してしまい、極端な画面で読みにくくなります。clamp() は calc(...vw) を最小値・最大値で挟むことで、その「行き過ぎ」を防ぎます。clamp(vw) 計算の本質は、calc() の傾き・切片を正しく求めることにあります。</dd>
+
+          <dt>対応ブラウザは？</dt>
+          <dd>clamp() は主要なモダンブラウザ(Chrome / Edge / Firefox / Safari)で広くサポートされています。レスポンシブなフォントサイズ計算や余白計算で安心して利用できます。</dd>
+
+          <dt>このツールは無料ですか？</dt>
+          <dd>はい、登録不要・無料で利用できます。入力値はサーバーに送信されず、ブラウザ内(localStorage)にのみ保存されます。</dd>
+        </dl>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <a href="https://nakaicode.com/" target="_blank" rel="noopener noreferrer">
+      Made by nakaicode
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+    </a>
+  </footer>
+
+  <script>
+  // ===== clamp() 計算ツール(バニラ JS。ビルド不要・依存なし) =====
+  (function () {
+    "use strict";
+    var STORAGE_KEY = "clampgen_v1";
+    var state = {
+      unit: "px",
+      root: 16,
+      cards: [{ id: "c1", w1: 320, w2: 1280, s1: 24, s2: 44 }]
+    };
+
+    // localStorage から復元
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var d = JSON.parse(raw);
+        if (d && d.cards && d.cards.length) state = Object.assign(state, d);
+      }
+    } catch (e) {}
+
+    function persist() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+    function num(v) { var n = parseFloat(v); return isFinite(n) ? n : 0; }
+    function toPx(v) { var n = num(v); return state.unit === "rem" ? n * state.root : n; }
+    function fmt(n, d) {
+      var p = Math.pow(10, d == null ? 3 : d);
+      var x = Math.round(n * p) / p;
+      if (Object.is(x, -0)) x = 0;
+      return String(x);
+    }
+    function clampCss(c) {
+      if (c.w2 <= c.w1) return "/* 「画面幅 最小 < 最大」にしてください */";
+      var unit = state.unit, root = state.root;
+      var slope = (c.s2 - c.s1) / (c.w2 - c.w1);
+      var vw = slope * 100, b = c.s1 - slope * c.w1;
+      var lo = Math.min(c.s1, c.s2), hi = Math.max(c.s1, c.s2);
+      var u = unit === "rem" ? "rem" : "px";
+      var conv = function (x) { return unit === "rem" ? x / root : x; };
+      var B = conv(b), C = unit === "rem" ? vw / root : vw;
+      var calc = C >= 0
+        ? "calc(" + fmt(B) + u + " + " + fmt(C) + "vw)"
+        : "calc(" + fmt(B) + u + " - " + fmt(Math.abs(C)) + "vw)";
+      return "clamp(" + fmt(conv(lo)) + u + ", " + calc + ", " + fmt(conv(hi)) + u + ")";
+    }
+
+    var cardsEl = document.getElementById("cards");
+    var unitLabel = function () { return state.unit === "rem" ? "rem" : "px"; };
+
+    function el(tag, cls, attrs) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+      return e;
+    }
+
+    // 「サイズ」入力欄の表示値(rem のときは換算して表示)
+    function dispSize(px) {
+      return state.unit === "rem" ? fmt(px / state.root, 4) : px;
+    }
+
+    function buildSide(c, side) {
+      // side: "min" or "max"
+      var isMin = side === "min";
+      var col = el("div", "ccard__col");
+      var label = el("div", "ccard__label");
+      var b = el("b"); b.textContent = isMin ? "最小側" : "最大側";
+      var em = el("em"); em.textContent = isMin ? "MIN" : "MAX";
+      label.appendChild(b); label.appendChild(em);
+      col.appendChild(label);
+
+      var row = el("div", "row");
+
+      // 画面幅
+      var l1 = el("label");
+      var s1 = el("span"); s1.textContent = "画面幅"; l1.appendChild(s1);
+      var f1 = el("span", "field");
+      var i1 = el("input", null, { type: "number" });
+      i1.value = isMin ? c.w1 : c.w2;
+      i1.addEventListener("change", function () {
+        var v = num(i1.value);
+        if (isMin) c.w1 = v; else c.w2 = v;
+        persist(); render();
+      });
+      var u1 = el("span", "unit"); u1.textContent = "px";
+      f1.appendChild(i1); f1.appendChild(u1); l1.appendChild(f1);
+      row.appendChild(l1);
+
+      // サイズ
+      var l2 = el("label");
+      var s2 = el("span"); s2.textContent = "サイズ"; l2.appendChild(s2);
+      var f2 = el("span", "field");
+      var i2 = el("input", null, { type: "number", step: state.unit === "rem" ? "0.05" : "1" });
+      i2.value = dispSize(isMin ? c.s1 : c.s2);
+      i2.addEventListener("change", function () {
+        var px = toPx(i2.value);
+        if (isMin) c.s1 = px; else c.s2 = px;
+        persist(); render();
+      });
+      var u2 = el("span", "unit"); u2.textContent = unitLabel();
+      f2.appendChild(i2); f2.appendChild(u2); l2.appendChild(f2);
+      row.appendChild(l2);
+
+      col.appendChild(row);
+      return col;
+    }
+
+    function render() {
+      // ルート入力欄の表示
+      document.getElementById("rootField").hidden = state.unit !== "rem";
+      document.getElementById("unitPx").classList.toggle("active", state.unit === "px");
+      document.getElementById("unitRem").classList.toggle("active", state.unit === "rem");
+
+      cardsEl.innerHTML = "";
+      state.cards.forEach(function (c) {
+        var card = el("div", "ccard");
+
+        if (state.cards.length > 1) {
+          var del = el("button", "ccard__del", { type: "button", title: "削除", "aria-label": "カードを削除" });
+          del.textContent = "×";
+          del.addEventListener("click", function () {
+            state.cards = state.cards.filter(function (x) { return x.id !== c.id; });
+            persist(); render();
+          });
+          card.appendChild(del);
+        }
+
+        var grid = el("div", "ccard__grid");
+        grid.appendChild(buildSide(c, "min"));
+        grid.appendChild(el("div", "ccard__divider"));
+        grid.appendChild(buildSide(c, "max"));
+        card.appendChild(grid);
+
+        var out = el("div", "ccard__out");
+        var tag = el("span", "tag"); tag.textContent = "CSS";
+        var code = el("code"); code.textContent = clampCss(c);
+        var copy = el("button", "ccard__copy", { type: "button" }); copy.textContent = "コピー";
+        copy.addEventListener("click", function () {
+          var css = clampCss(c);
+          try { navigator.clipboard.writeText(css); } catch (e) {}
+          copy.textContent = "コピー済";
+          setTimeout(function () { copy.textContent = "コピー"; }, 1300);
+        });
+        out.appendChild(tag); out.appendChild(code); out.appendChild(copy);
+        card.appendChild(out);
+
+        cardsEl.appendChild(card);
+      });
+    }
+
+    // 単位切り替え
+    document.getElementById("unitPx").addEventListener("click", function () {
+      state.unit = "px"; persist(); render();
+    });
+    document.getElementById("unitRem").addEventListener("click", function () {
+      state.unit = "rem"; persist(); render();
+    });
+    // ルート
+    document.getElementById("rootInput").addEventListener("change", function (e) {
+      state.root = Math.max(1, num(e.target.value)); persist(); render();
+    });
+    document.getElementById("rootInput").value = state.root;
+    // カード追加
+    document.getElementById("addCard").addEventListener("click", function () {
+      state.cards.push({ id: "c" + Date.now(), w1: 320, w2: 1280, s1: 16, s2: 24 });
+      persist(); render();
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>
