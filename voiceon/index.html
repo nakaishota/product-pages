@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoiceOn — 押している間だけ、話すだけ。</title>
+<meta name="description" content="「英数」キーを押している間だけ音声入力して、離すとカーソル位置に確定テキストを一括で打ち込む macOS 常駐アプリ。完全無料・ほぼ全アプリで動く・句読点も自動付与。">
+<meta property="og:title" content="VoiceOn — 押している間だけ、話すだけ。">
+<meta property="og:description" content="「英数」を押して話して離すだけ。カーソル位置に一括挿入する macOS 音声入力。完全無料・オフライン可。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nakaicode.com/voiceon/">
+<meta property="og:image" content="https://nakaicode.com/voiceon/images/hud.png">
+<link rel="canonical" href="https://nakaicode.com/voiceon/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ffffff'/%3E%3Cpath d='M16 7a3.2 3.2 0 0 0-3.2 3.2v5a3.2 3.2 0 0 0 6.4 0v-5A3.2 3.2 0 0 0 16 7Z' fill='%23E11D2A'/%3E%3Cpath d='M10 14.5v.7a6 6 0 0 0 12 0v-.7' fill='none' stroke='%23E11D2A' stroke-width='1.8' stroke-linecap='round'/%3E%3Cline x1='16' y1='21.2' x2='16' y2='24.5' stroke='%23E11D2A' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- grain overlay -->
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ── Nav ───────────────────────────────────────────── -->
+<header class="nav" id="top">
+  <a class="nav__brand" href="#top">
+    <span class="nav__dot" aria-hidden="true"></span>
+    Voice<span class="nav__on">On</span>
+  </a>
+  <nav class="nav__links">
+    <a href="#how"><span class="nav__no">01</span> 使い方</a>
+    <a href="#features"><span class="nav__no">02</span> 機能</a>
+    <a href="#review"><span class="nav__no">04</span> 語彙レビュー</a>
+    <a href="#start"><span class="nav__no">06</span> 導入</a>
+  </nav>
+  <a class="btn btn--ghost nav__cta" href="#start">ソースから入れる</a>
+</header>
+
+<!-- ── Hero ──────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="hero__rule" aria-hidden="true"></div>
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow reveal">macOS ／ メニューバー常駐 ／ 完全無料</p>
+      <h1 class="hero__title reveal" data-delay="1">
+        <span class="line">押している間だけ、</span>
+        <span class="line line--accent">話すだけ。<span class="cursor-bar" aria-hidden="true"></span></span>
+      </h1>
+      <p class="hero__lead reveal" data-delay="2">
+        <strong>「英数」キー</strong>を押している間だけ音声入力。離した瞬間、
+        カーソル位置に確定テキストを<strong>一括で打ち込む</strong>。
+        ターミナルでもエディタでもブラウザでも、そのまま使えます。
+      </p>
+      <div class="hero__cta reveal" data-delay="3">
+        <a class="btn btn--solid" href="#start">使ってみる<span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#how">仕組みを見る</a>
+      </div>
+      <ul class="hero__chips reveal" data-delay="4">
+        <li>句読点 自動付与</li>
+        <li>オフライン可</li>
+        <li>ほぼ全アプリ対応</li>
+      </ul>
+    </div>
+
+    <div class="hero__stage reveal" data-delay="3">
+      <span class="hero__tag" aria-hidden="true">PRESS &amp; SPEAK</span>
+      <!-- 実写差し替えスロット -->
+      <figure class="shot shot--hero" data-prompt="hero">
+        <img src="images/hero.png" alt="Mac の前で「英数」キーを押しながら話して音声入力する様子" loading="eager"
+             onerror="this.closest('.shot').classList.add('shot--missing')">
+        <figcaption class="shot__ph">実写イメージ：デスクで話して入力</figcaption>
+      </figure>
+
+      <!-- 製品由来モチーフ：録音HUD -->
+      <div class="hud hud--float" aria-hidden="true">
+        <span class="hud__dot"></span>
+        <div class="hud__wave">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <span class="hud__count">12字</span>
+      </div>
+
+      <!-- 製品由来モチーフ：英数キーキャップ -->
+      <div class="keycap" aria-hidden="true">
+        <span class="keycap__top">英数</span>
+        <span class="keycap__hint">長押し</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>話す → 離す → 入る</span><span class="sep">／</span>
+      <span>Terminal</span><span class="sep">／</span>
+      <span>VS Code</span><span class="sep">／</span>
+      <span>ブラウザ</span><span class="sep">／</span>
+      <span>Slack</span><span class="sep">／</span>
+      <span>メール</span><span class="sep">／</span>
+      <span>話す → 離す → 入る</span><span class="sep">／</span>
+      <span>Terminal</span><span class="sep">／</span>
+      <span>VS Code</span><span class="sep">／</span>
+      <span>ブラウザ</span><span class="sep">／</span>
+      <span>Slack</span><span class="sep">／</span>
+      <span>メール</span><span class="sep">／</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ──────────────────────────────────── -->
+<section class="how" id="how">
+  <div class="section-head reveal">
+    <span class="section-head__no">01 — 使い方</span>
+    <h2>覚えることは、<span class="hl">3つ</span>だけ</h2>
+    <p>モードもボタンも要らない。キーを押して、話して、離す。それだけ。</p>
+  </div>
+  <ol class="steps">
+    <li class="step reveal" data-delay="1">
+      <span class="step__index" aria-hidden="true">01</span>
+      <span class="step__n">押す</span>
+      <h3>「英数」を長押し</h3>
+      <p>200ms 以上の長押しで録音開始。短く押せば通常どおり IME の英字切替として通り抜けます。</p>
+      <p class="step__alt">US配列なら <b>⌘ ダブルタップ＆ホールド</b></p>
+    </li>
+    <li class="step reveal" data-delay="2">
+      <span class="step__index" aria-hidden="true">02</span>
+      <span class="step__n">話す</span>
+      <h3>そのまま喋る</h3>
+      <p>画面下に録音HUD（波形・録音ドット・文字数）が出ます。Apple の音声認識がリアルタイムに聞き取ります。</p>
+    </li>
+    <li class="step reveal" data-delay="3">
+      <span class="step__index" aria-hidden="true">03</span>
+      <span class="step__n">離す</span>
+      <h3>キーを離す</h3>
+      <p>離した瞬間、確定テキストをカーソル位置へ一括挿入。入力中のガタつきがなく、句読点も自動で付きます。</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ── Features: 見える / 見えない ───────────────────── -->
+<section class="features" id="features">
+  <div class="section-head section-head--center reveal">
+    <span class="section-head__no">02 — 機能</span>
+    <h2>画面で<span class="hl">見える</span>機能と、<br>裏で<span class="hl">見えない</span>仕組み</h2>
+    <p>操作はどこまでもシンプルに。賢さは、ぜんぶ裏側に。</p>
+  </div>
+
+  <div class="features__split">
+    <!-- ユーザー側 -->
+    <div class="fcol reveal">
+      <div class="fcol__label"><span class="tag tag--red">ユーザー側</span> 画面で見える操作</div>
+      <ul class="flist">
+        <li>
+          <span class="flist__k" aria-hidden="true">01</span>
+          <div>
+            <h3>2種類のトリガー</h3>
+            <p>「英数」長押し（JIS）／⌘ダブルタップ＆ホールド（US・JIS両対応）。短押しは IME 切替として透過。</p>
+          </div>
+        </li>
+        <li>
+          <span class="flist__k" aria-hidden="true">02</span>
+          <div>
+            <h3>録音HUD</h3>
+            <p>明滅する録音ドット、声に流れる波形、認識中の文字数を画面下中央のすりガラスに表示。</p>
+          </div>
+        </li>
+        <li>
+          <span class="flist__k" aria-hidden="true">03</span>
+          <div>
+            <h3>メニューバー常駐</h3>
+            <p>置換ルール追加（⌘R）、vocab.txt を開く、語彙レビュー（⌘L）にすぐアクセス。</p>
+          </div>
+        </li>
+        <li>
+          <span class="flist__k" aria-hidden="true">04</span>
+          <div>
+            <h3>語彙レビュー画面</h3>
+            <p>履歴の一覧、AIで語彙を抽出して自動登録、ルール貢献度の可視化。テキストを手で直接編集も。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 機能側 -->
+    <div class="fcol fcol--ink reveal" data-delay="1">
+      <div class="fcol__label"><span class="tag tag--ghost">機能側</span> 画面に見えない仕組み</div>
+      <ul class="flist">
+        <li>
+          <span class="flist__k" aria-hidden="true">01</span>
+          <div>
+            <h3>サーバー／オンデバイス自動切替</h3>
+            <p>接続時は高精度なサーバー認識、オフライン時はオンデバイスへ自動フォールバック。完全オフライン固定も可。</p>
+          </div>
+        </li>
+        <li>
+          <span class="flist__k" aria-hidden="true">02</span>
+          <div>
+            <h3>挿入前の後処理パイプライン</h3>
+            <p>フィラー除去 →（replace.txt の）置換辞書。AIなし・遅延ゼロで整形してから挿入。</p>
+          </div>
+        </li>
+        <li>
+          <span class="flist__k" aria-hidden="true">03</span>
+          <div>
+            <h3>認識ヒントの注入</h3>
+            <p>vocab.txt を contextualStrings として認識前に注入。誤変換を“事後に直す”のではなく“起こさせない”。</p>
+          </div>
+        </li>
+        <li>
+          <span class="flist__k" aria-hidden="true">04</span>
+          <div>
+            <h3>止まらない堅牢性</h3>
+            <p>イベントタップの自己監視・再生成、スリープ復帰やオーディオデバイス変更への自動追従。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── HUD showcase ──────────────────────────────────── -->
+<section class="showcase" id="hud">
+  <div class="showcase__text reveal">
+    <span class="section-head__no">03 — 録音HUD</span>
+    <h2>話している間も、<br><span class="hl">ちゃんと見える</span>。</h2>
+    <p>録音中は、すりガラスのカプセルに波形と文字数。いま聞き取れているか、何文字入ったかが一目で分かります。</p>
+    <div class="showcase__hud">
+      <span class="hud__dot"></span>
+      <div class="hud__wave">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <span class="hud__count">28字</span>
+    </div>
+  </div>
+  <figure class="shot shot--wide reveal" data-delay="1" data-prompt="hud">
+    <img src="images/hud.png" alt="Mac の画面下中央に表示された録音HUD（波形と文字数）"
+         onerror="this.closest('.shot').classList.add('shot--missing')">
+    <figcaption class="shot__ph">実写イメージ：画面下の録音HUD</figcaption>
+  </figure>
+</section>
+
+<!-- ── 語彙レビュー ──────────────────────────────────── -->
+<section class="review" id="review">
+  <div class="section-head reveal">
+    <span class="section-head__no">04 — 語彙レビュー</span>
+    <h2>使うほど、<span class="hl">固有名詞に強くなる</span></h2>
+    <p>履歴からローカルの claude CLI が専門用語・固有名詞を抽出して自動登録。誤変換は“事後修正”ではなく“事前予防”へ。</p>
+  </div>
+
+  <div class="review__grid">
+    <figure class="shot shot--tall reveal" data-prompt="review">
+      <img src="images/review.png" alt="VoiceOn 語彙レビュー画面。履歴一覧と抽出された語彙候補、ルール貢献度のグラフ"
+           onerror="this.closest('.shot').classList.add('shot--missing')">
+      <figcaption class="shot__ph">実写イメージ：語彙レビュー画面</figcaption>
+    </figure>
+    <div class="review__cards">
+      <article class="card reveal" data-delay="1">
+        <span class="card__k" aria-hidden="true">01</span>
+        <h3>AIで語彙を抽出</h3>
+        <p>ボタン1つで履歴を分析。繰り返し出る重要語は vocab.txt へ自動登録、残りは候補として提示します。</p>
+      </article>
+      <article class="card reveal" data-delay="2">
+        <span class="card__k" aria-hidden="true">02</span>
+        <h3>ルール貢献度</h3>
+        <p>置換ルール・登録語が「実際に何回効いたか」を回数順で可視化。<b class="badge">0回＝整理候補</b> として一目で分かります。</p>
+      </article>
+      <article class="card reveal" data-delay="3">
+        <span class="card__k" aria-hidden="true">03</span>
+        <h3>手で書いてもいい</h3>
+        <p>vocab.txt / replace.txt はただのテキスト。メニューからでも、エディタで直接でも編集できます。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── Works everywhere ──────────────────────────────── -->
+<section class="everywhere" id="everywhere">
+  <div class="everywhere__text reveal">
+    <span class="section-head__no">05 — 互換性</span>
+    <h2>キー入力として送るから、<br><span class="hl">ほぼ全アプリで動く</span></h2>
+    <p>認識結果を Unicode のキー入力として送出。専用の入力欄も、ブラウザ拡張も要りません。いつものアプリに、そのまま。</p>
+    <div class="pills">
+      <span>Terminal</span><span>VS Code</span><span>ブラウザ</span>
+      <span>Slack</span><span>メモ</span><span>メール</span><span>Notion</span>
+    </div>
+  </div>
+  <figure class="shot shot--wide reveal" data-delay="1" data-prompt="everywhere">
+    <img src="images/everywhere.png" alt="ターミナル・エディタ・ブラウザに音声入力で文字が入る様子"
+         onerror="this.closest('.shot').classList.add('shot--missing')">
+    <figcaption class="shot__ph">実写イメージ：いろんなアプリに入力</figcaption>
+  </figure>
+</section>
+
+<!-- ── Trust strip ───────────────────────────────────── -->
+<section class="trust">
+  <div class="trust__item reveal"><span class="trust__big">¥0</span><span>完全無料・課金なし</span></div>
+  <div class="trust__item reveal" data-delay="1"><span class="trust__big">Offline</span><span>通信なしでも動く</span></div>
+  <div class="trust__item reveal" data-delay="2"><span class="trust__big">Local</span><span>履歴も語彙も手元だけ</span></div>
+  <div class="trust__item reveal" data-delay="3"><span class="trust__big">macOS 13+</span><span>Apple Silicon / Intel</span></div>
+</section>
+
+<!-- ── Quick start ───────────────────────────────────── -->
+<section class="start" id="start">
+  <div class="start__glow" aria-hidden="true"></div>
+  <div class="section-head reveal">
+    <span class="section-head__no">06 — 導入</span>
+    <h2>ソースから、すぐ始める</h2>
+    <p>ビルドして起動、権限を許可するだけ。配布物ではなく、自分でビルドして使う形です。</p>
+  </div>
+  <div class="start__grid">
+    <pre class="code reveal"><code><span class="c-c"># 1. 開発ツール（初回のみ）</span>
+xcode-select --install
+
+<span class="c-c"># 2. 取得してビルド</span>
+git clone https://github.com/nakaishota/voice_on.git
+cd voice_on
+./build.sh
+
+<span class="c-c"># 3. 起動（メニューバーに 🎙 が出ます）</span>
+open VoiceOn.app</code></pre>
+    <div class="start__perm reveal" data-delay="1">
+      <h3>権限（初回のみ）</h3>
+      <ol class="perm">
+        <li><b>音声認識</b> と <b>マイク</b> のダイアログを許可</li>
+        <li><b>アクセシビリティ</b>：システム設定 &gt; プライバシーとセキュリティ &gt; アクセシビリティ で <code>VoiceOn.app</code> を追加して ON</li>
+        <li>アプリを再起動（<code>open VoiceOn.app</code>）</li>
+      </ol>
+      <p class="note">効かない時は、項目を一度「−」で削除してから追加し直すと確実です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────── -->
+<footer class="foot">
+  <div class="foot__brand">
+    <span class="nav__dot" aria-hidden="true"></span>
+    Voice<span class="nav__on">On</span>
+  </div>
+  <p class="foot__tag">「英数」を押している間だけ、話すだけ。</p>
+  <p class="foot__fine">個人の趣味で作ったツールです。無保証・MIT License。</p>
+  <a class="foot__top" href="https://github.com/nakaishota/voice_on" target="_blank" rel="noopener">GitHub で見る →</a>
+  <a class="foot__top" href="#top">↑ 先頭へ戻る</a>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
