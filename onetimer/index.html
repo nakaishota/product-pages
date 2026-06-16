@@ -1,506 +1,568 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OneTimer — いつもの時間を、ワンタップで。</title>
-<meta name="description" content="ロック画面ワンタップタイマー OneTimer。マナーモードでも鳴る、買い切り¥500。">
-<link rel="canonical" href="https://nakaicode.com/onetimer/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>OneTimer — 測らない。押すだけ。</title>
+  <meta name="description" content="OneTimer は、よく使うタイマーをロック画面・コントロールセンターからワンタップで起動できる iOS アプリ。iOS 26 の AlarmKit でマナーモード・集中モードでも鳴る。買い切り ¥500、サブスク・広告なし。">
+  <meta name="theme-color" content="#0a0a10">
+  <link rel="canonical" href="https://nakaicode.com/onetimer/">
+
+  <!-- OGP / SNS シェア -->
+  <meta property="og:title" content="OneTimer — 測らない。押すだけ。">
+  <meta property="og:description" content="よく使うタイマーをロック画面・コントロールセンターからワンタップで起動。AlarmKit でマナーモードでも鳴る iOS アプリ。買い切り ¥500・サブスクなし。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nakaicode.com/onetimer/">
+  <meta property="og:image" content="https://nakaicode.com/onetimer/images/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OneTimer — 測らない。押すだけ。">
+  <meta name="twitter:description" content="よく使うタイマーをロック画面・コントロールセンターからワンタップで起動。AlarmKit でマナーモードでも鳴る iOS アプリ。">
+  <meta name="twitter:image" content="https://nakaicode.com/onetimer/images/og-image.png">
+
+  <!-- ファビコン: ミントの円リングに「1」(アプリアイコンのモチーフ) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a10'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%233fd9cd' stroke-width='3' stroke-linecap='round' stroke-dasharray='49 63' transform='rotate(-90 16 16)'/%3E%3Ctext x='16' y='21' font-family='Helvetica,Arial,sans-serif' font-size='14' font-weight='800' fill='%23f4f4f8' text-anchor='middle'%3E1%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Sora:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+
 <style>
+/* ============================================================
+   OneTimer LP
+   ダーク #0a0a10 × ミント(アプリアイコンのリング) を主アクセント。
+   起動サーフェスのUIモックは純CSS/SVG。実写は背景・シーン・静音のみ。
+   モバイルファースト / 素のHTML・CSS・JS / ビルド工程なし
+   ============================================================ */
 :root{
-  --green:#006241;
-  --accent:#00754A;
-  --house:#1E3932;
-  --uplift:#2b5148;
-  --green-light:#d4e9e2;
-  --gold:#cba258;
-  --gold-light:#dfc49d;
-  --gold-lightest:#faf6ee;
-  --cream:#f2f0eb;
-  --ceramic:#edebe9;
-  --ink:rgba(0,0,0,.87);
-  --ink-soft:rgba(0,0,0,.58);
-  --white-soft:rgba(255,255,255,.70);
-  --card-shadow:0 0 .5px rgba(0,0,0,.14),0 1px 1px rgba(0,0,0,.24);
-  --maxw:1200px;
+  --bg:#0a0a10;
+  --bg-2:#0c0c14;
+  --surface:#13131e;
+  --surface-2:#191926;
+  --glass:rgba(255,255,255,.055);
+  --glass-strong:rgba(255,255,255,.09);
+  --glass-border:rgba(255,255,255,.10);
+  --hairline:rgba(255,255,255,.08);
+  --text:#f4f4f8;
+  --muted:#a6a6b5;
+  --faint:#6d6d7e;
+  --mint:#3fd9cd;
+  --mint-deep:#2bb6ab;
+  --purple:#bc85ff;
+  --purple-deep:#7a4fd0;
+  --orange:#ffa14e;
+  --red:#ff5a5f;
+  --radius:22px;
+  --radius-lg:30px;
+  --maxw:1080px;
+  --ease:cubic-bezier(.2,.7,.2,1);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{font-size:62.5%}
-[id]{scroll-margin-top:10rem}
+*{box-sizing:border-box}
+html{scroll-padding-top:96px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 body{
-  font-family:Inter,"Noto Sans JP","Hiragino Sans",sans-serif;
-  font-size:1.6rem;line-height:1.5;letter-spacing:-0.01em;
-  color:var(--ink);background:var(--cream);
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased;
+  text-size-adjust:100%;-webkit-text-size-adjust:100%;overflow-x:hidden;
 }
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 4rem}
-@media(max-width:767px){.wrap{padding:0 1.6rem}}
+p{margin:0;text-wrap:pretty}
+h1,h2,h3,h4{margin:0;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;line-height:1.28;letter-spacing:.01em}
+ul,ol{margin:0;padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+strong{font-weight:700}
+img{display:block;max-width:100%}
+svg{display:block}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:6px}
 
-/* ---------- pills ---------- */
-.pill{
-  display:inline-block;border-radius:50px;padding:9px 18px;
-  font-size:1.5rem;font-weight:600;letter-spacing:-0.01em;
-  text-decoration:none;cursor:pointer;transition:all .2s ease;border:1px solid transparent;
+/* ---- 背景の質感: 微細グリッド + 上部グロー ---- */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 78% -8%, rgba(63,217,205,.10), transparent 60%),
+    radial-gradient(760px 520px at 10% 4%, rgba(188,133,255,.09), transparent 60%),
+    var(--bg);
 }
-.pill:active{transform:scale(.95)}
-.pill-filled{background:var(--accent);color:#fff;border-color:var(--accent)}
-.pill-outline{background:transparent;color:var(--accent);border-color:var(--accent)}
-.pill-black{background:#000;color:#fff;border-color:#000;font-size:1.4rem}
-.pill-dark-outline{background:transparent;color:var(--ink);border-color:rgba(0,0,0,.87);font-size:1.4rem}
-.pill-white{background:#fff;color:var(--accent);border-color:#fff}
-.pill-white-outline{background:transparent;color:#fff;border-color:#fff}
-.pill-gold{background:transparent;color:var(--gold);border-color:var(--gold);font-size:1.3rem;font-weight:700;letter-spacing:.5px;padding:4px 12px}
-
-/* ---------- top strip ---------- */
-.strip{background:#000;color:#fff;text-align:center;padding:1.2rem 1.6rem;font-size:1.4rem}
-.strip b{font-weight:600}
-.strip .pill{margin-left:1.6rem;padding:5px 14px}
-
-/* ---------- nav ---------- */
-nav{
-  position:sticky;top:0;z-index:40;background:#fff;
-  box-shadow:0 1px 3px rgba(0,0,0,.1),0 2px 2px rgba(0,0,0,.06),0 0 2px rgba(0,0,0,.07);
-}
-.nav-inner{display:flex;align-items:center;gap:3.2rem;height:8rem;max-width:var(--maxw);margin:0 auto;padding:0 4rem}
-.logo{display:flex;align-items:center;gap:1rem;text-decoration:none}
-.logo-cup{
-  width:4rem;height:4rem;border-radius:50%;background:var(--green);
-  display:grid;place-items:center;color:#fff;font-weight:700;font-size:1.7rem;
-}
-.logo b{color:var(--ink);font-size:1.8rem;font-weight:700}
-.nav-links{display:flex;gap:2.4rem;flex:1}
-.nav-links a{color:var(--ink);text-decoration:none;font-size:1.5rem;font-weight:600}
-.nav-links a:hover{color:var(--accent)}
-.nav-cta{display:flex;gap:1.2rem;align-items:center}
-@media(max-width:767px){
-  .nav-inner{height:6.4rem;padding:0 1.6rem;gap:1.6rem}
-  .nav-links{display:none}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 75%);
+          mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 75%);
 }
 
-/* ---------- hero ---------- */
-.hero{padding:6.4rem 0;background:var(--cream)}
-.hero-grid{display:grid;grid-template-columns:60fr 40fr;gap:4rem;align-items:center}
-.hero .eyebrow{
-  display:inline-block;font-size:1.4rem;font-weight:700;color:var(--accent);
-  letter-spacing:.1em;margin-bottom:1.6rem;
+/* ---- レイアウト ---- */
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
+section{position:relative;padding:clamp(64px,11vw,118px) 0}
+/* ---- セクションの色区切り: 1つおきにトーンの違う斜めバンド ---- */
+.band{
+  --slant:clamp(16px,2.4vw,34px);
+  position:relative;
+  padding:calc(clamp(64px,11vw,118px) + var(--slant)) 0;
+  background:
+    radial-gradient(95% 60% at 50% 0%, rgba(63,217,205,.055), transparent 62%),
+    linear-gradient(180deg,#10111c 0%,#0b0c15 100%);
+  clip-path:polygon(0 var(--slant),100% 0,100% calc(100% - var(--slant)),0 100%);
 }
-h1{
-  color:var(--green);font-size:5.8rem;font-weight:700;line-height:1.25;letter-spacing:-0.16px;
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:"Sora",sans-serif;font-weight:700;font-size:12px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mint);
+  padding:7px 13px;border:1px solid var(--glass-border);border-radius:999px;
+  background:var(--glass);
 }
-.hero p.lead{margin-top:2.8rem;font-size:2.1rem;line-height:1.8;color:var(--ink)}
-.hero p.lead strong{font-weight:700;color:var(--green)}
-.hero p.sub{margin-top:1.4rem;font-size:1.5rem;color:var(--ink-soft)}
-.cta-row{margin-top:3.2rem;display:flex;gap:1.6rem;flex-wrap:wrap}
+.eyebrow svg{width:14px;height:14px}
+.sec-head{max-width:760px;margin:0 0 clamp(34px,5vw,56px)}
+.sec-head h2{font-size:clamp(26px,5.4vw,42px);margin:18px 0 14px}
+.sec-head p{color:var(--muted);font-size:clamp(15px,2.4vw,17px)}
+.grad{background:linear-gradient(100deg,var(--mint),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.amp{color:var(--mint)}
 
-.hero-visual{display:flex;justify-content:center;position:relative}
-.hero-disc{
-  width:38rem;height:38rem;border-radius:50%;background:var(--green-light);
-  display:grid;place-items:center;
+/* ============================================================ NAV */
+.topbar{
+  position:sticky;top:0;z-index:60;
+  background:linear-gradient(90deg,rgba(63,217,205,.16),rgba(188,133,255,.16));
+  border-bottom:1px solid var(--hairline);
+  font-size:12px;color:var(--text);text-align:center;
+  padding:7px 14px;letter-spacing:.04em;backdrop-filter:blur(8px)
 }
-/* phone mock */
-.phone{
-  width:21rem;border-radius:3.4rem;background:#000;border:5px solid #2e2e36;
-  overflow:hidden;filter:drop-shadow(0 4px 1px rgba(0,0,0,.11)) drop-shadow(0 0 2px rgba(0,0,0,.24));
+.topbar b{font-family:"Sora",sans-serif;font-weight:700;letter-spacing:.1em}
+.nav{
+  position:sticky;top:33px;z-index:50;
+  background:rgba(10,10,16,.72);backdrop-filter:blur(16px) saturate(1.4);
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-bottom:1px solid var(--hairline);
 }
-.phone .scr{
-  background:linear-gradient(170deg,#1b2336 0%,#14463f 100%);
-  padding:1.2rem 1.2rem 1.8rem;min-height:40rem;display:flex;flex-direction:column;
+.nav__in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:18px}
+.brand{display:inline-flex;align-items:center;gap:11px;font-family:"Sora",sans-serif;font-weight:700;font-size:17px;letter-spacing:.01em}
+.brand .mark{width:30px;height:30px;flex:none}
+.nav__links{display:none;gap:30px;font-size:14px;color:var(--muted)}
+.nav__links a:hover{color:var(--text)}
+.nav__cta{
+  font-family:"Sora",sans-serif;font-weight:600;font-size:13px;
+  padding:9px 16px;border-radius:999px;white-space:nowrap;
+  color:#06110f;background:linear-gradient(120deg,var(--mint),#7ee9df);
+  box-shadow:0 6px 20px -8px rgba(63,217,205,.7)
 }
-.phone .island{width:6rem;height:1.8rem;border-radius:99px;background:#000;margin:0 auto .8rem}
-.phone .d{text-align:center;color:#cfd6e6;font-size:1.1rem}
-.phone .t{text-align:center;color:#eef1f9;font-size:4.6rem;font-weight:200;line-height:1.05}
-.phone .la{
-  margin-top:1.4rem;background:rgba(10,14,22,.65);border-radius:1.6rem;padding:1.1rem 1.2rem;
-  display:flex;gap:1rem;align-items:center;
+@media(min-width:860px){.nav__links{display:flex}}
+
+/* ============================================================ HERO */
+.hero{padding-top:clamp(40px,7vw,68px);overflow:hidden}
+.hero__bg{
+  position:absolute;inset:0;z-index:-1;
+  background:url("images/hero-bg.jpg") center 30%/cover no-repeat;
+  opacity:.5;
 }
-.phone .la .ic{width:3rem;height:3rem;border-radius:50%;background:rgba(0,117,74,.35);display:grid;place-items:center;font-size:1.3rem}
-.phone .la .nm{color:#fff;font-size:1.1rem;font-weight:700}
-.phone .la .cd{color:#7fd6b4;font-size:2rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15}
-.phone .ws{display:flex;justify-content:center;gap:1rem;margin-top:auto;padding-top:2rem}
-.phone .w{
-  width:4.2rem;height:4.2rem;border-radius:50%;background:rgba(255,255,255,.2);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;
+.hero__bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(10,10,16,.72) 0%,rgba(10,10,16,.4) 36%,rgba(10,10,16,.9) 100%),
+    radial-gradient(70% 60% at 28% 30%,transparent,rgba(10,10,16,.5));
 }
-.phone .w em{font-style:normal;font-size:1.3rem}
-.phone .w span{font-size:.9rem;font-weight:700}
-@media(max-width:900px){
-  .hero-grid{grid-template-columns:1fr;gap:2.4rem}
-  h1{font-size:4rem}
-  .hero p.lead{font-size:1.8rem}
-  .hero-disc{width:30rem;height:30rem}
-  .hero-visual{margin-top:7rem}
+.hero__grid{display:grid;grid-template-columns:1fr;gap:clamp(40px,7vw,64px);align-items:center}
+.hero__copy{max-width:600px}
+.hero h1{
+  font-size:clamp(40px,10.5vw,76px);line-height:1.04;letter-spacing:-.01em;margin:22px 0 0;
+}
+.hero h1 .l2{display:block}
+.hero h1 .push{color:var(--mint)}
+.hero__lead{margin:24px 0 0;color:#dcdce6;font-size:clamp(15px,2.7vw,18.5px);line-height:1.8;max-width:30em}
+.hero__lead b{color:#fff;font-weight:700}
+.hero__cta{display:flex;flex-wrap:wrap;gap:13px;margin-top:32px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:"Sora",sans-serif;font-weight:600;font-size:15px;
+  padding:14px 22px;border-radius:14px;border:1px solid transparent;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease)
+}
+.btn-primary{color:#06110f;background:linear-gradient(120deg,var(--mint),#86ece2);box-shadow:0 12px 30px -10px rgba(63,217,205,.65)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(63,217,205,.8)}
+.btn-primary svg{width:19px;height:19px}
+.btn-ghost{color:var(--text);background:var(--glass);border-color:var(--glass-border)}
+.btn-ghost:hover{background:var(--glass-strong)}
+.btn[aria-disabled="true"]{cursor:default}
+.soon-tag{font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:6px;background:rgba(6,17,15,.32);color:#06110f}
+.hero__meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:24px;color:var(--muted);font-size:12.5px}
+.hero__meta span{display:inline-flex;align-items:center;gap:7px}
+.hero__meta svg{width:15px;height:15px;color:var(--mint)}
+.hero__stage{display:flex;justify-content:center}
+
+/* ============================================================ DEVICE (iPhone mock) */
+.device{
+  position:relative;width:clamp(258px,76vw,318px);aspect-ratio:1/2.05;flex:none;
+  border-radius:46px;padding:11px;
+  background:linear-gradient(160deg,#26262f,#0c0c12 60%);
+  box-shadow:0 50px 90px -30px rgba(0,0,0,.85),0 0 0 1.5px rgba(255,255,255,.06),inset 0 0 0 2px rgba(0,0,0,.6);
+}
+.device__screen{
+  position:relative;width:100%;height:100%;border-radius:36px;overflow:hidden;
+  background:radial-gradient(120% 80% at 50% 0%,#1a2230,#0a0c12 70%);
+  display:flex;flex-direction:column
+}
+.island{
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:96px;height:30px;background:#000;border-radius:18px;z-index:6;
+}
+/* ロック画面 */
+.lock{padding:54px 18px 20px;display:flex;flex-direction:column;height:100%}
+.lock__clock{text-align:center;color:#fff}
+.lock__date{font-size:11.5px;color:#c7c7d2;letter-spacing:.03em}
+.lock__time{font-family:"Sora",sans-serif;font-weight:600;font-size:62px;line-height:1;letter-spacing:-.02em;margin-top:2px}
+.lock__widgets{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.widget{
+  position:relative;background:rgba(255,255,255,.10);border-radius:18px;
+  padding:11px 6px 9px;text-align:center;backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.08)
+}
+.ring{position:relative;width:42px;height:42px;margin:0 auto 6px}
+.ring svg{width:100%;height:100%}
+.ring .ico{position:absolute;inset:0;display:grid;place-items:center}
+.ring .ico svg{width:18px;height:18px}
+.widget__name{font-size:10px;color:#e9e9f1;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.widget__time{font-family:"Sora",sans-serif;font-size:11px;font-weight:600;color:#fff}
+.tap{position:absolute;width:54px;height:54px;border-radius:50%;border:2px solid var(--mint);left:50%;top:42%;transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+.fingertip{position:absolute;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.9),rgba(63,217,205,.35) 60%,transparent 72%);left:50%;top:42%;transform:translate(-50%,-50%) scale(.6);opacity:0;filter:blur(.3px);z-index:7}
+/* 実行中の Live Activity ピル(ロック画面下に出現) */
+.liveact{
+  position:absolute;left:14px;right:14px;bottom:20px;z-index:8;
+  background:rgba(8,10,14,.86);border:1px solid rgba(63,217,205,.4);
+  border-radius:20px;padding:11px 14px;display:flex;align-items:center;gap:11px;
+  backdrop-filter:blur(10px);transform:translateY(140%);opacity:0;
+}
+.liveact .ring{width:36px;height:36px;margin:0}
+.liveact__txt{flex:1;min-width:0;text-align:left}
+.liveact__name{font-size:11px;color:#cfeee9;font-weight:500}
+.liveact__rem{font-family:"Sora",sans-serif;font-weight:600;font-size:17px;color:#fff;line-height:1.1}
+.liveact__stop{width:30px;height:30px;border-radius:50%;background:rgba(255,90,95,.18);display:grid;place-items:center;flex:none}
+.liveact__stop svg{width:13px;height:13px;color:var(--red)}
+
+@media(min-width:900px){
+  .hero__grid{grid-template-columns:1.05fr .95fr}
 }
 
-/* ---------- white sections ---------- */
-.section{padding:6.4rem 0}
-.section.white{background:#fff}
-.section.ceramic{background:var(--ceramic)}
-h2.sec{color:var(--green);font-size:2.4rem;font-weight:600;letter-spacing:-0.16px}
-p.sec-sub{margin-top:.8rem;color:var(--ink-soft);font-size:1.5rem}
+/* ============================================================ 手数比較 */
+.compare{display:grid;grid-template-columns:1fr;gap:18px}
+.cpanel{
+  border:1px solid var(--glass-border);border-radius:var(--radius);
+  padding:clamp(20px,3.4vw,30px);background:var(--surface);position:relative;overflow:hidden
+}
+.cpanel--old{background:linear-gradient(180deg,#16131a,#100f16)}
+.cpanel--new{background:linear-gradient(180deg,rgba(63,217,205,.10),rgba(63,217,205,.02));border-color:rgba(63,217,205,.32)}
+.cpanel__label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.cpanel__label h3{font-size:16px;font-weight:700}
+.cpanel--old h3{color:var(--muted)}
+.taps{font-family:"Sora",sans-serif;font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px}
+.taps--old{background:rgba(255,90,95,.14);color:#ff9295}
+.taps--new{background:rgba(63,217,205,.18);color:var(--mint)}
+.steps{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.step{
+  display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#d6d6e0;
+  padding:9px 14px;border-radius:12px;background:var(--glass);border:1px solid var(--hairline)
+}
+.step b{font-family:"Sora",sans-serif;color:var(--faint);font-weight:700}
+.step--accent{background:rgba(63,217,205,.16);border-color:rgba(63,217,205,.4);color:#fff;font-weight:700}
+.step--accent b{color:var(--mint)}
+.arrow{color:var(--faint);font-size:14px}
+.cpanel--new .big1{font-family:"Sora",sans-serif;font-weight:800;font-size:clamp(34px,7vw,52px);line-height:1;color:var(--mint);margin-left:4px}
+@media(min-width:760px){.compare{grid-template-columns:1.35fr .9fr}}
 
-.card-grid{margin-top:4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2.4rem}
-@media(max-width:900px){.card-grid{grid-template-columns:1fr}}
-.card{
-  background:#fff;border-radius:12px;box-shadow:var(--card-shadow);overflow:hidden;
+/* ============================================================ 起動サーフェス */
+.surfaces{display:grid;grid-template-columns:1fr;gap:18px}
+.scard{
+  border:1px solid var(--glass-border);border-radius:var(--radius-lg);
+  background:var(--surface);padding:24px 22px 26px;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;transition:transform .3s var(--ease),border-color .3s var(--ease)
 }
-.section.white .card{background:var(--cream)}
-.card .thumb{height:16rem;display:grid;place-items:center;position:relative}
-.card .bd{padding:2.4rem}
-.card h3{font-size:1.9rem;font-weight:600;color:var(--ink)}
-.card p{margin-top:.8rem;font-size:1.4rem;color:var(--ink-soft);line-height:1.6}
-.card .more{display:inline-block;margin-top:1.6rem;color:var(--accent);font-size:1.4rem;font-weight:700;text-decoration:none}
-.card .more:hover{text-decoration:underline}
+.scard:hover{transform:translateY(-4px);border-color:rgba(63,217,205,.35)}
+.scard__viz{height:188px;margin:-4px -6px 20px;border-radius:18px;background:linear-gradient(170deg,#15151f,#0d0d15);border:1px solid var(--hairline);display:grid;place-items:center;overflow:hidden;position:relative}
+.scard h3{font-size:18px;font-weight:700;display:flex;align-items:center;gap:9px}
+.scard h3 svg{width:20px;height:20px;color:var(--mint)}
+.scard p{color:var(--muted);font-size:14px;margin-top:9px}
+.chip{align-self:flex-start;margin-top:14px;font-family:"Sora",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:.03em;padding:5px 11px;border-radius:999px}
+.chip--strong{background:rgba(63,217,205,.16);color:var(--mint);border:1px solid rgba(63,217,205,.4)}
+.chip--soft{background:var(--glass);color:var(--muted);border:1px solid var(--hairline)}
+.surface-note{margin-top:22px;display:flex;gap:11px;align-items:flex-start;color:var(--muted);font-size:13px;background:var(--glass);border:1px solid var(--hairline);border-radius:14px;padding:14px 16px}
+.surface-note svg{width:18px;height:18px;color:var(--orange);flex:none;margin-top:2px}
+@media(min-width:820px){.surfaces{grid-template-columns:repeat(3,1fr)}}
 
-/* thumbs (CSS product photography) */
-.th-lock{background:#cfe3da}
-.th-cc{background:#f3d9c4}
-.th-ab{background:#dcd4ec}
-.mini-lock{
-  width:9rem;border-radius:1.6rem;background:linear-gradient(170deg,#1b2336,#14463f);
-  padding:.8rem .7rem 1rem;box-shadow:0 6px 14px rgba(0,0,0,.18);
-}
-.mini-lock .mt{color:#eef1f9;font-size:1.7rem;font-weight:200;text-align:center;line-height:1}
-.mini-lock .md{color:#cfd6e6;font-size:.7rem;text-align:center;margin-bottom:.2rem}
-.mini-lock .mw{display:flex;justify-content:center;gap:.4rem;margin-top:1.2rem}
-.mini-lock .mw i{width:1.6rem;height:1.6rem;border-radius:50%;background:rgba(255,255,255,.35)}
-.mini-cc{
-  width:10rem;border-radius:1.4rem;background:#23232d;padding:1rem;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;box-shadow:0 6px 14px rgba(0,0,0,.18);
-}
-.mini-cc i{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.3);display:block}
-.mini-cc i.hot{background:var(--accent)}
-.mini-ab{
-  width:4.2rem;height:12rem;border-radius:2rem;background:#2c2c35;position:relative;
-  box-shadow:0 6px 14px rgba(0,0,0,.18);
-}
-.mini-ab::before{
-  content:"";position:absolute;left:-0.6rem;top:2.4rem;width:.7rem;height:4.2rem;border-radius:.4rem;
-  background:var(--accent);box-shadow:0 0 10px rgba(0,117,74,.7);
-}
+/* コントロールセンター ミニモック */
+.ccmock{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;width:80%;max-width:230px}
+.cc{aspect-ratio:1;min-width:0;border-radius:13px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.06);display:grid;place-items:center}
+.cc svg{width:18px;height:18px;color:#8a8a98}
+.cc--timer{background:rgba(63,217,205,.18);border-color:rgba(63,217,205,.45)}
+.cc--timer svg{color:var(--mint)}
+/* アクションボタン モック */
+.abmock{position:relative;width:118px;height:150px}
+.abphone{position:absolute;inset:0;border-radius:26px;background:linear-gradient(160deg,#26262f,#101016);border:1px solid rgba(255,255,255,.08)}
+.abbtn{position:absolute;left:-6px;top:34px;width:6px;height:42px;border-radius:4px;background:linear-gradient(var(--mint),var(--mint-deep));box-shadow:0 0 16px rgba(63,217,205,.7)}
+.abmock .pulse{position:absolute;left:-6px;top:34px;width:6px;height:42px;border-radius:4px;background:var(--mint);opacity:.5}
+.abscreen{position:absolute;inset:11px;border-radius:18px;background:radial-gradient(80% 60% at 50% 38%,#16202a,#0a0d12);display:grid;place-items:center}
+/* ロック画面ウィジェット ミニモック */
+.lwmock{display:flex;gap:13px}
+.lw{width:54px;text-align:center}
+.lw .ring{width:50px;height:50px;margin:0 auto 6px}
+.lw small{font-size:9.5px;color:#bdbdc8;display:block;line-height:1.3}
 
-/* ---------- feature band ---------- */
-.band{background:var(--house);color:#fff;padding:6.4rem 0}
-.band-grid{display:grid;grid-template-columns:55fr 45fr;gap:4rem;align-items:center}
-.band h2{font-size:2.8rem;font-weight:600;line-height:1.3;letter-spacing:-0.16px}
-.band p{margin-top:1.6rem;color:var(--white-soft);font-size:1.6rem;line-height:1.75;max-width:46rem}
-.band .cta-row{margin-top:2.8rem}
-.alert-card{
-  width:26rem;margin:0 auto;background:#fff;border-radius:12px;padding:2.8rem 2.4rem;text-align:center;
-  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
+/* ============================================================ ALARMKIT (鳴る) */
+.ring-sec{
+  border:1px solid rgba(255,161,78,.28);border-radius:var(--radius-lg);overflow:hidden;
+  background:radial-gradient(120% 100% at 80% 0%,rgba(255,161,78,.14),transparent 55%),linear-gradient(180deg,#15110d,#0e0c10);
 }
-.alert-card .bell{
-  width:5.6rem;height:5.6rem;margin:0 auto 1.4rem;border-radius:50%;background:var(--green-light);
-  display:grid;place-items:center;color:var(--green);font-size:2.4rem;
-}
-.alert-card .ti{font-size:1.9rem;font-weight:700;color:var(--ink)}
-.alert-card .su{font-size:1.3rem;color:var(--ink-soft);margin-top:.4rem}
-.alert-card .stop{
-  margin-top:2rem;background:var(--accent);color:#fff;border:none;border-radius:50px;
-  padding:1rem;width:100%;font-size:1.5rem;font-weight:600;cursor:pointer;transition:all .2s ease;
-}
-.alert-card .stop:active{transform:scale(.95)}
-.alert-card .mute{margin-top:1.4rem;font-size:1.2rem;color:var(--ink-soft)}
-@media(max-width:900px){.band-grid{grid-template-columns:1fr;gap:4.8rem}}
+.ring-sec__grid{display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,50px);align-items:center;padding:clamp(30px,5vw,56px)}
+.ring-sec h2{font-size:clamp(28px,6vw,48px);line-height:1.1}
+.ring-sec h2 .hot{color:var(--orange)}
+.ring-sec__lead{color:#e7d9cd;margin-top:18px;font-size:clamp(15px,2.5vw,17px)}
+.alist{margin-top:26px;display:grid;gap:12px}
+.aitem{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.04);border:1px solid var(--hairline);border-radius:16px;padding:15px 17px}
+.aitem__ic{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;background:rgba(255,161,78,.16)}
+.aitem__ic svg{width:21px;height:21px;color:var(--orange)}
+.aitem h4{font-size:15px;font-weight:700;font-family:"Zen Kaku Gothic New",sans-serif}
+.aitem p{color:var(--muted);font-size:13px;margin-top:3px}
+.verified{display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-size:12.5px;color:var(--mint);background:rgba(63,217,205,.1);border:1px solid rgba(63,217,205,.3);padding:8px 14px;border-radius:999px;font-weight:500}
+.verified svg{width:15px;height:15px}
+/* 鳴動するベルのビジュアル */
+.bellstage{display:flex;justify-content:center;align-items:center;min-height:240px;position:relative}
+.bellwrap{position:relative;width:150px;height:150px;display:grid;place-items:center}
+.bell-core{width:104px;height:104px;border-radius:32px;background:linear-gradient(150deg,#ffb368,#ff8a3d);display:grid;place-items:center;box-shadow:0 20px 50px -14px rgba(255,138,61,.6);z-index:2}
+.bell-core svg{width:50px;height:50px;color:#1a0f06}
+.bellwave{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,161,78,.5)}
+@media(min-width:840px){.ring-sec__grid{grid-template-columns:1.1fr .9fr}}
 
-/* ---------- silent / commute ---------- */
-.silent-grid{margin-top:4rem;display:grid;grid-template-columns:1fr 1fr;gap:4.8rem;align-items:center}
-.silent-lead{font-size:2rem;font-weight:700;color:var(--green);line-height:1.5}
-.silent-list{list-style:none;margin-top:2.4rem;display:flex;flex-direction:column;gap:1.6rem}
-.silent-list li{font-size:1.5rem;color:var(--ink);line-height:1.7;padding-left:2.4rem;position:relative}
-.silent-list li::before{content:"✓";position:absolute;left:0;top:0;color:var(--accent);font-weight:700}
-.silent-list b{font-weight:700}
-.silent-note{margin-top:2.4rem;font-size:1.4rem;color:var(--ink-soft);line-height:1.8}
-.commute-card{
-  max-width:32rem;margin:0 auto;background:var(--house);border-radius:12px;padding:2.8rem;color:#fff;
-  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
+/* ============================================================ 静音モード */
+.silent{
+  position:relative;border-radius:var(--radius-lg);overflow:hidden;
+  border:1px solid var(--glass-border);min-height:420px;display:flex;align-items:flex-end
 }
-.commute-head{display:flex;align-items:center;gap:1.2rem}
-.commute-ic{font-size:2.6rem}
-.commute-nm{font-size:1.7rem;font-weight:700}
-.commute-sub{font-size:1.3rem;color:var(--white-soft)}
-.commute-mute{margin-left:auto;font-size:2rem}
-.commute-time{font-size:5.6rem;font-weight:600;font-family:Inter,sans-serif;letter-spacing:-.02em;margin:1.2rem 0 1.6rem;color:#7fd6b4}
-.commute-tags{display:flex;flex-wrap:wrap;gap:.8rem}
-.ctag{font-size:1.2rem;font-weight:600;padding:.5rem 1rem;border-radius:50px;border:1px solid rgba(255,255,255,.3);color:var(--white-soft)}
-.ctag.on{border-color:var(--gold);color:var(--gold)}
-@media(max-width:900px){.silent-grid{grid-template-columns:1fr;gap:3.2rem}}
+.silent__bg{position:absolute;inset:0;z-index:0}
+.silent__bg img{width:100%;height:100%;object-fit:cover;opacity:.62}
+.silent__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,16,.94) 0%,rgba(10,10,16,.72) 42%,rgba(10,10,16,.28) 100%)}
+.silent__body{position:relative;z-index:1;padding:clamp(26px,4.5vw,46px);max-width:560px}
+.silent__body h2{font-size:clamp(26px,5vw,40px)}
+.silent__body p{color:#dcdce6;margin-top:16px;font-size:clamp(14px,2.4vw,16px)}
+.silent__feats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.sfeat{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:#eaeaf0;background:rgba(255,255,255,.07);border:1px solid var(--glass-border);border-radius:12px;padding:10px 14px;backdrop-filter:blur(4px)}
+.sfeat svg{width:17px;height:17px;color:var(--purple)}
+.silent__note{margin-top:18px;font-size:12px;color:var(--faint)}
 
-/* ---------- scenes ---------- */
-.scene-grid{margin-top:4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+/* ============================================================ シーン */
+.scenes{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .scene{
-  background:#fff;border-radius:12px;box-shadow:var(--card-shadow);padding:2.4rem;
-  display:flex;flex-direction:column;gap:1rem;
+  position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:3/4;
+  border:1px solid var(--glass-border);display:flex;align-items:flex-end
 }
-.scene-top{display:flex;align-items:center;gap:1.2rem}
-.scene-ic{
-  width:4.4rem;height:4.4rem;border-radius:50%;display:grid;place-items:center;
-  font-size:2.2rem;flex-shrink:0;background:var(--green-light);
-}
-.scene-nm{font-size:1.7rem;font-weight:700;color:var(--ink)}
-.scene-time{font-size:1.3rem;color:var(--ink-soft);font-weight:600}
-.scene-time .mute{color:var(--accent);margin-left:.4rem}
-.scene p{font-size:1.4rem;color:var(--ink-soft);line-height:1.7}
-@media(max-width:900px){.scene-grid{grid-template-columns:1fr}}
+.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.scene:hover img{transform:scale(1.05)}
+.scene::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(8,8,12,.9) 100%)}
+.scene__cap{position:relative;z-index:1;padding:16px 16px 18px}
+.scene__cap .t{display:flex;align-items:center;gap:8px;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;font-size:15px}
+.scene__cap .t svg{width:17px;height:17px;color:var(--mint)}
+.scene__cap .d{font-size:12px;color:#c3c3cf;margin-top:4px}
+@media(min-width:720px){.scenes{grid-template-columns:repeat(4,1fr)}}
 
-/* ---------- size selector (PDP parody) ---------- */
-.pdp-card{
-  margin-top:4rem;background:#fff;border-radius:12px;box-shadow:var(--card-shadow);padding:4rem;
-}
-.size-row{display:flex;gap:4rem;justify-content:center;flex-wrap:wrap}
-.size{
-  display:flex;flex-direction:column;align-items:center;gap:1rem;cursor:pointer;
-  background:none;border:none;font-family:inherit;
-}
-.size .cup{
-  width:7.2rem;height:7.2rem;border-radius:50%;display:grid;place-items:center;
-  background:var(--cream);position:relative;transition:all .2s ease;
-}
-.size.sel .cup{outline:2px solid var(--accent);outline-offset:3px}
-.size .cup span{font-size:2rem;font-weight:600;color:var(--green)}
-.size .nm{font-size:1.6rem;font-weight:700;color:var(--green)}
-.size .oz{font-size:1.3rem;color:var(--ink-soft)}
-.size:active .cup{transform:scale(.95)}
-.pdp-note{text-align:center;margin-top:2.8rem;font-size:1.4rem;color:var(--ink-soft)}
-.pdp-ctas{display:flex;gap:1.6rem;justify-content:center;margin-top:2.4rem;flex-wrap:wrap}
-.pill-customize{padding:12px 36px;border-width:1.5px}
-.pill-customize .spark{color:var(--gold)}
+/* ============================================================ アプリ画面 */
+.screens{display:grid;grid-template-columns:1fr;gap:clamp(26px,5vw,48px);align-items:center}
+.screens__copy h3{font-size:20px;margin-bottom:10px}
+.screens__copy p{color:var(--muted);font-size:14.5px}
+.screens__copy .feat-list{margin-top:6px;display:grid;gap:13px}
+.fl{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:#d6d6e0}
+.fl svg{width:19px;height:19px;color:var(--mint);flex:none;margin-top:2px}
+.fl b{color:#fff;font-weight:700}
+.screens__devs{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+/* アプリホーム(3スロット) */
+.app{width:clamp(232px,72vw,258px);border-radius:34px;padding:9px;background:linear-gradient(160deg,#26262f,#0c0c12);box-shadow:0 40px 80px -34px rgba(0,0,0,.8),0 0 0 1.5px rgba(255,255,255,.05);flex:none}
+.app__sc{border-radius:27px;background:#0c0e13;overflow:hidden;padding:16px 14px 18px}
+.app__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.app__top h4{font-family:"Sora",sans-serif;font-weight:700;font-size:15px}
+.app__top .plus{width:26px;height:26px;border-radius:50%;background:var(--glass-strong);display:grid;place-items:center}
+.app__top .plus svg{width:14px;height:14px;color:var(--mint)}
+.slot{display:flex;align-items:center;gap:12px;padding:13px;border-radius:16px;background:var(--surface-2);margin-bottom:9px;border:1px solid var(--hairline)}
+.slot__ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.slot__ic svg{width:21px;height:21px}
+.slot__tx{flex:1;min-width:0}
+.slot__name{font-size:13.5px;font-weight:700}
+.slot__sub{font-size:11px;color:var(--faint)}
+.slot__time{font-family:"Sora",sans-serif;font-weight:600;font-size:16px}
+.slot--run{border-color:rgba(63,217,205,.5);background:rgba(63,217,205,.08)}
+.slot--run .slot__time{color:var(--mint)}
+.runrow{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--mint);margin-top:1px}
+.runrow .dot{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:blink 1.4s infinite}
+.app__empty{border:1.5px dashed var(--hairline);border-radius:16px;padding:13px;text-align:center;font-size:11.5px;color:var(--faint)}
+/* プリセット編集 */
+.edit__sc{border-radius:27px;background:#0c0e13;overflow:hidden;padding:16px 15px 18px}
+.edit__title{font-family:"Sora",sans-serif;font-weight:600;font-size:13px;text-align:center;color:var(--muted);margin-bottom:14px}
+.field{margin-bottom:13px}
+.field__lb{font-size:10px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;font-family:"Sora",sans-serif;font-weight:600}
+.field__nm{background:var(--surface-2);border:1px solid var(--hairline);border-radius:11px;padding:10px 12px;font-size:13.5px;display:flex;align-items:center;gap:8px}
+.field__nm svg{width:15px;height:15px;color:var(--purple)}
+.wheel{display:flex;justify-content:center;gap:6px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:11px;padding:8px;align-items:center}
+.wcol{display:flex;flex-direction:column;align-items:center;font-family:"Sora",sans-serif;line-height:1.5}
+.wcol .o{font-size:11px;color:var(--faint)}
+.wcol .m{font-size:21px;font-weight:700;color:#fff}
+.wsep{font-size:18px;color:var(--faint);font-weight:700;padding:0 2px}
+.wunit{font-size:9px;color:var(--faint);align-self:flex-end;margin-bottom:4px}
+.icons{display:flex;gap:7px;flex-wrap:wrap}
+.ibtn{width:34px;height:34px;border-radius:10px;background:var(--surface-2);border:1px solid var(--hairline);display:grid;place-items:center}
+.ibtn svg{width:17px;height:17px;color:#9a9aa8}
+.ibtn--on{background:rgba(188,133,255,.18);border-color:var(--purple)}
+.ibtn--on svg{color:var(--purple)}
+.dots{display:flex;gap:9px;flex-wrap:wrap}
+.dot8{width:24px;height:24px;border-radius:50%;position:relative}
+.dot8--on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px currentColor}
+.toggle{display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);border:1px solid var(--hairline);border-radius:11px;padding:11px 13px}
+.toggle__l{display:flex;align-items:center;gap:9px;font-size:13px}
+.toggle__l svg{width:16px;height:16px;color:var(--purple)}
+.sw{width:38px;height:23px;border-radius:999px;background:var(--purple);position:relative;flex:none}
+.sw::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2.5px;right:2.5px}
+@media(min-width:860px){.screens{grid-template-columns:.95fr 1.05fr}}
 
-/* ---------- spec table ---------- */
-#spec h2.sec{text-align:center}
-.spec-card{
-  margin:4rem auto 0;background:#fff;border-radius:12px;box-shadow:var(--card-shadow);
-  padding:3.2rem 4rem;max-width:72rem;
-}
-.spec-foot{text-align:center}
-.spec-row{display:flex;justify-content:space-between;gap:2.4rem;padding:1.3rem 0;border-bottom:1px solid #e7e7e7;font-size:1.4rem}
-.spec-row:last-child{border-bottom:none}
-.spec-row .k{color:var(--ink-soft)}
-.spec-row .v{font-weight:700;text-align:right}
-.spec-foot{margin-top:1.6rem;font-size:1.3rem;color:var(--ink-soft)}
+/* ============================================================ 料金 */
+.plans{display:grid;grid-template-columns:1fr;gap:18px;max-width:760px;margin:0 auto}
+.plan{border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:28px 26px;background:var(--surface);position:relative}
+.plan--pro{background:linear-gradient(180deg,rgba(63,217,205,.1),rgba(188,133,255,.06));border-color:rgba(63,217,205,.4)}
+.plan__tag{font-family:"Sora",sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--mint)}
+.plan--free .plan__tag{color:var(--muted)}
+.plan__price{font-family:"Sora",sans-serif;font-weight:800;font-size:clamp(34px,7vw,46px);margin:8px 0 2px;display:flex;align-items:baseline;gap:6px}
+.plan__price small{font-size:14px;font-weight:600;color:var(--muted)}
+.plan__sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.plan__list{display:grid;gap:11px}
+.plan__list li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#dcdce6}
+.plan__list svg{width:18px;height:18px;color:var(--mint);flex:none;margin-top:2px}
+.plan__badge{position:absolute;top:-12px;right:22px;font-family:"Sora",sans-serif;font-weight:700;font-size:11px;letter-spacing:.06em;padding:5px 12px;border-radius:999px;color:#06110f;background:linear-gradient(120deg,var(--mint),var(--purple))}
+.plans__note{max-width:760px;margin:20px auto 0;display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:center;color:var(--faint);font-size:12.5px}
+.plans__note span{display:inline-flex;align-items:center;gap:7px}
+.plans__note svg{width:14px;height:14px;color:var(--mint)}
+@media(min-width:720px){.plans{grid-template-columns:1fr 1.08fr}}
 
-/* ---------- gold / pro ---------- */
-.gold-sec{background:var(--gold-lightest);padding:8rem 0}
-.gold-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.8rem;align-items:center}
-.gold-sec h2.serif{
-  font-family:"Noto Serif JP","Iowan Old Style",Georgia,serif;
-  font-size:3.4rem;font-weight:600;line-height:1.45;color:#33433d;letter-spacing:0;
-}
-.gold-sec p{margin-top:1.6rem;color:#33433d;font-size:1.6rem;line-height:1.8}
-.gold-benefits{margin-top:2.4rem;list-style:none;display:flex;flex-direction:column;gap:1.2rem}
-.gold-benefits li{display:flex;gap:1.2rem;align-items:center;font-size:1.5rem;color:#33433d}
-.gold-benefits li::before{content:"★";color:var(--gold);font-size:1.4rem}
-.pro-card{
-  background:var(--house);border-radius:12px;padding:4.8rem 4rem;text-align:center;color:#fff;
-  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);position:relative;overflow:hidden;
-}
-.pro-card::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:.8rem;
-  background:linear-gradient(90deg,var(--gold-light),var(--gold),var(--gold-light));
-}
-.pro-card .lv{
-  display:inline-grid;place-items:center;width:3.2rem;height:3.2rem;border-radius:50%;
-  background:var(--gold);color:var(--house);font-weight:700;font-size:1.5rem;margin-bottom:1.6rem;
-}
-.pro-card h3{font-size:2.4rem;font-weight:600}
-.pro-card .pr{font-size:4.4rem;font-weight:700;margin-top:1.2rem}
-.pro-card .pr small{font-size:1.4rem;font-weight:400;color:var(--white-soft);margin-left:.6rem}
-.pro-card ul{list-style:none;margin-top:2.4rem;display:flex;flex-direction:column;gap:1rem;text-align:left}
-.pro-card ul li{font-size:1.4rem;color:var(--white-soft);display:flex;gap:1rem}
-.pro-card ul li::before{content:"✓";color:var(--gold)}
-.pro-card .pill{margin-top:2.8rem;width:100%}
-@media(max-width:900px){.gold-grid{grid-template-columns:1fr}}
+/* ============================================================ プライバシー */
+.privacy{border:1px solid var(--glass-border);border-radius:var(--radius-lg);background:var(--surface);padding:clamp(28px,4.5vw,44px);text-align:center;max-width:820px;margin:0 auto}
+.privacy h2{font-size:clamp(24px,4.6vw,34px)}
+.privacy>p{color:var(--muted);margin:14px auto 0;max-width:50em}
+.pgrid{display:grid;grid-template-columns:1fr;gap:13px;margin-top:30px;text-align:left}
+.pcard{display:flex;gap:13px;align-items:flex-start;background:var(--glass);border:1px solid var(--hairline);border-radius:16px;padding:16px}
+.pcard svg{width:22px;height:22px;color:var(--mint);flex:none}
+.pcard h4{font-size:14px;font-weight:700}
+.pcard p{font-size:12.5px;color:var(--muted);margin-top:3px}
+@media(min-width:680px){.pgrid{grid-template-columns:repeat(3,1fr)}}
 
-/* ---------- footer ---------- */
-footer{background:var(--house);color:#fff;padding:5.6rem 0 4rem}
-.foot-grid{display:flex;justify-content:space-between;gap:3.2rem;flex-wrap:wrap}
-.foot-grid a{color:var(--white-soft);text-decoration:none;font-size:1.4rem;display:block;margin-top:1rem}
-.foot-grid a:hover{color:#fff}
-.foot-col b{font-size:1.5rem;font-weight:600}
-.foot-bottom{margin-top:4rem;padding-top:2.4rem;border-top:1px solid rgba(255,255,255,.15);font-size:1.2rem;color:var(--white-soft);display:flex;justify-content:space-between;gap:1.6rem;flex-wrap:wrap}
-.foot-bottom .gold{color:var(--gold);font-weight:600}
+/* ============================================================ 最終CTA */
+.final{text-align:center}
+.final__box{
+  border-radius:var(--radius-lg);padding:clamp(40px,7vw,78px) 24px;
+  background:radial-gradient(110% 130% at 50% 0%,rgba(63,217,205,.16),transparent 60%),linear-gradient(180deg,#13131e,#0c0c14);
+  border:1px solid rgba(63,217,205,.26)
+}
+.final h2{font-size:clamp(27px,6vw,46px);line-height:1.18}
+.final h2 .em{color:var(--mint)}
+.final p{color:var(--muted);margin:18px auto 0;max-width:34em}
+.final .hero__cta{justify-content:center}
+.final__os{margin-top:18px;font-size:12px;color:var(--faint)}
 
-/* ---------- frap ---------- */
-.frap{
-  position:fixed;right:2.4rem;bottom:2.4rem;z-index:60;
-  width:5.6rem;height:5.6rem;border-radius:50%;border:none;cursor:pointer;
-  background:var(--accent);color:#fff;font-size:2rem;
-  box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
-  transition:all .2s ease;display:grid;place-items:center;
+/* ============================================================ FOOTER */
+footer{border-top:1px solid var(--hairline);padding:46px 0 60px;margin-top:20px}
+.foot{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+.foot__brand{display:flex;align-items:center;gap:11px;font-family:"Sora",sans-serif;font-weight:700;font-size:16px}
+.foot__brand .mark{width:28px;height:28px}
+.foot__links{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--muted)}
+.foot__links a:hover{color:var(--text)}
+.foot__copy{font-size:12px;color:var(--faint)}
+.foot__author{color:var(--muted);text-decoration:underline;text-underline-offset:2px;transition:color .2s var(--ease)}
+.foot__author:hover{color:var(--mint)}
+@media(min-width:680px){.foot{flex-direction:row;justify-content:space-between;align-items:center}}
+
+/* ============================================================ reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}.reveal[data-d="2"]{transition-delay:.16s}.reveal[data-d="3"]{transition-delay:.24s}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
 }
-.frap:active{transform:scale(.95);box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,0)}
-.frap-toast{
-  position:fixed;right:2.4rem;bottom:9.6rem;z-index:60;
-  background:#fff;border-radius:12px;box-shadow:0 0 6px rgba(0,0,0,.24),0 8px 12px rgba(0,0,0,.14);
-  padding:1.4rem 1.8rem;display:none;align-items:center;gap:1.2rem;
-}
-.frap-toast.on{display:flex}
-.frap-toast .ic{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--green-light);display:grid;place-items:center;color:var(--green)}
-.frap-toast .tt{font-size:1.3rem;font-weight:700;color:var(--ink)}
-.frap-toast .cd{font-size:1.8rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
 </style>
 </head>
-<body>
+<body id="top">
 
-<!-- top strip -->
-<div class="strip">
-  <b>App Storeで近日公開。</b>無料で1スロットから。
-  <a class="pill pill-black" style="border-color:#fff" href="#pro">公開通知を受け取る</a>
-</div>
+<!-- ===== Coming Soon バー ===== -->
+<div class="topbar"><b>COMING SOON</b> &nbsp;— iOS 26 対応・App Store にて近日公開</div>
 
-<!-- nav -->
-<nav>
-  <div class="nav-inner">
-    <a class="logo" href="#"><span class="logo-cup">1</span><b>OneTimer</b></a>
-    <div class="nav-links">
-      <a href="#surfaces">起動場所</a>
-      <a href="#ring">鳴り方</a>
-      <a href="#silent">静音モード</a>
-      <a href="#scenes">使う場面</a>
-      <a href="#sizes">プリセット</a>
-      <a href="#spec">スペック</a>
-    </div>
-    <div class="nav-cta">
-      <a class="pill pill-dark-outline" href="#spec">ヘルプ</a>
-      <a class="pill pill-black" href="#pro">近日公開</a>
-    </div>
-  </div>
-</nav>
-
-<!-- hero -->
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow">ロック画面ワンタップタイマー</span>
-      <h1>いつもの時間を、<br>ワンタップで。</h1>
-      <p class="lead">昼寝20分。カップ麺3分。通勤23分。よく使うタイマーをロック画面に置いておけば、<strong>タップ一回でスタート</strong>。声も出さず、アプリも開かず。</p>
-      <p class="sub">iOS 26対応 / 無料で1スロット / サブスクなし</p>
-      <div class="cta-row">
-        <a class="pill pill-filled" href="#surfaces">どこから起動できるか見る</a>
-        <a class="pill pill-outline" href="#sizes">プリセットを見る</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="hero-disc">
-        <div class="phone">
-          <div class="scr">
-            <div class="island"></div>
-            <div class="d">6月10日 水曜日</div>
-            <div class="t">13:33</div>
-            <div class="la">
-              <span class="ic">🌙</span>
-              <div><div class="nm">昼寝</div><div class="cd" id="heroCd">19:58</div></div>
-            </div>
-            <div class="ws">
-              <span class="w"><em>☾</em><span>20分</span></span>
-              <span class="w"><em>♨</em><span>3分</span></span>
-              <span class="w"><em>♥</em><span>1分</span></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- ===== NAV ===== -->
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="brand" href="#top" aria-label="OneTimer ホーム">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0f1620"/><circle cx="16" cy="16" r="10" fill="none" stroke="#3fd9cd" stroke-width="3" stroke-linecap="round" stroke-dasharray="49 63" transform="rotate(-90 16 16)"/><text x="16" y="21" font-family="Sora,Helvetica,sans-serif" font-size="14" font-weight="800" fill="#f4f4f8" text-anchor="middle">1</text></svg>
+      OneTimer
+    </a>
+    <nav class="nav__links" aria-label="セクション">
+      <a href="#surfaces">起動</a>
+      <a href="#alarm">マナーモード</a>
+      <a href="#screens">画面</a>
+      <a href="#pricing">料金</a>
+    </nav>
+    <a class="nav__cta" href="#pricing">近日公開</a>
   </div>
 </header>
 
-<!-- surfaces -->
-<section class="section white" id="surfaces">
-  <div class="wrap">
-    <h2 class="sec">iPhoneのいちばん近い場所から。</h2>
-    <p class="sec-sub">タイマーを「探す」工程を、設計からなくしました。</p>
-    <div class="card-grid">
-      <div class="card">
-        <div class="thumb th-lock">
-          <div class="mini-lock">
-            <div class="md">6月10日 水曜日</div>
-            <div class="mt">13:33</div>
-            <div class="mw"><i></i><i></i><i></i></div>
-          </div>
-        </div>
-        <div class="bd">
-          <h3>ロック画面ウィジェット</h3>
-          <p>時計の下に最大3つのボタン。画面を点けたら、もう目の前に。タップ一回でカウントダウンが始まります。</p>
-          <a class="more" href="#sizes">プリセットの作り方 →</a>
-        </div>
-      </div>
-      <div class="card">
-        <div class="thumb th-cc">
-          <div class="mini-cc"><i class="hot"></i><i></i><i></i><i></i><i></i><i></i></div>
-        </div>
-        <div class="bd">
-          <h3>コントロールセンター</h3>
-          <p>右上からスワイプして1タップ。アプリを開かずその場で開始。ロック中でも動作します。</p>
-          <a class="more" href="#ring">どう鳴るかを見る →</a>
-        </div>
-      </div>
-      <div class="card">
-        <div class="thumb th-ab">
-          <div class="mini-ab"></div>
-        </div>
-        <div class="bd">
-          <h3>アクションボタン</h3>
-          <p>側面の物理ボタンに割り当てれば、画面を見ずに開始。ポケットの中からでも、いつもの時間。</p>
-          <a class="more" href="#spec">対応機種を見る →</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<main>
 
-<!-- dark green band -->
-<section class="band" id="ring">
-  <div class="wrap band-grid">
-    <div>
-      <h2>マナーモードでも、鳴る。</h2>
-      <p>OneTimerは通知ではなく、iOS 26の新機能 AlarmKit — 純正アラームと同じ仕組みで鳴ります。消音スイッチも集中モードも貫通して、止めるまで鳴り続ける。「気づかなくて麺がのびた」は、もう起きません。</p>
-      <div class="cta-row">
-        <a class="pill pill-white" href="#sizes">プリセットを見る</a>
-        <a class="pill pill-white-outline" href="#spec">仕組みを詳しく</a>
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <span class="eyebrow reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+        ONE TAP TIMER
+      </span>
+      <h1 class="reveal" data-d="1">測らない。<span class="l2 push">押すだけ。</span></h1>
+      <p class="hero__lead reveal" data-d="2">よく使うタイマーを<b>ロック画面とコントロールセンター</b>に常駐。「3分測って」を、毎回ホイールで合わせる手間から、<b>ワンタップ</b>へ。</p>
+      <div class="hero__cta reveal" data-d="3">
+        <span class="btn btn-primary" role="button" aria-disabled="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.9c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.6.8-3.3.8-.7 0-1.7-.8-2.8-.8-1.4 0-2.8.8-3.5 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.1 1.1 0 1.5-.7 2.8-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.3-.9-2.3-3.2zM14.3 6.3c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.6.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2z"/></svg>
+          App Store <span class="soon-tag">近日公開</span>
+        </span>
+        <a class="btn btn-ghost" href="#surfaces">仕組みを見る</a>
+      </div>
+      <div class="hero__meta reveal" data-d="3">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>iOS 26 / AlarmKit</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>買い切り ¥500・サブスクなし</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>広告・データ収集なし</span>
       </div>
     </div>
-    <div>
-      <div class="alert-card">
-        <div class="bell">🔔</div>
-        <div class="ti">昼寝 終了</div>
-        <div class="su">OneTimer — 20:00</div>
-        <button class="stop">停止</button>
-        <div class="mute">🔇 消音モード中でも、この画面と音でお知らせ</div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- silent mode / commute -->
-<section class="section white" id="silent">
-  <div class="wrap">
-    <h2 class="sec">音を出せない場所には、静音モード。</h2>
-    <p class="sec-sub">電車で。オフィスで。図書館で。鳴らさずに、ちゃんと気づく。</p>
-    <div class="silent-grid">
-      <div class="silent-copy">
-        <p class="silent-lead">「ヘイ Siri」と言えない場所こそ、OneTimer の出番です。</p>
-        <ul class="silent-list">
-          <li><b>音は鳴らさない。</b>本体スピーカーからは音を出しません。満員電車でも気まずくならない。</li>
-          <li><b>バイブで知らせる。</b>ポケットの中の振動で、そっとお知らせ。</li>
-          <li><b>音楽が止まる。</b>イヤホンで聴いていた音楽が一時停止。「急な無音」が目を覚まします。</li>
-        </ul>
-        <p class="silent-note">通勤の電車で「降りる駅の少し前」にセットしておけば、うっかり寝過ごしも防げます。プリセットごとに切り替えられます。</p>
-      </div>
-      <div class="silent-visual">
-        <div class="commute-card">
-          <div class="commute-head">
-            <span class="commute-ic">🚃</span>
-            <div>
-              <div class="commute-nm">通勤</div>
-              <div class="commute-sub">静音モード ON</div>
+    <!-- iPhone ロック画面モック -->
+    <div class="hero__stage reveal" data-d="2">
+      <div class="device" role="img" aria-label="iPhone のロック画面。3つの円形タイマーウィジェット（昼寝・カップ麺・筋トレ）をワンタップで起動できる様子。">
+        <div class="device__screen">
+          <div class="island" id="island"></div>
+          <div class="lock">
+            <div class="lock__clock">
+              <div class="lock__date">6月16日 月曜日</div>
+              <div class="lock__time">9:41</div>
             </div>
-            <span class="commute-mute">🔇</span>
-          </div>
-          <div class="commute-time">23:00</div>
-          <div class="commute-tags">
-            <span class="ctag">スピーカー音 なし</span>
-            <span class="ctag on">バイブ あり</span>
-            <span class="ctag on">音楽 停止</span>
+            <div class="lock__widgets">
+              <div class="widget" id="w-nap">
+                <div class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="3.5"/><circle cx="22" cy="22" r="19" fill="none" stroke="#bc85ff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="119" stroke-dashoffset="30" transform="rotate(-90 22 22)"/></svg><span class="ico" style="color:#bc85ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></span></div>
+                <div class="widget__name">昼寝</div><div class="widget__time">20:00</div>
+              </div>
+              <div class="widget" id="w-noodle">
+                <div class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="3.5"/><circle cx="22" cy="22" r="19" fill="none" stroke="#ffa14e" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="119" stroke-dashoffset="55" transform="rotate(-90 22 22)"/></svg><span class="ico" style="color:#ffa14e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M6 11V8m4 3V7m4 4V8"/><path d="M3 20h18"/></svg></span></div>
+                <div class="widget__name">カップ麺</div><div class="widget__time">3:00</div>
+              </div>
+              <div class="widget" id="w-fit">
+                <div class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="3.5"/><circle cx="22" cy="22" r="19" fill="none" stroke="#3fd9cd" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="119" stroke-dashoffset="80" transform="rotate(-90 22 22)"/></svg><span class="ico" style="color:#3fd9cd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12h2M19.5 12h2"/><rect x="4.5" y="8.5" width="3.4" height="7" rx="1.2"/><rect x="16.1" y="8.5" width="3.4" height="7" rx="1.2"/><path d="M7.9 12h8.2"/></svg></span></div>
+                <div class="widget__name">筋トレ</div><div class="widget__time">1:00</div>
+              </div>
+            </div>
+            <div class="fingertip" id="fingertip"></div>
+            <div class="tap" id="tapring"></div>
+
+            <!-- 起動後に出る Live Activity -->
+            <div class="liveact" id="liveact">
+              <div class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="3.5"/><circle cx="22" cy="22" r="19" fill="none" stroke="#3fd9cd" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="119" stroke-dashoffset="6" id="laRing" transform="rotate(-90 22 22)"/></svg><span class="ico" style="color:#3fd9cd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12h2M19.5 12h2"/><rect x="4.5" y="8.5" width="3.4" height="7" rx="1.2"/><rect x="16.1" y="8.5" width="3.4" height="7" rx="1.2"/><path d="M7.9 12h8.2"/></svg></span></div>
+              <div class="liveact__txt"><div class="liveact__name">筋トレ</div><div class="liveact__rem" id="laRem">0:58</div></div>
+              <div class="liveact__stop" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg></div>
+            </div>
           </div>
         </div>
       </div>
@@ -508,206 +570,411 @@ footer{background:var(--house);color:#fff;padding:5.6rem 0 4rem}
   </div>
 </section>
 
-<!-- scenes -->
-<section class="section ceramic" id="scenes">
+<!-- ===== 手数比較 ===== -->
+<section id="why">
   <div class="wrap">
-    <h2 class="sec">声を出せない場所で、いちばん役に立つ。</h2>
-    <p class="sec-sub">「いつもの時間」は、毎日くり返す場面にこそ宿ります。</p>
-    <div class="scene-grid">
-      <div class="scene">
-        <div class="scene-top">
-          <span class="scene-ic">👶</span>
-          <div>
-            <div class="scene-nm">寝かしつけ・授乳</div>
-            <div class="scene-time">30:00<span class="mute">🔇 静音</span></div>
-          </div>
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>4手 → 1手</span>
+      <h2>「いつもの時間」を、<br>呼び出すだけ。</h2>
+      <p>標準タイマーは、起動のたびにロック解除からホイール合わせまで何手もかかる。OneTimer は登録済みのプリセットを押すだけ。</p>
+    </div>
+    <div class="compare">
+      <div class="cpanel cpanel--old reveal">
+        <div class="cpanel__label"><h3>標準タイマー</h3><span class="taps taps--old">4手以上</span></div>
+        <div class="steps">
+          <span class="step"><b>1</b>ロック解除</span><span class="arrow">→</span>
+          <span class="step"><b>2</b>アプリを探す</span><span class="arrow">→</span>
+          <span class="step"><b>3</b>時間を合わせる</span><span class="arrow">→</span>
+          <span class="step"><b>4</b>開始</span>
         </div>
-        <p>暗い部屋で声は出せない。片手も塞がっている。ロック画面をタップするだけ。静音モードのバイブで、子を起こさず親だけが気づけます。</p>
       </div>
-      <div class="scene">
-        <div class="scene-top">
-          <span class="scene-ic">🏋️</span>
-          <div>
-            <div class="scene-nm">ジムのインターバル</div>
-            <div class="scene-time">1:30<span class="mute">🔇 静音</span></div>
-          </div>
+      <div class="cpanel cpanel--new reveal" data-d="1">
+        <div class="cpanel__label"><h3>OneTimer</h3><span class="taps taps--new">1手</span></div>
+        <div class="steps">
+          <span class="step step--accent"><b>1</b>押す</span>
+          <span class="big1">→ 開始</span>
         </div>
-        <p>セット間のレスト90秒。音楽を聴きながら、声も出さずに。静音モードなら音楽が止まって、次のセットの合図になります。</p>
-      </div>
-      <div class="scene">
-        <div class="scene-top">
-          <span class="scene-ic">🎤</span>
-          <div>
-            <div class="scene-nm">登壇・プレゼン</div>
-            <div class="scene-time">5:00<span class="mute">🔇 静音</span></div>
-          </div>
-        </div>
-        <p>「5分で話す」持ち時間。話している最中だから声は出せず、聴衆の前で音も鳴らせない。アクションボタンでこっそり開始、残り時間は自分だけにバイブで。</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PDP parody: size selector -->
-<section class="section white" id="sizes">
+<!-- ===== 起動サーフェス ===== -->
+<section id="surfaces" class="band">
   <div class="wrap">
-    <h2 class="sec">サイズをお選びください。</h2>
-    <p class="sec-sub">プリセットは3スロット。名前・時間・アイコン・カラーはお好みで。</p>
-    <div class="pdp-card">
-      <div class="size-row">
-        <button class="size sel" data-name="昼寝" data-time="20:00">
-          <span class="cup"><span>☾</span></span>
-          <span class="nm">昼寝</span>
-          <span class="oz">20 min</span>
-        </button>
-        <button class="size" data-name="カップ麺" data-time="3:00">
-          <span class="cup"><span>♨</span></span>
-          <span class="nm">カップ麺</span>
-          <span class="oz">3 min</span>
-        </button>
-        <button class="size" data-name="筋トレ" data-time="1:00">
-          <span class="cup"><span>♥</span></span>
-          <span class="nm">筋トレ</span>
-          <span class="oz">60 sec</span>
-        </button>
-        <button class="size" data-name="通勤" data-time="23:00" data-silent="1">
-          <span class="cup"><span>🚃</span></span>
-          <span class="nm">通勤 🔇</span>
-          <span class="oz">23 min</span>
-        </button>
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>起動サーフェス</span>
+      <h2>呼び出す場所は、<span class="amp">手元のあちこち。</span></h2>
+      <p>OneTimer の価値は「どこから起動できるか」。よく使うタイマーを、最短距離の場所に置ける。</p>
+    </div>
+    <div class="surfaces">
+      <!-- コントロールセンター -->
+      <div class="scard reveal">
+        <div class="scard__viz">
+          <div class="ccmock" aria-hidden="true">
+            <div class="cc cc--timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4M9 2h6" stroke-linecap="round"/></svg></div>
+            <div class="cc cc--timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4M9 2h6" stroke-linecap="round"/></svg></div>
+            <div class="cc cc--timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4M9 2h6" stroke-linecap="round"/></svg></div>
+            <div class="cc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9 9m0 0V3m0 6h6M4 20a8 8 0 0 0 14-6"/></svg></div>
+            <div class="cc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14 0M8.5 16a6 6 0 0 1 7 0M2 8.82a15 15 0 0 1 20 0"/><circle cx="12" cy="19" r="1"/></svg></div>
+            <div class="cc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 8 10 8-5 4V4l5 4L7 16"/></svg></div>
+            <div class="cc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></div>
+            <div class="cc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>
+          </div>
+        </div>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>コントロールセンター</h3>
+        <p>タイマーを最大3つ常駐。スワイプして1タップでカウントダウン開始。</p>
+        <span class="chip chip--strong">アプリを開かずに起動</span>
       </div>
-      <p class="pdp-note" id="pdpNote">「昼寝 20:00」— ロック画面のスロット1に置けます。</p>
-      <div class="pdp-ctas">
-        <a class="pill pill-outline pill-customize" href="#pro"><span class="spark">✦</span> カスタマイズ</a>
-        <a class="pill pill-filled" style="padding:12px 32px" href="#pro">スロットに登録</a>
+      <!-- アクションボタン -->
+      <div class="scard reveal" data-d="1">
+        <div class="scard__viz">
+          <div class="abmock" aria-hidden="true">
+            <div class="abphone"></div><div class="pulse"></div><div class="abbtn"></div>
+            <div class="abscreen"><svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#3fd9cd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/></svg></div>
+          </div>
+        </div>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="3"/><path d="M3 8v5"/></svg>アクションボタン</h3>
+        <p>側面の物理ボタンにコントロールを割り当て、画面を見ずにそのまま起動。</p>
+        <span class="chip chip--strong">アプリを開かずに起動</span>
       </div>
+      <!-- ロック画面ウィジェット -->
+      <div class="scard reveal" data-d="2">
+        <div class="scard__viz">
+          <div class="lwmock" aria-hidden="true">
+            <div class="lw"><div class="ring"><svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="21" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="4"/><circle cx="25" cy="25" r="21" fill="none" stroke="#bc85ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="132" stroke-dashoffset="40" transform="rotate(-90 25 25)"/></svg><span class="ico" style="color:#bc85ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></span></div><small>昼寝</small></div>
+            <div class="lw"><div class="ring"><svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="21" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="4"/><circle cx="25" cy="25" r="21" fill="none" stroke="#3fd9cd" stroke-width="4" stroke-linecap="round" stroke-dasharray="132" stroke-dashoffset="80" transform="rotate(-90 25 25)"/></svg><span class="ico" style="color:#3fd9cd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12h2M19.5 12h2"/><rect x="4.5" y="8.5" width="3.4" height="7" rx="1.2"/><rect x="16.1" y="8.5" width="3.4" height="7" rx="1.2"/><path d="M7.9 12h8.2"/></svg></span></div><small>筋トレ</small></div>
+          </div>
+        </div>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="12" r="4"/></svg>ロック画面ウィジェット</h3>
+        <p>円形ウィジェットを最大3つ配置。ロック画面からそのまま1タップで起動。</p>
+        <span class="chip chip--soft">1タップで起動</span>
+      </div>
+    </div>
+    <div class="surface-note reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+      <p><strong>「アプリを開かずに」起動できるのはコントロールセンターとアクションボタン</strong>（実機・シミュレータ検証済み）。ロック画面ウィジェットは現状 iOS 26.5 の仕様により起動時にアプリが一瞬開きますが、ワンタップでの起動はそのまま行えます。</p>
     </div>
   </div>
 </section>
 
-<!-- spec -->
-<section class="section ceramic" id="spec">
+<!-- ===== AlarmKit / マナーモード貫通 ===== -->
+<section id="alarm">
   <div class="wrap">
-    <h2 class="sec">スペック</h2>
-    <div class="spec-card">
-      <div class="spec-row"><span class="k">対応OS</span><span class="v">iOS 26以降</span></div>
-      <div class="spec-row"><span class="k">アラーム方式</span><span class="v">AlarmKit(消音・集中モード貫通)</span></div>
-      <div class="spec-row"><span class="k">静音モード</span><span class="v">プリセットごとに切替(バイブ+音楽停止)</span></div>
-      <div class="spec-row"><span class="k">スロット数</span><span class="v">無料1 / Pro 3</span></div>
-      <div class="spec-row"><span class="k">残り時間表示</span><span class="v">ロック画面 / Dynamic Island / アプリ内(秒単位)</span></div>
-      <div class="spec-row"><span class="k">停止</span><span class="v">ウィジェット / Live Activity / アプリから</span></div>
-      <div class="spec-row"><span class="k">同時実行</span><span class="v">1本(開始時に自動で置き換え)**</span></div>
-      <div class="spec-row"><span class="k">価格</span><span class="v">無料 / Pro ¥500(買い切り)</span></div>
-      <div class="spec-foot">** 「シンプルであること」は仕様です。複数同時実行の予定はいまのところありません。</div>
+    <div class="ring-sec reveal">
+      <div class="ring-sec__grid">
+        <div>
+          <span class="eyebrow" style="color:var(--orange);border-color:rgba(255,161,78,.4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>AlarmKit</span>
+          <h2>マナーモードでも、<span class="hot">鳴る。</span></h2>
+          <p class="ring-sec__lead">iOS 26 の AlarmKit を採用。通知ではなく純正アラームと同じ仕組みだから、音を消していても確実に気づける。<strong>OneTimer 最大の差別化軸です。</strong></p>
+          <div class="alist">
+            <div class="aitem">
+              <span class="aitem__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M11 5l4-3v14m4-7a4 4 0 0 0-1.5-3M5 9v6h3l3 3"/></svg></span>
+              <div><h4>消音スイッチ ON でも鳴る</h4><p>サイレントにしていても、ちゃんと音で知らせる。</p></div>
+            </div>
+            <div class="aitem">
+              <span class="aitem__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></span>
+              <div><h4>集中モードを貫通</h4><p>おやすみ等の集中モード中でも鳴動する。</p></div>
+            </div>
+            <div class="aitem">
+              <span class="aitem__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></span>
+              <div><h4>止めるまで鳴り続ける</h4><p>純正アラームと同じ挙動。寝過ごし・聞き逃しを防ぐ。</p></div>
+            </div>
+          </div>
+          <span class="verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>実機で鳴動を確認済み（iPhone 16 / iOS 26.5）</span>
+        </div>
+        <div class="bellstage" aria-hidden="true">
+          <div class="bellwrap">
+            <span class="bellwave" id="bw1"></span><span class="bellwave" id="bw2"></span><span class="bellwave" id="bw3"></span>
+            <div class="bell-core" id="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- gold pro section -->
-<section class="gold-sec" id="pro">
-  <div class="wrap gold-grid">
-    <div>
-      <h2 class="serif">無料の1スロットは、<br>はじまりにすぎない。</h2>
-      <p>OneTimerは無料のままでも完成品です。タイマー1個、ロック画面、ちゃんと鳴る。それでも「昼寝とカップ麺と筋トレ、ぜんぶ置きたい」と思ったら、そのときだけ。</p>
-      <ul class="gold-benefits">
-        <li>3スロットすべて解放</li>
-        <li>アイコンとカラーのフルカスタマイズ</li>
-        <li>今後の機能追加もそのまま使える</li>
-      </ul>
+<!-- ===== 静音モード ===== -->
+<section id="silent">
+  <div class="wrap">
+    <div class="silent reveal">
+      <div class="silent__bg" aria-hidden="true"><img src="images/silent-meeting.jpg" alt="" width="1440" height="960" loading="lazy"></div>
+      <div class="silent__body">
+        <span class="eyebrow" style="color:var(--purple);border-color:rgba(188,133,255,.4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M11 5 6 9H2v6h4l5 4V5z"/></svg>静音モード</span>
+        <h2>音を出せない場所でも、<br>気づける。</h2>
+        <p>会議・電車・図書館。プリセット単位で静音モードに切り替えれば、音を鳴らさずに知らせます。</p>
+        <div class="silent__feats">
+          <span class="sfeat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M2 9v6M22 9v6"/></svg>バイブレーション</span>
+          <span class="sfeat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M6 9l12-2M6 15l12-2"/></svg>再生中の音楽を一時停止</span>
+          <span class="sfeat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg>全画面アラート表示</span>
+        </div>
+        <p class="silent__note">※ バイブは iPhone の「設定 &gt; サウンドと触覚 &gt; 触覚」の設定に従います。</p>
+      </div>
     </div>
-    <div>
-      <div class="pro-card">
-        <span class="lv">★</span>
-        <h3>OneTimer Pro</h3>
-        <div class="pr">¥500<small>一度だけ</small></div>
-        <ul>
-          <li>タイマー3スロット</li>
-          <li>アイコン・カラーカスタマイズ</li>
-          <li>サブスクではありません</li>
+  </div>
+</section>
+
+<!-- ===== シーン ===== -->
+<section id="scenes" class="band">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>毎日のシーン</span>
+      <h2>「いつもの3分」が、<br><span class="amp">暮らしのあちこちに。</span></h2>
+      <p>繰り返し使う時間を登録しておけば、その瞬間に押すだけ。</p>
+    </div>
+    <div class="scenes">
+      <div class="scene reveal">
+        <img src="images/scene-nap.jpg" alt="薄暗い寝室で昼寝をする人" width="733" height="1100" loading="lazy">
+        <div class="scene__cap"><div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>昼寝 20分</div><div class="d">集中モード中でも、ちゃんと起こす。</div></div>
+      </div>
+      <div class="scene reveal" data-d="1">
+        <img src="images/scene-noodle.jpg" alt="暗いテーブルの上で湯気を立てるカップ麺" width="733" height="1100" loading="lazy">
+        <div class="scene__cap"><div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0zM3 20h18"/></svg>カップ麺 3分</div><div class="d">通知を逃さない。麺がのびない。</div></div>
+      </div>
+      <div class="scene reveal" data-d="2">
+        <img src="images/scene-workout.jpg" alt="暗いジムの床に置かれたダンベル" width="733" height="1100" loading="lazy">
+        <div class="scene__cap"><div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12h2M19.5 12h2"/><rect x="4.5" y="8.5" width="3.4" height="7" rx="1.2"/><rect x="16.1" y="8.5" width="3.4" height="7" rx="1.2"/><path d="M7.9 12h8.2"/></svg>筋トレ 60秒</div><div class="d">画面を見ず、アクションボタンで。</div></div>
+      </div>
+      <div class="scene reveal" data-d="3">
+        <img src="images/scene-childcare.jpg" alt="大人と子どもの手がそっと重なる様子" width="733" height="1100" loading="lazy">
+        <div class="scene__cap"><div class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"/></svg>育児のリズム</div><div class="d">歯みがき・寝かしつけ・おやつに。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== アプリ画面 ===== -->
+<section id="screens">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6"/></svg>アプリ画面</span>
+      <h2>登録は最大3つ。<span class="amp">あとは押すだけ。</span></h2>
+      <p>名前・時間・アイコン・カラーを決めて、いつものタイマーを作る。実行中の操作もシンプル。</p>
+    </div>
+    <div class="screens">
+      <div class="screens__copy reveal">
+        <div class="feat-list">
+          <div class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span><b>最大3スロット</b>。1つは無料、買い切りで3枠すべて解放。</span></div>
+          <div class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>時間は<b>0〜99分＋0〜59秒</b>。アイコンは SF Symbols、カラーは<b>8色</b>から。</span></div>
+          <div class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>実行中は <b>Live Activity / Dynamic Island</b> に残り時間を秒単位で表示。</span></div>
+          <div class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>カウントダウン中は<b>一時停止・再開</b>が可能。停止はどこからでも。</span></div>
+          <div class="fl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>同時に走るタイマーは常に1本。新しく始めると実行中のものと置き換わる。</span></div>
+        </div>
+      </div>
+      <div class="screens__devs reveal" data-d="1">
+        <!-- ホーム(3スロット) -->
+        <div class="app" role="img" aria-label="OneTimer のホーム画面。3つのプリセットと実行中のタイマー。">
+          <div class="app__sc">
+            <div class="app__top"><h4>OneTimer</h4><span class="plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></div>
+            <div class="slot slot--run">
+              <div class="slot__ic" style="background:rgba(63,217,205,.18);color:#3fd9cd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12h2M19.5 12h2"/><rect x="4.5" y="8.5" width="3.4" height="7" rx="1.2"/><rect x="16.1" y="8.5" width="3.4" height="7" rx="1.2"/><path d="M7.9 12h8.2"/></svg></div>
+              <div class="slot__tx"><div class="slot__name">筋トレ</div><div class="runrow"><span class="dot"></span>実行中</div></div>
+              <div class="slot__time">0:58</div>
+            </div>
+            <div class="slot">
+              <div class="slot__ic" style="background:rgba(188,133,255,.18);color:#bc85ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></div>
+              <div class="slot__tx"><div class="slot__name">昼寝</div><div class="slot__sub">サウンド</div></div>
+              <div class="slot__time">20:00</div>
+            </div>
+            <div class="slot">
+              <div class="slot__ic" style="background:rgba(255,161,78,.18);color:#ffa14e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0zM3 20h18"/></svg></div>
+              <div class="slot__tx"><div class="slot__name">カップ麺</div><div class="slot__sub">サウンド</div></div>
+              <div class="slot__time">3:00</div>
+            </div>
+            <div class="app__empty">＋ 3枠目を追加（Pro）</div>
+          </div>
+        </div>
+        <!-- プリセット編集 -->
+        <div class="app" role="img" aria-label="プリセット編集画面。名前・時間・アイコン・カラー・静音モードを設定。">
+          <div class="edit__sc">
+            <div class="edit__title">プリセットを編集</div>
+            <div class="field"><div class="field__lb">名前</div><div class="field__nm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>昼寝</div></div>
+            <div class="field"><div class="field__lb">時間</div>
+              <div class="wheel"><div class="wcol"><span class="o">19</span><span class="m">20</span><span class="o">21</span></div><span class="wunit">分</span><span class="wsep">:</span><div class="wcol"><span class="o">59</span><span class="m">00</span><span class="o">01</span></div><span class="wunit">秒</span></div>
+            </div>
+            <div class="field"><div class="field__lb">アイコン</div>
+              <div class="icons">
+                <span class="ibtn ibtn--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg></span>
+                <span class="ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a8 8 0 0 1-16 0zM3 20h18"/></svg></span>
+                <span class="ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12h2M19.5 12h2"/><rect x="4.5" y="8.5" width="3.4" height="7" rx="1.2"/><rect x="16.1" y="8.5" width="3.4" height="7" rx="1.2"/><path d="M7.9 12h8.2"/></svg></span>
+                <span class="ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6M14 2v6M7 8h10l-1 12H8z"/></svg></span>
+                <span class="ibtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 12h14"/></svg></span>
+              </div>
+            </div>
+            <div class="field"><div class="field__lb">カラー（8色）</div>
+              <div class="dots">
+                <span class="dot8" style="background:#ffa14e;color:#ffa14e"></span>
+                <span class="dot8" style="background:#ff5a5f;color:#ff5a5f"></span>
+                <span class="dot8" style="background:#ff7eb6;color:#ff7eb6"></span>
+                <span class="dot8 dot8--on" style="background:#bc85ff;color:#bc85ff"></span>
+                <span class="dot8" style="background:#5b9dff;color:#5b9dff"></span>
+                <span class="dot8" style="background:#3fd9cd;color:#3fd9cd"></span>
+                <span class="dot8" style="background:#5ad6a0;color:#5ad6a0"></span>
+                <span class="dot8" style="background:#ffd166;color:#ffd166"></span>
+              </div>
+            </div>
+            <div class="toggle"><div class="toggle__l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18M11 5 6 9H2v6h4l5 4V5z"/></svg>静音モード</div><span class="sw"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 料金 ===== -->
+<section id="pricing" class="band">
+  <div class="wrap">
+    <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="8" cy="8" r="1.5"/></svg>料金</span>
+      <h2>買い切り、<span class="amp">サブスクなし。</span></h2>
+      <p>一度の ¥500 で永続。無料スロットも全機能込みの「1枠」。Pro は枠が2つ増える。</p>
+    </div>
+    <div class="plans">
+      <div class="plan plan--free reveal">
+        <div class="plan__tag">FREE</div>
+        <div class="plan__price">¥0</div>
+        <div class="plan__sub">まずは1枠で、全機能を。</div>
+        <ul class="plan__list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>タイマースロット <b>&nbsp;1枠</b></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>ロック画面・コントロール対応</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>マナーモード貫通アラーム</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>静音モード・カラー/アイコン</li>
         </ul>
-        <a class="pill pill-white" href="#">App Storeで近日公開</a>
       </div>
+      <div class="plan plan--pro reveal" data-d="1">
+        <div class="plan__badge">おすすめ</div>
+        <div class="plan__tag">PRO ・ 買い切り</div>
+        <div class="plan__price">¥500 <small>/ 一度だけ</small></div>
+        <div class="plan__sub">枠が3つに。サブスク・広告なし。</div>
+        <ul class="plan__list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>タイマースロット <b>&nbsp;3枠すべて</b></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>FREE のすべての機能</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>今後の機能追加もそのまま利用可</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>購入の復元に対応（機種変更時など）</li>
+        </ul>
+      </div>
+    </div>
+    <div class="plans__note reveal">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>サブスクリプションなし</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>広告なし</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>決済は App Store 経由</span>
     </div>
   </div>
 </section>
 
-<!-- footer -->
-<footer>
+<!-- ===== プライバシー ===== -->
+<section id="privacy">
   <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-col">
-        <b>OneTimer</b>
-        <a href="#surfaces">起動場所</a>
-        <a href="#sizes">プリセット</a>
-        <a href="#pro">価格</a>
+    <div class="privacy reveal">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>プライバシー</span>
+      <h2>集めない。送らない。</h2>
+      <p>OneTimer は個人情報を一切収集しません。プリセットの設定はすべて端末内にのみ保存され、外部に送信されることはありません。</p>
+      <div class="pgrid">
+        <div class="pcard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><path d="M3 3l18 18"/></svg><div><h4>データ収集なし</h4><p>アクセス解析・広告 SDK を使用しません。</p></div></div>
+        <div class="pcard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6"/></svg><div><h4>端末内に保存</h4><p>設定はあなたの iPhone の中だけ。</p></div></div>
+        <div class="pcard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9 9m0 0V3m0 6h6M4 20a8 8 0 0 0 14-6"/><circle cx="12" cy="12" r="9"/></svg><div><h4>アカウント不要</h4><p>サーバーなし・オフラインで動作。</p></div></div>
       </div>
-      <div class="foot-col">
-        <b>サポート</b>
-        <a href="#spec">スペック</a>
-        <a href="#">ヘルプ / FAQ</a>
-        <a href="#">お問い合わせ</a>
-      </div>
-      <div class="foot-col">
-        <b>開発</b>
-        <a href="#">開発者より</a>
-        <a href="./privacy.html">プライバシーポリシー</a>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>© 2026 OneTimer — ロック画面ワンタップタイマー</span>
-      <span class="gold">★ NO SUBSCRIPTION — 買い切り¥500</span>
+      <p style="margin-top:24px;font-size:13px"><a href="privacy.html" style="color:var(--mint);text-decoration:underline;text-underline-offset:3px">プライバシーポリシーを読む →</a></p>
     </div>
   </div>
+</section>
+
+<!-- ===== 最終CTA ===== -->
+<section id="get" class="final">
+  <div class="wrap">
+    <div class="final__box reveal">
+      <h2>次の「3分測って」から、<br><span class="em">押すだけに。</span></h2>
+      <p>よく使うタイマーを、手元のいちばん近い場所へ。OneTimer は App Store にて近日公開。</p>
+      <div class="hero__cta">
+        <span class="btn btn-primary" role="button" aria-disabled="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.9c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.6.8-3.3.8-.7 0-1.7-.8-2.8-.8-1.4 0-2.8.8-3.5 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.1 1.1 0 1.5-.7 2.8-.7s1.7.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.3-.9-2.3-3.2zM14.3 6.3c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.6.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2z"/></svg>
+          App Store <span class="soon-tag">近日公開</span>
+        </span>
+      </div>
+      <p class="final__os">iOS 26 以降対応 / iPhone</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap foot">
+    <div class="foot__brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0f1620"/><circle cx="16" cy="16" r="10" fill="none" stroke="#3fd9cd" stroke-width="3" stroke-linecap="round" stroke-dasharray="49 63" transform="rotate(-90 16 16)"/><text x="16" y="21" font-family="Sora,Helvetica,sans-serif" font-size="14" font-weight="800" fill="#f4f4f8" text-anchor="middle">1</text></svg>
+      OneTimer
+    </div>
+    <nav class="foot__links" aria-label="フッター">
+      <a href="#surfaces">起動サーフェス</a>
+      <a href="#pricing">料金</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+      <a href="../">制作者のポートフォリオ</a>
+      <a href="https://github.com/nakaishota/product-pages/issues" target="_blank" rel="noopener">お問い合わせ</a>
+    </nav>
+  </div>
+  <div class="wrap" style="margin-top:18px"><p class="foot__copy">© 2026 <a href="../" class="foot__author">shota nakai</a> · OneTimer. iOS 26 以降対応。App Store にて近日公開。</p></div>
 </footer>
 
-<!-- frap floating demo button -->
-<div class="frap-toast" id="frapToast">
-  <span class="ic">☾</span>
-  <div>
-    <div class="tt">昼寝 — カウントダウン中</div>
-    <div class="cd" id="frapCd">20:00</div>
-  </div>
-</div>
-<button class="frap" id="frap" aria-label="ワンタップ開始デモ">▶</button>
-
 <script>
-// hero countdown ticking
 (function(){
-  let s=19*60+58;
-  setInterval(()=>{
-    s=s>0?s-1:20*60;
-    document.getElementById('heroCd').textContent=
-      Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-  },1000);
-})();
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// size selector
-document.querySelectorAll('.size').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.size').forEach(b=>b.classList.remove('sel'));
-    btn.classList.add('sel');
-    document.getElementById('pdpNote').textContent= btn.dataset.silent
-      ? '「'+btn.dataset.name+' '+btn.dataset.time+'」— 静音モードで、音を出さずにバイブでお知らせ。'
-      : '「'+btn.dataset.name+' '+btn.dataset.time+'」— ロック画面のスロットに置けます。';
-  });
-});
+  /* スクロールで reveal */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
-// frap: one-tap demo
-(function(){
-  const toast=document.getElementById('frapToast');
-  const cd=document.getElementById('frapCd');
-  let timer=null;
-  document.getElementById('frap').addEventListener('click',()=>{
-    clearInterval(timer);
-    let s=20*60;
-    cd.textContent='20:00';
-    toast.classList.add('on');
-    timer=setInterval(()=>{
-      s--;
-      cd.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
-      if(s<=0)clearInterval(timer);
-    },1000);
-    setTimeout(()=>toast.classList.remove('on'),6000);
+  if(rm) return;
+
+  /* ヒーロー: タップ → Live Activity 出現 → カウントダウン のループ演出 */
+  var tip=document.getElementById('fingertip'), tap=document.getElementById('tapring'),
+      la=document.getElementById('liveact'), island=document.getElementById('island'),
+      laRem=document.getElementById('laRem'), laRing=document.getElementById('laRing'),
+      wFit=document.getElementById('w-fit');
+  var remain=58, cdTimer=null;
+
+  function fmt(s){ var m=Math.floor(s/60); return m+':'+('0'+(s%60)).slice(-2); }
+  function anim(el,frames,opt){ if(el&&el.animate) return el.animate(frames,opt); }
+
+  function tapPulse(){
+    anim(tip,[{opacity:0,transform:'translate(-50%,-50%) scale(.5)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)',offset:.4},{opacity:0,transform:'translate(-50%,-50%) scale(.85)'}],{duration:900,easing:'ease-out'});
+    anim(tap,[{opacity:.9,transform:'translate(-50%,-50%) scale(.4)'},{opacity:0,transform:'translate(-50%,-50%) scale(1.5)'}],{duration:900,easing:'ease-out'});
+    if(wFit) anim(wFit,[{transform:'scale(1)'},{transform:'scale(.92)',offset:.4},{transform:'scale(1)'}],{duration:600,easing:'ease-out'});
+  }
+  function showLA(){
+    if(la) la.animate([{transform:'translateY(140%)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:600,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'});
+    if(island) island.animate([{width:'96px'},{width:'130px'}],{duration:500,fill:'forwards',easing:'ease-out'});
+  }
+  function hideLA(){
+    if(la) la.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(140%)',opacity:0}],{duration:450,easing:'ease-in',fill:'forwards'});
+    if(island) island.animate([{width:'130px'},{width:'96px'}],{duration:400,fill:'forwards'});
+  }
+  function tick(){
+    remain--; if(laRem) laRem.textContent=fmt(remain);
+    if(laRing) laRing.setAttribute('stroke-dashoffset', String(119*(1-remain/58)));
+    if(remain<=50){ clearInterval(cdTimer); setTimeout(function(){ hideLA(); setTimeout(loop,1400); },900); }
+  }
+  function loop(){
+    remain=58; if(laRem) laRem.textContent=fmt(remain); if(laRing) laRing.setAttribute('stroke-dashoffset','6');
+    tapPulse();
+    setTimeout(function(){ showLA(); cdTimer=setInterval(tick,250); }, 900);
+  }
+  /* ヒーローが見えている間だけ動かす */
+  var heroEl=document.getElementById('hero'), running=false;
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting && !running){ running=true; setTimeout(loop,700); }
+    });
+  },{threshold:.3}).observe(heroEl);
+
+  /* AlarmKit: ベルの揺れ + 波紋 */
+  var bell=document.getElementById('bell');
+  if(bell) bell.animate([{transform:'rotate(0)'},{transform:'rotate(11deg)'},{transform:'rotate(-9deg)'},{transform:'rotate(7deg)'},{transform:'rotate(-5deg)'},{transform:'rotate(0)'}],{duration:1600,iterations:Infinity,easing:'ease-in-out'});
+  ['bw1','bw2','bw3'].forEach(function(id,i){
+    var el=document.getElementById(id); if(!el) return;
+    el.animate([{transform:'scale(.55)',opacity:.55},{transform:'scale(1.25)',opacity:0}],{duration:2400,iterations:Infinity,delay:i*800,easing:'ease-out'});
   });
 })();
 </script>
