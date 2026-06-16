@@ -1,135 +1,207 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>プライバシーポリシー — OneTimer</title>
-<meta name="description" content="OneTimerのプライバシーポリシー。個人情報は収集しません。">
+<meta name="description" content="OneTimer のプライバシーポリシー。個人情報は一切収集しません。設定は端末内にのみ保存され、外部送信・広告・解析はありません。">
+<meta name="theme-color" content="#0a0a10">
+<link rel="canonical" href="https://nakaicode.com/onetimer/privacy.html">
+
+<!-- ファビコン: ミントの円リングに「1」(LPと共通) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a10'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%233fd9cd' stroke-width='3' stroke-linecap='round' stroke-dasharray='49 63' transform='rotate(-90 16 16)'/%3E%3Ctext x='16' y='21' font-family='Helvetica,Arial,sans-serif' font-size='14' font-weight='800' fill='%23f4f4f8' text-anchor='middle'%3E1%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Sora:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+
 <style>
+/* OneTimer プライバシーポリシー — LP と同じダーク×ミントの世界観 */
 :root{
-  --green:#006241;
-  --accent:#00754A;
-  --house:#1E3932;
-  --cream:#f2f0eb;
-  --ink:rgba(0,0,0,.87);
-  --ink-soft:rgba(0,0,0,.58);
-  --white-soft:rgba(255,255,255,.70);
-  --card-shadow:0 0 .5px rgba(0,0,0,.14),0 1px 1px rgba(0,0,0,.24);
+  --bg:#0a0a10; --surface:#13131e; --surface-2:#191926;
+  --glass:rgba(255,255,255,.055); --glass-border:rgba(255,255,255,.10);
+  --hairline:rgba(255,255,255,.08);
+  --text:#f4f4f8; --muted:#a6a6b5; --faint:#6d6d7e;
+  --mint:#3fd9cd; --purple:#bc85ff; --radius:22px; --maxw:760px;
+  --ease:cubic-bezier(.2,.7,.2,1);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{font-size:62.5%}
+*{box-sizing:border-box}
+html{scroll-padding-top:80px}
 body{
-  font-family:Inter,"Noto Sans JP","Hiragino Sans",sans-serif;
-  font-size:1.6rem;line-height:1.8;letter-spacing:-0.01em;
-  color:var(--ink);background:var(--cream);
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+  font-size:15px;line-height:1.9;-webkit-font-smoothing:antialiased;
+  text-size-adjust:100%;-webkit-text-size-adjust:100%;overflow-x:hidden;
 }
-.wrap{max-width:76rem;margin:0 auto;padding:0 2.4rem}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 80% -10%, rgba(63,217,205,.10), transparent 60%),
+    radial-gradient(720px 480px at 8% 2%, rgba(188,133,255,.08), transparent 60%),
+    var(--bg);
+}
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:54px 54px;
+  -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 75%);
+          mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 75%);
+}
+a{color:inherit;text-decoration:none}
+p{margin:0;text-wrap:pretty}
+h1,h2{margin:0;font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;line-height:1.3}
+ul{margin:.6rem 0 0;padding:0;list-style:none}
+svg{display:block}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
 
-nav{
-  background:#fff;
-  box-shadow:0 1px 3px rgba(0,0,0,.1),0 2px 2px rgba(0,0,0,.06),0 0 2px rgba(0,0,0,.07);
-}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;height:7.2rem;max-width:76rem;margin:0 auto;padding:0 2.4rem}
-.logo{display:flex;align-items:center;gap:1rem;text-decoration:none}
-.logo-cup{
-  width:3.6rem;height:3.6rem;border-radius:50%;background:var(--green);
-  display:grid;place-items:center;color:#fff;font-weight:700;font-size:1.6rem;
-}
-.logo b{color:var(--ink);font-size:1.7rem;font-weight:700}
-.back{
-  display:inline-block;border-radius:50px;padding:8px 18px;
-  font-size:1.4rem;font-weight:600;text-decoration:none;
-  color:var(--accent);border:1px solid var(--accent);transition:all .2s ease;
-}
-.back:active{transform:scale(.95)}
+/* NAV */
+.nav{position:sticky;top:0;z-index:50;background:rgba(10,10,16,.72);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--hairline)}
+.nav__in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:14px}
+.brand{display:inline-flex;align-items:center;gap:11px;font-family:"Sora",sans-serif;font-weight:700;font-size:17px}
+.brand .mark{width:30px;height:30px;flex:none}
+.back{display:inline-flex;align-items:center;gap:7px;font-family:"Sora",sans-serif;font-weight:600;font-size:13px;color:var(--text);padding:8px 15px;border-radius:999px;border:1px solid var(--glass-border);background:var(--glass);transition:background .2s var(--ease)}
+.back:hover{background:var(--glass-strong,rgba(255,255,255,.09))}
+.back svg{width:15px;height:15px}
 
-main{padding:5.6rem 0 8rem}
-h1{color:var(--green);font-size:3.2rem;font-weight:700;line-height:1.4;letter-spacing:-0.16px}
-.updated{margin-top:.8rem;font-size:1.3rem;color:var(--ink-soft)}
-.card{
-  margin-top:3.2rem;background:#fff;border-radius:12px;box-shadow:var(--card-shadow);
-  padding:4rem;
-}
-.card h2{color:var(--green);font-size:1.9rem;font-weight:600;margin:3.2rem 0 1.2rem}
-.card h2:first-child{margin-top:0}
-.card p,.card li{font-size:1.5rem;color:var(--ink)}
-.card ul{padding-left:2.2rem;display:flex;flex-direction:column;gap:.6rem;margin-top:.8rem}
-.card .soft{color:var(--ink-soft);font-size:1.4rem}
-.card a{color:var(--accent);font-weight:600}
-.lead-box{
-  background:var(--cream);border-radius:12px;padding:2rem 2.4rem;font-size:1.6rem;font-weight:600;
-  color:var(--green);
-}
+/* HEADER */
+main{padding:clamp(40px,8vw,72px) 0 clamp(60px,10vw,100px)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:"Sora",sans-serif;font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mint);padding:7px 13px;border:1px solid var(--glass-border);border-radius:999px;background:var(--glass)}
+.eyebrow svg{width:14px;height:14px}
+h1{font-size:clamp(30px,7vw,48px);margin:20px 0 0}
+.sub{margin-top:14px;color:var(--muted);font-size:15px}
+.sub b{color:var(--text);font-weight:700}
+.updated{margin-top:6px;font-family:"Sora",sans-serif;font-size:12.5px;color:var(--faint);letter-spacing:.02em}
 
-footer{background:var(--house);color:var(--white-soft);padding:3.2rem 0;font-size:1.3rem}
-.foot-inner{max-width:76rem;margin:0 auto;padding:0 2.4rem;display:flex;justify-content:space-between;gap:1.6rem;flex-wrap:wrap}
-footer a{color:#fff;text-decoration:none;font-weight:600}
-@media(max-width:600px){.card{padding:2.8rem 2rem}}
+/* LEAD */
+.lead{
+  margin-top:30px;display:flex;gap:15px;align-items:flex-start;
+  border:1px solid rgba(63,217,205,.32);border-radius:var(--radius);
+  background:radial-gradient(120% 100% at 0% 0%,rgba(63,217,205,.12),transparent 60%),var(--surface);
+  padding:22px 24px;
+}
+.lead__ic{width:42px;height:42px;flex:none;border-radius:12px;background:rgba(63,217,205,.16);display:grid;place-items:center}
+.lead__ic svg{width:22px;height:22px;color:var(--mint)}
+.lead h2{font-size:18px;font-weight:700}
+.lead p{margin-top:5px;color:var(--muted);font-size:13.5px}
+
+/* DOC */
+.doc{margin-top:14px;border:1px solid var(--glass-border);border-radius:var(--radius);background:var(--surface);padding:clamp(24px,4.4vw,40px)}
+.sec{padding:26px 0;border-top:1px solid var(--hairline)}
+.sec:first-child{padding-top:4px;border-top:0}
+.sec h2{display:flex;align-items:baseline;gap:11px;font-size:18px;font-weight:700}
+.sec h2 .n{font-family:"Sora",sans-serif;font-weight:800;font-size:14px;color:var(--mint);flex:none}
+.sec p{margin-top:10px;color:#d6d6e0;font-size:14.5px}
+.sec p + p{margin-top:10px}
+.sec a{color:var(--mint);text-decoration:underline;text-underline-offset:3px}
+.list{margin-top:12px;display:grid;gap:11px}
+.list li{display:flex;gap:11px;align-items:flex-start;color:#d6d6e0;font-size:14px}
+.list li svg{width:18px;height:18px;color:var(--mint);flex:none;margin-top:3px}
+.list li b{color:#fff;font-weight:700}
+.sign{margin-top:30px;padding-top:22px;border-top:1px solid var(--hairline);display:flex;align-items:center;gap:10px;color:var(--faint);font-size:13px}
+.sign .mark{width:24px;height:24px;flex:none}
+
+/* FOOTER */
+footer{border-top:1px solid var(--hairline);padding:34px 0 56px}
+.foot{display:flex;flex-direction:column;gap:14px;align-items:flex-start;color:var(--faint);font-size:12.5px}
+.foot a{color:var(--muted)}
+.foot a:hover{color:var(--text)}
+@media(min-width:600px){.foot{flex-direction:row;justify-content:space-between;align-items:center}}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a class="logo" href="./"><span class="logo-cup">1</span><b>OneTimer</b></a>
-    <a class="back" href="./">← トップへ戻る</a>
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="brand" href="./" aria-label="OneTimer ホーム">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0f1620"/><circle cx="16" cy="16" r="10" fill="none" stroke="#3fd9cd" stroke-width="3" stroke-linecap="round" stroke-dasharray="49 63" transform="rotate(-90 16 16)"/><text x="16" y="21" font-family="Sora,Helvetica,sans-serif" font-size="14" font-weight="800" fill="#f4f4f8" text-anchor="middle">1</text></svg>
+      OneTimer
+    </a>
+    <a class="back" href="./"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>トップへ戻る</a>
   </div>
-</nav>
+</header>
 
 <main>
   <div class="wrap">
-    <h1>プライバシーポリシー</h1>
+    <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>PRIVACY</span>
+    <h1>集めない。送らない。</h1>
+    <p class="sub">OneTimer の<b>プライバシーポリシー</b>です。あなたの設定は、あなたの iPhone の中だけにあります。</p>
     <p class="updated">制定日: 2026年6月10日</p>
 
-    <div class="card">
-      <div class="lead-box">
-        要約: OneTimerは、あなたの個人情報を一切収集しません。
+    <!-- 要約 -->
+    <div class="lead">
+      <span class="lead__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <div>
+        <h2>要約</h2>
+        <p>OneTimer は、あなたの個人情報を<strong>一切収集しません</strong>。サーバーもアカウントもなく、設定はすべて端末内にのみ保存されます。</p>
+      </div>
+    </div>
+
+    <!-- 本文 -->
+    <div class="doc">
+
+      <section class="sec">
+        <h2><span class="n">01</span>はじめに</h2>
+        <p>本プライバシーポリシーは、iOS アプリ「OneTimer」（以下「本アプリ」）における利用者情報の取り扱いについて定めるものです。</p>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">02</span>収集する情報</h2>
+        <p>本アプリは、個人情報を収集しません。</p>
+        <ul class="list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>タイマーのプリセット設定（名前・時間・アイコン・カラー）は、お使いの<b>端末内にのみ</b>保存されます。</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>これらのデータが端末の外部（開発者のサーバーや第三者）へ<b>送信されることはありません</b>。</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>本アプリはサーバーを持たず、アカウント登録も不要です。</span></li>
+        </ul>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">03</span>アクセス解析・広告</h2>
+        <p>本アプリは、アクセス解析ツールおよび広告配信 SDK を<strong>使用していません</strong>。</p>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">04</span>利用する端末機能と権限</h2>
+        <ul class="list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span><b>アラーム（AlarmKit）</b>: タイマー終了をお知らせするために使用します。マナーモードや集中モード中でも通知音を再生するための、iOS 標準のアラーム機能です。</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="12" r="4"/></svg><span><b>ウィジェット / コントロール / Live Activity</b>: ロック画面等にタイマーのボタンや残り時間を表示するために使用します。表示内容はすべて端末内で処理されます。</span></li>
+        </ul>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">05</span>アプリ内課金</h2>
+        <p>本アプリの買い切り課金（Pro）は、Apple 社の App Store を通じて処理されます。決済情報（クレジットカード番号等）は開発者に共有されず、Apple 社のプライバシーポリシーに基づいて取り扱われます。</p>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">06</span>第三者への提供</h2>
+        <p>本アプリは利用者の情報を収集しないため、第三者に提供することもありません。</p>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">07</span>本ポリシーの変更</h2>
+        <p>機能追加等により利用者情報の取り扱いに変更が生じる場合は、本ページにて告知のうえポリシーを改定します。重要な変更がある場合は、アプリ内でもお知らせします。</p>
+      </section>
+
+      <section class="sec">
+        <h2><span class="n">08</span>お問い合わせ</h2>
+        <p>本ポリシーに関するお問い合わせは、<a href="https://github.com/nakaishota/product-pages/issues" target="_blank" rel="noopener">GitHub リポジトリの Issue</a> からお寄せください。</p>
+      </section>
+
+      <div class="sign">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#0f1620"/><circle cx="16" cy="16" r="10" fill="none" stroke="#3fd9cd" stroke-width="3" stroke-linecap="round" stroke-dasharray="49 63" transform="rotate(-90 16 16)"/><text x="16" y="21" font-family="Sora,Helvetica,sans-serif" font-size="14" font-weight="800" fill="#f4f4f8" text-anchor="middle">1</text></svg>
+        開発者: shota nakai
       </div>
 
-      <h2>1. はじめに</h2>
-      <p>本プライバシーポリシーは、iOSアプリ「OneTimer」(以下「本アプリ」)における利用者情報の取り扱いについて定めるものです。</p>
-
-      <h2>2. 収集する情報</h2>
-      <p>本アプリは、個人情報を収集しません。</p>
-      <ul>
-        <li>タイマーのプリセット設定(名前・時間・アイコン・カラー)は、お使いの端末内にのみ保存されます。</li>
-        <li>これらのデータが端末の外部(開発者のサーバーや第三者)へ送信されることはありません。</li>
-        <li>本アプリはサーバーを持たず、アカウント登録も不要です。</li>
-      </ul>
-
-      <h2>3. アクセス解析・広告</h2>
-      <p>本アプリは、アクセス解析ツールおよび広告配信SDKを使用していません。</p>
-
-      <h2>4. 利用する端末機能と権限</h2>
-      <ul>
-        <li><b>アラーム(AlarmKit)</b>: タイマー終了をお知らせするために使用します。マナーモードや集中モード中でも通知音を再生するための、iOS標準のアラーム機能です。</li>
-        <li><b>ウィジェット / コントロール / Live Activity</b>: ロック画面等にタイマーのボタンや残り時間を表示するために使用します。表示内容はすべて端末内で処理されます。</li>
-      </ul>
-
-      <h2>5. アプリ内課金</h2>
-      <p>本アプリの買い切り課金(Pro)は、Apple社のApp Storeを通じて処理されます。決済情報(クレジットカード番号等)は開発者に共有されず、Apple社のプライバシーポリシーに基づいて取り扱われます。</p>
-
-      <h2>6. 第三者への提供</h2>
-      <p>本アプリは利用者の情報を収集しないため、第三者に提供することもありません。</p>
-
-      <h2>7. 本ポリシーの変更</h2>
-      <p>機能追加等により利用者情報の取り扱いに変更が生じる場合は、本ページにて告知のうえポリシーを改定します。重要な変更がある場合は、アプリ内でもお知らせします。</p>
-
-      <h2>8. お問い合わせ</h2>
-      <p>本ポリシーに関するお問い合わせは、<a href="https://github.com/nakaishota/product-pages/issues" target="_blank" rel="noopener">GitHubリポジトリのIssue</a>からお寄せください。</p>
-
-      <p class="soft" style="margin-top:3.2rem">開発者: shota nakai</p>
     </div>
   </div>
 </main>
 
 <footer>
-  <div class="foot-inner">
-    <span>© 2026 OneTimer — ロック画面ワンタップタイマー</span>
-    <a href="./">トップへ戻る</a>
+  <div class="wrap foot">
+    <span>© 2026 shota nakai · OneTimer — ロック画面ワンタップタイマー</span>
+    <a href="./">トップへ戻る →</a>
   </div>
 </footer>
 
