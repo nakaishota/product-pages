@@ -18,6 +18,6 @@
 | HomeRide（乗換ナビ iOS アプリ） | `homeride/` | 公開中 — https://nakaishota.github.io/product-pages/homeride/ |
 | 尾道レトロキャンペーン（架空・サンプル LP） | `onomichi/` | 移植済み — https://nakaishota.github.io/product-pages/onomichi/ |
 | OneTimer（ロック画面ワンタップタイマー iOS アプリ） | `onetimer/` | 公開中 — https://nakaishota.github.io/product-pages/onetimer/ |
-| VoiceOn（「英数」長押し音声入力 macOS アプリ・OSS） | `voiceon/` | 公開中 — https://nakaicode.com/voiceon/ |
+| VoiceOn（「英数」長押し音声入力 macOS アプリ・OSS） | `voiceon/` | **非公開** — ファイルは残しているがポートフォリオ未掲載 / sitemap除外 / noindex。詳細: `TODO.md` の `voiceon-hidden` 項目 |
 | Shiori（思考の再開メモ macOS/iOS アプリ） | `shiori/` | 作業中（未公開・draft） |
 | 管理コスト診断（Web 診断アプリ・別リポジトリ） | WORKS から外部リンク（`kanricost` リポジトリ） | 公開中 — https://nakaishota.github.io/kanricost/ |

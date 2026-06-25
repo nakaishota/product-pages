@@ -31,11 +31,17 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <!--
+    TODO[voiceon-hidden]: 一時的に sitemap から外している。
+    公開復活時にこの url ブロックを戻すこと。詳細: ルート直下の TODO.md。
+  -->
+  <!--
   <url>
     <loc>https://nakaicode.com/voiceon/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  -->
   <url>
     <loc>https://nakaicode.com/onomichi/</loc>
     <changefreq>monthly</changefreq>

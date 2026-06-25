@@ -38,3 +38,33 @@ grep -rn 'TODO\[clamp-generator-hidden\]' .
 ```
 
 ---
+
+## `voiceon-hidden` — VoiceOn LP を一時的に非公開化中
+
+**ステータス**: 非公開  
+**配置**: `voiceon/` はリポジトリに残しているが、検索エンジンとポートフォリオからは外している  
+**発生コミット**: pastimage デプロイ後の運用変更
+
+### 何をした
+- ルート `index.html` の WORKS カードをコメントアウト（`TODO[voiceon-hidden]` で囲み）
+- ルート `sitemap.xml` の `<url>` をコメントアウト（同タグ）
+- ルート `README.md` の LP一覧表でステータスを「**非公開**」に変更
+- `voiceon/index.html` の `<head>` 先頭に `<meta name="robots" content="noindex,nofollow">` を追加し、TODO コメントを併記
+
+### なぜ
+一時的にポートフォリオから外したいため。ファイル自体は履歴から消したくないので、
+リポジトリには残しつつ4箇所で「非公開」を担保している（clamp-generator と同じパターン）。
+
+### 公開復活の手順
+1. `voiceon/index.html` 先頭の `<meta name="robots" content="noindex,nofollow">` を削除し、関連コメントも整理
+2. ルート `index.html` の `<!-- TODO[voiceon-hidden] ... -->` で囲まれた WORKS カードのコメントを解除
+3. ルート `sitemap.xml` の `<!-- TODO[voiceon-hidden] ... -->` で囲まれた `<url>` ブロックのコメントを解除
+4. ルート `README.md` の VoiceOn 行のステータスを **公開中 — https://nakaicode.com/voiceon/** に戻す
+5. この `TODO.md` から本セクションを削除
+
+### grep ヒント
+```sh
+grep -rn 'TODO\[voiceon-hidden\]' .
+```
+
+---
