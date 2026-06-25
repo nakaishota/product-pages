@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pastimage — just paste, mark, copy</title>
+  <link rel="icon" type="image/jpeg" href="avatar.jpg" />
+  <link rel="apple-touch-icon" href="avatar.jpg" />
   <meta
     name="description"
     content="ペーストした画像に赤枠とテキストで素早く注釈して、⌘Cでクリップボードに戻すだけの開発者向けWebツール。ログイン不要・サーバ送信なし。"
@@ -33,8 +35,13 @@
 </head>
 <body>
   <div class="empty" id="empty">
-    <div class="key">⌘V</div>
-    <div class="hint">paste an image to begin</div>
+    <div class="empty-title">最小手順で画像に注釈してコピー</div>
+    <ol class="empty-steps">
+      <li><b>1</b>画像をペースト（ドラッグ&ドロップでも可）</li>
+      <li><b>2</b>マウスドラッグで矩形を描画</li>
+      <li><b>3</b>ダブルクリックでテキスト挿入</li>
+      <li><b>4</b><kbd data-other="Ctrl+C">⌘C</kbd> でクリップボードへコピー → Slack 等に貼り付け</li>
+    </ol>
   </div>
 
   <div class="toolbar hidden" id="toolbar">
@@ -87,7 +94,7 @@
     </div>
   </div>
 
-  <button class="save-btn hidden" id="saveBtn" title="save as (⌘S)">save</button>
+  <button class="save-btn hidden" id="saveBtn" title="save as">save</button>
 
   <canvas id="canvas" class="hidden"></canvas>
 
@@ -95,13 +102,17 @@
     <span><kbd>drag</kbd>rect</span>
     <span><kbd>dblclick</kbd>text</span>
     <span><kbd>click</kbd>select</span>
-    <span><kbd>⌘C</kbd>copy</span>
-    <span><kbd>⌘Z</kbd>undo</span>
+    <span><kbd data-other="Ctrl+C">⌘C</kbd>copy</span>
+    <span><kbd data-other="Ctrl+Z">⌘Z</kbd>undo</span>
     <span><kbd>del</kbd>remove</span>
     <span><kbd>esc</kbd>clear</span>
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <div class="privacy-note">
+    全処理はブラウザ内で完結 — 画像はサーバへ送信されません
+  </div>
 
   <a
     class="credit"

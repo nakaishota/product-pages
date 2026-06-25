@@ -1,3 +1,10 @@
+const IS_MAC = (() => {
+  if (navigator.userAgentData && navigator.userAgentData.platform) {
+    return /mac|ios/i.test(navigator.userAgentData.platform);
+  }
+  return /Mac|iPhone|iPad/.test(navigator.userAgent || "");
+})();
+
 const COLORS = ["#ff3b30", "#ffcc00", "#34c759", "#0a84ff", "#ffffff"];
 const STROKE_LEVELS = [1, 1.5, 2, 3, 4];
 const SELECTION_COLOR = "rgba(120, 180, 255, 0.9)";
@@ -786,6 +793,13 @@ document.addEventListener("drop", async (e) => {
     toast("Failed to load image: " + err.message, true);
   }
 });
+
+if (!IS_MAC) {
+  document.querySelectorAll("[data-other]").forEach((el) => {
+    el.textContent = el.dataset.other;
+  });
+}
+saveBtn.title = `save as (${IS_MAC ? "⌘S" : "Ctrl+S"})`;
 
 updateToolbarUI();
 updateToolbarVisibility();
