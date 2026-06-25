@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pastimage — just paste, mark, copy</title>
+  <meta
+    name="description"
+    content="ペーストした画像に赤枠とテキストで素早く注釈して、⌘Cでクリップボードに戻すだけの開発者向けWebツール。ログイン不要・サーバ送信なし。"
+  />
+  <meta property="og:title" content="pastimage — just paste, mark, copy" />
+  <meta
+    property="og:description"
+    content="ペーストした画像に赤枠とテキストで注釈して、⌘Cでクリップボードに戻すだけ。"
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nakaicode.com/pastimage/" />
+  <meta
+    property="og:image"
+    content="https://nakaicode.com/pastimage/og-image.png"
+  />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="pastimage — just paste, mark, copy" />
+  <meta
+    name="twitter:description"
+    content="ペーストした画像に赤枠とテキストで注釈して、⌘Cでクリップボードに戻すだけ。"
+  />
+  <meta
+    name="twitter:image"
+    content="https://nakaicode.com/pastimage/og-image.png"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="empty" id="empty">
+    <div class="key">⌘V</div>
+    <div class="hint">paste an image to begin</div>
+  </div>
+
+  <div class="toolbar hidden" id="toolbar">
+    <div class="t-group">
+      <button class="swatch" data-color="#ff3b30" style="background:#ff3b30" title="red"></button>
+      <button class="swatch" data-color="#ffcc00" style="background:#ffcc00" title="yellow"></button>
+      <button class="swatch" data-color="#34c759" style="background:#34c759" title="green"></button>
+      <button class="swatch" data-color="#0a84ff" style="background:#0a84ff" title="blue"></button>
+      <button class="swatch" data-color="#ffffff" style="background:#ffffff" title="white"></button>
+    </div>
+    <div class="t-group t-stroke-group">
+      <button class="stroke-btn" data-stroke="0" title="thinnest">
+        <svg viewBox="0 0 20 14"><line x1="2" y1="7" x2="18" y2="7" stroke="currentColor" stroke-width="0.8"/></svg>
+      </button>
+      <button class="stroke-btn" data-stroke="1" title="thin">
+        <svg viewBox="0 0 20 14"><line x1="2" y1="7" x2="18" y2="7" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <button class="stroke-btn" data-stroke="2" title="default">
+        <svg viewBox="0 0 20 14"><line x1="2" y1="7" x2="18" y2="7" stroke="currentColor" stroke-width="2.5"/></svg>
+      </button>
+      <button class="stroke-btn" data-stroke="3" title="thick">
+        <svg viewBox="0 0 20 14"><line x1="2" y1="7" x2="18" y2="7" stroke="currentColor" stroke-width="4"/></svg>
+      </button>
+      <button class="stroke-btn" data-stroke="4" title="thickest">
+        <svg viewBox="0 0 20 14"><line x1="2" y1="7" x2="18" y2="7" stroke="currentColor" stroke-width="5.5"/></svg>
+      </button>
+    </div>
+    <div class="t-group t-text-group">
+      <input
+        type="number"
+        class="size-input"
+        id="sizeInput"
+        min="8"
+        max="500"
+        step="1"
+        value="32"
+        title="font size (px)"
+      />
+      <span class="size-suffix">px</span>
+    </div>
+    <div class="t-group t-fill-group">
+      <button class="fill-swatch" data-fill="none" title="no fill">
+        <svg viewBox="0 0 22 22"><line x1="4" y1="18" x2="18" y2="4" stroke="#ff6464" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="fill-swatch" data-fill="#ff3b30" style="background:#ff3b30" title="red fill"></button>
+      <button class="fill-swatch" data-fill="#ffcc00" style="background:#ffcc00" title="yellow fill"></button>
+      <button class="fill-swatch" data-fill="#34c759" style="background:#34c759" title="green fill"></button>
+      <button class="fill-swatch" data-fill="#0a84ff" style="background:#0a84ff" title="blue fill"></button>
+      <button class="fill-swatch" data-fill="#ffffff" style="background:#ffffff" title="white fill"></button>
+    </div>
+  </div>
+
+  <button class="save-btn hidden" id="saveBtn" title="save as (⌘S)">save</button>
+
+  <canvas id="canvas" class="hidden"></canvas>
+
+  <div class="help-bar hidden" id="helpBar">
+    <span><kbd>drag</kbd>rect</span>
+    <span><kbd>dblclick</kbd>text</span>
+    <span><kbd>click</kbd>select</span>
+    <span><kbd>⌘C</kbd>copy</span>
+    <span><kbd>⌘Z</kbd>undo</span>
+    <span><kbd>del</kbd>remove</span>
+    <span><kbd>esc</kbd>clear</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <a
+    class="credit"
+    href="https://nakaicode.com/"
+    target="_blank"
+    rel="noopener"
+    title="作者: なかい (nakaicode.com)"
+  >
+    <img src="avatar.jpg" alt="" />
+    <span>by なかい</span>
+  </a>
+
+  <script src="app.js"></script>
+</body>
+</html>
