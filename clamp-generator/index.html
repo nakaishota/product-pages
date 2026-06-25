@@ -1,16 +1,30 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="no-js">
 <head>
   <meta charset="utf-8">
+  <!--
+    ============================================================
+    TODO[clamp-generator-hidden]: UI改修中のため一時的に非公開化中
+    ============================================================
+    検索エンジンとポートフォリオから外している状態。
+    公開復活時の戻し作業:
+      1. 直下にある noindex/nofollow の meta タグを削除
+      2. ルート index.html のコメントアウトされた WORKS カードを復活
+      3. ルート sitemap.xml のコメントアウトされた url ブロックを復活
+      4. ルート README.md のステータスを「公開中」に戻す
+    詳細とTODO一覧: リポジトリルートの TODO.md を参照
+  -->
+  <meta name="robots" content="noindex,nofollow">
+  <script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CSS clamp() ジェネレーター｜画面幅から最小・最大サイズを自動計算</title>
-  <meta name="description" content="画面幅とサイズを入力するだけで、レスポンシブな CSS clamp() の値を自動計算する無料ツール。フォントサイズや余白の clamp(vw) 計算に対応。px / rem 切替・複数まとめ計算・ワンクリックコピー対応の clamp ジェネレーターです。">
+  <meta name="description" content="画面幅とサイズを入力するだけで、レスポンシブな CSS clamp() の値を自動計算する無料ツール。フォントサイズや余白の clamp(vw) 計算に対応。px / rem 切替・スライダーで挙動を体感・ワンクリックコピー対応の clamp ジェネレーターです。">
   <meta name="theme-color" content="#3b5bdb">
   <link rel="canonical" href="https://nakaicode.com/clamp-generator/">
 
   <!-- OGP / SNS シェア -->
   <meta property="og:title" content="CSS clamp() ジェネレーター｜画面幅から最小・最大サイズを自動計算">
-  <meta property="og:description" content="画面幅とサイズを入れるだけでレスポンシブな clamp() を自動計算。フォント・余白の clamp(vw) 計算に。px/rem 切替・複数まとめ計算・コピー対応の無料ツール。">
+  <meta property="og:description" content="画面幅とサイズを入れるだけでレスポンシブな clamp() を自動計算。フォント・余白の clamp(vw) 計算に。px/rem 切替・スライダーで体感・コピー対応の無料ツール。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://nakaicode.com/clamp-generator/">
   <meta property="og:image" content="https://nakaicode.com/clamp-generator/og-image.png">
@@ -37,7 +51,7 @@
     "url": "https://nakaicode.com/clamp-generator/",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Web",
-    "description": "画面幅とサイズを入力するだけで、レスポンシブな CSS clamp() の値を自動計算する無料ツール。フォントサイズや余白の clamp(vw) 計算に対応し、px / rem 切替・複数まとめ計算・ワンクリックコピーが可能。",
+    "description": "画面幅とサイズを入力するだけで、レスポンシブな CSS clamp() の値を自動計算する無料ツール。フォントサイズや余白の clamp(vw) 計算に対応し、px / rem 切替・スライダーで挙動を体感・ワンクリックコピーが可能。",
     "inLanguage": "ja",
     "offers": {
       "@type": "Offer",
@@ -95,7 +109,7 @@
         "name": "レスポンシブなフォントサイズの計算にも使えますか？",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "はい。フォントサイズの clamp 計算はこのツールの主用途です。たとえば『画面幅 320px で 24px、1280px で 44px』のように入力すると、その間をなめらかに変化し画面外では止まる clamp() が得られます。複数の見出し・本文サイズをカードで並べて一度に計算できます。"
+          "text": "はい。フォントサイズの clamp 計算はこのツールの主用途です。たとえば『画面幅 320px で 24px、1280px で 44px』のように入力すると、その間をなめらかに変化し画面外では止まる clamp() が得られます。入力値はブラウザに自動保存され、px / rem の切り替えにもその場で追従します。"
         }
       }
     ]
@@ -130,19 +144,30 @@
     /* ヘッダー */
     .site-header{background:#fff;border-bottom:1px solid var(--line)}
     .site-header .wrap{display:flex;align-items:center;justify-content:space-between;padding:15px 20px}
-    .logo{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;letter-spacing:-0.01em}
-    .logo span{color:var(--muted);font-weight:500}
+    .logo{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;letter-spacing:-0.01em}
+    .logo__mark{height:22px;width:auto;display:block;flex-shrink:0}
+    .logo span{color:var(--muted);font-weight:500;font-size:13px}
     .home-link{font-size:12.5px;color:var(--muted);text-decoration:none}
     .home-link:hover{color:var(--accent)}
 
-    /* イントロ */
-    .intro{padding:40px 0 8px}
-    h1{font-size:clamp(26px,3.6vw,38px);line-height:1.3;margin:0 0 14px;letter-spacing:-0.01em}
-    .lead{font-size:clamp(15px,1.6vw,17px);color:oklch(0.38 0.02 255);margin:0}
+    /* ページタイトル(ツールを主役にするため簡潔に) */
+    .pagehead{padding:30px 0 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px}
+    h1{font-size:clamp(25px,3.6vw,36px);line-height:1.25;margin:0;letter-spacing:-0.015em}
+    .h1-clamp{font-family:'JetBrains Mono',monospace;font-size:0.9em;font-weight:700;color:var(--accent);background:oklch(0.95 0.035 262);padding:0.02em 0.32em;border-radius:9px}
+    .h1-wave{width:min(188px,54%);height:auto;color:var(--accent-soft);display:block}
+    .lead{font-size:clamp(14.5px,1.6vw,16px);color:oklch(0.4 0.02 255);margin:6px 0 0}
 
-    /* ツール本体 */
-    .tool{margin:26px 0 8px}
-    .tool-bar{display:flex;align-items:center;justify-content:flex-end;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+    /* ツール本体(ページ先頭の主役) */
+    .tool{
+      margin:18px 0 8px;padding:20px;
+      background:linear-gradient(180deg, oklch(0.99 0.003 262), oklch(0.975 0.006 262));
+      border:1px solid var(--line);border-radius:14px;
+      box-shadow:0 1px 2px oklch(0.5 0.02 255 / 0.04), 0 12px 30px oklch(0.5 0.05 262 / 0.06);
+    }
+
+    .tool-bar{display:flex;align-items:center;justify-content:flex-end;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+    .tool-bar__right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
     .root-field{display:flex;align-items:center;gap:8px}
     .root-field[hidden]{display:none}
     .root-field label{font-size:12px;color:var(--muted);font-weight:500}
@@ -154,11 +179,9 @@
     .seg button.active{background:#fff;color:oklch(0.34 0.03 255);box-shadow:0 1px 1px oklch(0.5 0.02 255 / 0.14)}
 
     .cards{display:flex;flex-direction:column;gap:16px}
-    .ccard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-    .ccard__del{position:absolute;top:9px;right:9px;z-index:2;width:24px;height:24px;border:none;border-radius:5px;background:transparent;color:oklch(0.6 0.02 255);font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
-    .ccard__del:hover{background:oklch(0.95 0.02 30);color:oklch(0.52 0.15 30)}
+    .ccard{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 1px 2px oklch(0.5 0.02 255 / 0.04)}
     .ccard__grid{display:grid;grid-template-columns:1fr 1px 1fr}
-    .ccard__col{padding:20px}
+    .ccard__col{padding:18px 20px}
     .ccard__divider{background:oklch(0.93 0.01 255)}
     .ccard__label{display:flex;align-items:baseline;gap:8px;margin-bottom:16px}
     .ccard__label b{font-size:12.5px;font-weight:600;color:oklch(0.34 0.02 255)}
@@ -169,17 +192,23 @@
     .row .field{flex:1;min-width:0}
     .row .field input{width:100%;padding:8px 34px 8px 9px;border:1px solid var(--line);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff}
 
-    .ccard__out{display:flex;align-items:center;gap:12px;padding:13px 16px;border-top:1px solid var(--line);background:var(--code-bg)}
-    .ccard__out .tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.14em;color:oklch(0.7 0.12 262);flex-shrink:0}
-    .ccard__out code{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:oklch(0.89 0.02 255);word-break:break-all;line-height:1.55}
-    .ccard__copy{flex-shrink:0;border:1px solid oklch(0.42 0.012 255);background:transparent;color:oklch(0.8 0.015 255);font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:4px}
+    /* 出力(CSS ラベルは置かず、コードとコピーを主役に) */
+    .ccard__out{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line);background:var(--code-bg)}
+    .ccard__out code{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:13px;color:oklch(0.91 0.02 255);word-break:break-all;line-height:1.55}
+    .ccard__copy{flex-shrink:0;border:1px solid oklch(0.42 0.012 255);background:transparent;color:oklch(0.82 0.015 255);font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:5px;display:inline-flex;align-items:center;gap:5px}
     .ccard__copy:hover{border-color:var(--accent-soft);background:var(--accent-soft);color:#fff}
 
-    .add-btn{align-self:flex-start;margin-top:16px;border:none;background:var(--accent-soft);color:#fff;font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:6px;display:inline-flex;align-items:center;gap:6px}
-    .add-btn:hover{background:var(--accent)}
+    /* 共通: レンジスライダー */
+    .vw-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:999px;background:var(--line);cursor:pointer;outline:none;margin:0}
+    .vw-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--accent-soft);box-shadow:0 1px 4px oklch(0.5 0.05 262 / 0.35);margin-top:-7px;cursor:pointer;transition:transform .1s}
+    .vw-range::-webkit-slider-thumb:active{transform:scale(1.12)}
+    .vw-range::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:transparent}
+    .vw-range::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--accent-soft);box-shadow:0 1px 4px oklch(0.5 0.05 262 / 0.35);cursor:pointer}
+    .vw-range::-moz-range-track{height:6px;border-radius:999px;background:transparent}
+    .range-scale{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:7px}
 
     /* 解説コンテンツ */
-    article.doc{padding:34px 0 10px}
+    article.doc{padding:30px 0 10px}
     article.doc section{padding:14px 0}
     h2{font-size:clamp(20px,2.4vw,25px);margin:30px 0 10px;letter-spacing:-0.01em;padding-bottom:8px;border-bottom:1px solid var(--line)}
     h3{font-size:16px;margin:22px 0 6px}
@@ -191,15 +220,50 @@
     .faq dt{font-weight:600;margin:18px 0 4px;font-size:15.5px}
     .faq dd{margin:0 0 6px;font-size:15px;color:oklch(0.34 0.02 255)}
 
+    /* clamp() 体感プレイグラウンド(中盤の解説) */
+    .pg{margin:18px 0 6px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px oklch(0.5 0.02 255 / 0.04)}
+    .pg__stage{min-height:92px;display:flex;align-items:center;justify-content:center;padding:12px 14px;background:oklch(0.985 0.003 262);border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px}
+    .pg__sample{font-weight:700;color:oklch(0.28 0.02 255);line-height:1.1;white-space:nowrap;transition:font-size .07s linear}
+    .pg__readout{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:16px}
+    .pg__readout b{color:var(--fg);font-variant-numeric:tabular-nums;font-size:16px}
+    .pg__device{display:inline-block;margin-left:9px;font-size:11.5px;font-weight:700;padding:2px 11px;border-radius:999px;vertical-align:middle}
+    .pg__zones{display:flex;gap:4px;margin-bottom:9px}
+    .pg__zone{flex-basis:0;text-align:center;font-size:10px;font-weight:700;color:oklch(0.36 0.04 262);padding:6px 2px;border-radius:6px;background:var(--zc);opacity:.4;transition:.15s;white-space:nowrap;overflow:hidden}
+    .pg__zone.on{opacity:1;box-shadow:0 0 0 1.5px oklch(0.5 0.1 262 / .45) inset}
+    .pg__explain{font-size:14px;color:oklch(0.34 0.02 255);margin:14px 0 0;background:oklch(0.975 0.006 262);border-left:3px solid var(--accent-soft);padding:11px 14px;border-radius:0 7px 7px 0;line-height:1.75}
+    .pg__explain b{color:var(--accent)}
+
     /* フッター */
     .site-footer{margin-top:30px;padding:26px 0 50px;border-top:1px solid var(--line);text-align:center}
     .site-footer a{font-size:12px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
     .site-footer a:hover{color:var(--accent)}
 
+    /* FV 直下に置く「使い方」(article の外なので段落スタイルを補う) */
+    .howto-fv{padding:6px 0 0}
+    .howto-fv ul{padding-left:1.3em;margin:8px 0}
+    .howto-fv li{margin:4px 0;font-size:15px;line-height:1.7}
+
+    /* スクロール誘導インジケーター(解説への導線) */
+    .scroll-cue{display:flex;flex-direction:column;align-items:center;gap:7px;margin:48px 0 10px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.03em;transition:opacity .4s ease}
+    .scroll-cue.hide{opacity:0;pointer-events:none}
+    .scroll-cue svg{display:block;color:var(--accent-soft)}
+
+    /* スクロール連動フェードイン: JS 有効かつモーション許可時のみ初期非表示にする(JS 無効時や reduced-motion では常時表示=SEO/アクセシビリティ安全) */
+    @media (prefers-reduced-motion: no-preference){
+      html.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+      html.js .reveal.in{opacity:1;transform:none}
+      .scroll-cue__chev{animation:cueBounce 1.8s ease-in-out infinite}
+    }
+    @keyframes cueBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
     @media (max-width:560px){
+      .tool{padding:14px;border-radius:12px}
+      .scroll-cue{margin:36px 0 6px}
       .ccard__grid{grid-template-columns:1fr}
       .ccard__divider{display:none}
       .ccard__col + .ccard__col{border-top:1px solid var(--line)}
+      .row .field input,.num-inp{font-size:16px}/* iOS のズーム回避 */
+      .pg__zone{font-size:8.5px;padding:6px 1px}
     }
   </style>
 </head>
@@ -207,50 +271,116 @@
 
   <header class="site-header">
     <div class="wrap">
-      <div class="logo">clamp()<span> generator</span></div>
+      <div class="logo">
+        <svg class="logo__mark" viewBox="0 0 118 32" role="img" aria-label="clamp() generator" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 8v16M8 8h7M8 24h7" stroke="#3b5bdb" stroke-width="3"/>
+            <path d="M36 8v16M36 8h-7M36 24h-7" stroke="#3b5bdb" stroke-width="3"/>
+            <path d="M14 23c6 0 7-14 14-14" stroke="#3b5bdb" stroke-width="3"/>
+            <path d="M14 23h-3M31 9h3" stroke="#9ca3af" stroke-width="2"/>
+            <circle cx="14" cy="23" r="2.3" fill="#3b5bdb" stroke="none"/>
+            <circle cx="28" cy="9" r="2.3" fill="#3b5bdb" stroke="none"/>
+          </g>
+          <text x="46" y="21.5" fill="#1f2937" font-family="'JetBrains Mono','SFMono-Regular',Consolas,monospace" font-size="15" font-weight="700">clamp()</text>
+        </svg>
+        <span>generator</span>
+      </div>
       <a class="home-link" href="https://nakaicode.com/">← nakaicode</a>
     </div>
   </header>
 
   <main class="wrap">
 
-    <div class="intro">
-      <h1>CSS clamp() ジェネレーター</h1>
-      <p class="lead">画面幅とサイズを入力するだけで、レスポンシブな <code class="inline">clamp()</code> の値を自動計算します。フォントサイズや余白の <code class="inline">clamp(vw)</code> 計算に。px / rem 切替・複数まとめ計算・ワンクリックコピーに対応した無料ツールです。</p>
+    <!-- ============ ① ジェネレーター本体(ページ先頭) ============ -->
+    <div class="pagehead">
+      <h1><span class="h1-clamp">clamp</span> かんたんジェネレーター</h1>
+      <svg class="h1-wave" viewBox="0 0 120 10" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 7 Q16 1 30 7 T58 7 T86 7 T114 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
     </div>
 
-    <!-- ============ ツール本体(JS で動的更新。初期状態はHTMLに記述) ============ -->
     <section class="tool" aria-label="clamp() 計算ツール">
       <div class="tool-bar">
-        <div class="root-field" id="rootField" hidden>
-          <label for="rootInput">ルート</label>
-          <span class="field">
-            <input class="num-inp" type="number" id="rootInput" value="16">
-            <span class="unit">px</span>
-          </span>
-        </div>
-        <div class="seg" role="tablist" aria-label="単位の切り替え">
-          <button id="unitPx" class="active" type="button">px</button>
-          <button id="unitRem" type="button">rem</button>
+        <div class="tool-bar__right">
+          <div class="root-field" id="rootField" hidden>
+            <label for="rootInput">ルート</label>
+            <span class="field">
+              <input class="num-inp" type="number" id="rootInput" value="16">
+              <span class="unit">px</span>
+            </span>
+          </div>
+          <div class="seg" role="tablist" aria-label="単位の切り替え">
+            <button id="unitPx" class="active" type="button">px</button>
+            <button id="unitRem" type="button">rem</button>
+          </div>
         </div>
       </div>
 
       <div class="cards" id="cards"><!-- カードを JS で描画 --></div>
-
-      <button class="add-btn" id="addCard" type="button">＋ カードを追加</button>
     </section>
 
-    <!-- ============ 解説コンテンツ(静的 HTML。ここが SEO の本丸) ============ -->
+    <!-- ジェネレーター直下に「使い方」を配置(ファーストビュー内に収める) -->
+    <section id="howto" class="howto-fv">
+      <h2>使い方</h2>
+      <ul>
+        <li><strong>最小側・最大側それぞれに「画面幅」と「サイズ」を入力</strong>します。最小側は小さい画面、最大側は大きい画面の値です。</li>
+        <li>右上の <code class="inline">px / rem</code> ボタンで<strong>出力単位を切り替え</strong>られます。rem を選ぶとルートフォントサイズ(既定 16px)を基準に自動換算します。</li>
+        <li><strong>「コピー」ボタン</strong>で生成された <code class="inline">clamp()</code> をクリップボードに保存できます。入力内容はブラウザに自動保存され、値はサーバーに送信されません。</li>
+        <li>挙動がイメージしづらいときは、下の<strong>「スライダーで動かして体感する clamp()」</strong>で画面幅を動かして確認できます。</li>
+      </ul>
+    </section>
+
+    <!-- スクロール誘導 + 解説エリアへの余白 -->
+    <div class="scroll-cue" id="scrollCue" aria-hidden="true">
+      <span>スクロールして詳しく</span>
+      <svg class="scroll-cue__chev" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+    </div>
+
+    <!-- ============ ② 解説コンテンツ(静的 HTML。ここが SEO の本丸) ============ -->
     <article class="doc">
 
-      <section id="about">
+      <p class="lead">画面幅とサイズを入力するだけで、レスポンシブな <code class="inline">clamp()</code> の値を自動計算します。フォントサイズや余白の <code class="inline">clamp(vw)</code> 計算に。px / rem 切替・スライダーで挙動を体感・ワンクリックコピーに対応した無料ツールです。</p>
+
+      <section id="about" class="reveal">
         <h2>CSS の clamp() 関数とは</h2>
         <p><code class="inline">clamp()</code> は、サイズを「下限・推奨値・上限」の3つで指定できる CSS 関数です。書式は次のとおりです。</p>
         <pre>clamp(最小値, 推奨値, 最大値)</pre>
         <p>推奨値が最小値より小さくなれば最小値で、最大値より大きくなれば最大値で止まります。この推奨値に <code class="inline">vw</code>(ビューポート幅の 1% を表す単位)を含めることで、画面幅に応じてフォントサイズや余白を<strong>なめらかに変化させつつ、小さすぎ・大きすぎを自動で防ぐ</strong>ことができます。メディアクエリを何段も書かずに、1行でレスポンシブなサイズを表現できるのが最大の利点です。</p>
       </section>
 
-      <section id="formula">
+      <!-- ============ 体感プレイグラウンド(clamp を知らない人向けの導入) ============ -->
+      <section id="playground" class="reveal">
+        <h2>スライダーで動かして体感する clamp()</h2>
+        <p>文章だけだとイメージしづらいので、実際に画面幅を動かして clamp() の挙動を見てみましょう。例として、見出しを <code class="inline">clamp(28px, calc(17.333px + 3.333vw), 60px)</code>(=画面幅 320px で 28px、1280px で 60px になる指定)にした場合です。下のつまみを左右に動かすと、その画面幅で見出しが実際に何 px になるかが分かります。</p>
+
+        <div class="pg">
+          <div class="pg__stage">
+            <div class="pg__sample" id="pgSample" style="font-size:42.93px">見出しのサンプル Ag</div>
+          </div>
+
+          <div class="pg__readout">
+            <span>画面幅 <b id="pgW">768</b>px<span class="pg__device" id="pgDevice" style="background:oklch(0.89 0.08 280);color:oklch(0.32 0.06 280)">タブレット</span></span>
+            <span>見出しのサイズ <b id="pgSize">42.93px</b></span>
+          </div>
+
+          <!-- 画面幅の目安を色分け表示(どれくらいの幅か直感的に)。初期状態は静的に記述し、JS は操作時に上書きする -->
+          <div class="pg__zones" id="pgZones" aria-hidden="true">
+            <div class="pg__zone" style="--zc:oklch(0.9 0.06 232);flex-grow:160">スマホ</div>
+            <div class="pg__zone" style="--zc:oklch(0.9 0.06 258);flex-grow:288">大型スマホ</div>
+            <div class="pg__zone on" style="--zc:oklch(0.89 0.08 280);flex-grow:256">タブレット</div>
+            <div class="pg__zone" style="--zc:oklch(0.89 0.08 305);flex-grow:416">ノートPC</div>
+            <div class="pg__zone" style="--zc:oklch(0.89 0.08 330);flex-grow:480">デスクトップ</div>
+          </div>
+          <input class="vw-range" type="range" id="pgRange" min="320" max="1920" step="1" value="768" aria-label="プレビューする画面幅" style="background:linear-gradient(to right, var(--accent-soft) 0%, var(--accent-soft) 28%, var(--line) 28%, var(--line) 100%)">
+          <div class="range-scale"><span>320px</span><span>1920px</span></div>
+
+          <p class="pg__explain" id="pgExplain">画面幅が 320〜1280px の範囲なので、サイズは画面幅に比例して<b>なめらかに変化中(現在 42.93px)</b>。これが clamp() の推奨値(vw)が効いている状態です。</p>
+        </div>
+
+        <p>このように clamp() は、<strong>狭い画面では下限で止まり、広い画面では上限で止まり、その間だけ画面幅に比例してなめらかに変化</strong>します。色分けはおおよその端末の目安(スマホ〜デスクトップ)です。上のジェネレーターで作った値も、まったく同じしくみで動きます。</p>
+      </section>
+
+      <section id="formula" class="reveal">
         <h2>clamp(vw) の計算式 — このツールが自動化していること</h2>
         <p>「画面幅が小さいときのサイズ」と「大きいときのサイズ」の2点を決めると、その間は一次関数(直線)で結べます。2点を <code class="inline">(W1, S1)</code>・<code class="inline">(W2, S2)</code> とすると、推奨値は次のように求まります。</p>
         <pre>傾き  slope = (S2 - S1) / (W2 - W1)
@@ -261,17 +391,7 @@
         <p>このツールは、上の <code class="inline">calc()</code> の係数計算と、px / rem の単位換算(ルートフォントサイズ基準)をまとめて自動で行います。手計算で間違えやすい傾きと切片を、入力した瞬間に正確に出力します。</p>
       </section>
 
-      <section id="howto">
-        <h2>使い方</h2>
-        <ul>
-          <li><strong>最小側・最大側それぞれに「画面幅」と「サイズ」を入力</strong>します。最小側は小さい画面、最大側は大きい画面の値です。</li>
-          <li>右上の <code class="inline">px / rem</code> ボタンで<strong>出力単位を切り替え</strong>られます。rem を選ぶとルートフォントサイズ(既定 16px)を基準に自動換算します。</li>
-          <li><strong>「コピー」ボタン</strong>で生成された <code class="inline">clamp()</code> をクリップボードに保存できます。</li>
-          <li><strong>「カードを追加」</strong>で、見出し・本文・余白など複数のサイズを一度にまとめて計算できます。入力内容はブラウザに自動保存されます。</li>
-        </ul>
-      </section>
-
-      <section id="examples">
+      <section id="examples" class="reveal">
         <h2>実例 — よく使う clamp() の値</h2>
         <p>レスポンシブ設計でそのまま使える典型値の例です。いずれも画面幅 320px〜1280px を想定しています。</p>
         <h3>見出し(h1)のフォントサイズ</h3>
@@ -283,7 +403,7 @@
         <p>本文のフォントサイズは rem 指定にしておくと、ユーザーのブラウザ文字サイズ設定にも追従でき、アクセシビリティ面で安全です。</p>
       </section>
 
-      <section id="faq">
+      <section id="faq" class="reveal">
         <h2>よくある質問(FAQ)</h2>
         <dl class="faq">
           <dt>clamp() の単位は px と rem どちらを使うべき？</dt>
@@ -314,22 +434,25 @@
   </footer>
 
   <script>
-  // ===== clamp() 計算ツール(バニラ JS。ビルド不要・依存なし) =====
+  // ===== ① clamp() ジェネレーター(バニラ JS。ビルド不要・依存なし) =====
   (function () {
     "use strict";
-    var STORAGE_KEY = "clampgen_v1";
+    var STORAGE_KEY = "clampgen_v2";
     var state = {
       unit: "px",
       root: 16,
       cards: [{ id: "c1", w1: 320, w2: 1280, s1: 24, s2: 44 }]
     };
 
-    // localStorage から復元
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         var d = JSON.parse(raw);
-        if (d && d.cards && d.cards.length) state = Object.assign(state, d);
+        if (d && d.cards && d.cards.length) {
+          state = Object.assign(state, d);
+          // 単一カードに正規化(旧バージョンで複数保存されていても先頭のみ採用)
+          state.cards = [state.cards[0]];
+        }
       }
     } catch (e) {}
 
@@ -369,13 +492,11 @@
       return e;
     }
 
-    // 「サイズ」入力欄の表示値(rem のときは換算して表示)
     function dispSize(px) {
       return state.unit === "rem" ? fmt(px / state.root, 4) : px;
     }
 
     function buildSide(c, side) {
-      // side: "min" or "max"
       var isMin = side === "min";
       var col = el("div", "ccard__col");
       var label = el("div", "ccard__label");
@@ -421,7 +542,6 @@
     }
 
     function render() {
-      // ルート入力欄の表示
       document.getElementById("rootField").hidden = state.unit !== "rem";
       document.getElementById("unitPx").classList.toggle("active", state.unit === "px");
       document.getElementById("unitRem").classList.toggle("active", state.unit === "rem");
@@ -430,16 +550,6 @@
       state.cards.forEach(function (c) {
         var card = el("div", "ccard");
 
-        if (state.cards.length > 1) {
-          var del = el("button", "ccard__del", { type: "button", title: "削除", "aria-label": "カードを削除" });
-          del.textContent = "×";
-          del.addEventListener("click", function () {
-            state.cards = state.cards.filter(function (x) { return x.id !== c.id; });
-            persist(); render();
-          });
-          card.appendChild(del);
-        }
-
         var grid = el("div", "ccard__grid");
         grid.appendChild(buildSide(c, "min"));
         grid.appendChild(el("div", "ccard__divider"));
@@ -447,41 +557,143 @@
         card.appendChild(grid);
 
         var out = el("div", "ccard__out");
-        var tag = el("span", "tag"); tag.textContent = "CSS";
         var code = el("code"); code.textContent = clampCss(c);
-        var copy = el("button", "ccard__copy", { type: "button" }); copy.textContent = "コピー";
+        var copy = el("button", "ccard__copy", { type: "button" });
+        copy.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>コピー</span>';
         copy.addEventListener("click", function () {
           var css = clampCss(c);
           try { navigator.clipboard.writeText(css); } catch (e) {}
-          copy.textContent = "コピー済";
-          setTimeout(function () { copy.textContent = "コピー"; }, 1300);
+          var lbl = copy.querySelector("span");
+          if (lbl) { lbl.textContent = "コピー済"; setTimeout(function () { lbl.textContent = "コピー"; }, 1300); }
         });
-        out.appendChild(tag); out.appendChild(code); out.appendChild(copy);
+        out.appendChild(code); out.appendChild(copy);
         card.appendChild(out);
 
         cardsEl.appendChild(card);
       });
     }
 
-    // 単位切り替え
     document.getElementById("unitPx").addEventListener("click", function () {
       state.unit = "px"; persist(); render();
     });
     document.getElementById("unitRem").addEventListener("click", function () {
       state.unit = "rem"; persist(); render();
     });
-    // ルート
     document.getElementById("rootInput").addEventListener("change", function (e) {
       state.root = Math.max(1, num(e.target.value)); persist(); render();
     });
     document.getElementById("rootInput").value = state.root;
-    // カード追加
-    document.getElementById("addCard").addEventListener("click", function () {
-      state.cards.push({ id: "c" + Date.now(), w1: 320, w2: 1280, s1: 16, s2: 24 });
-      persist(); render();
-    });
 
     render();
+  })();
+
+  // ===== ② clamp() 体感プレイグラウンド(中盤の解説。画面幅を色分けで提示) =====
+  (function () {
+    "use strict";
+    // 固定の例: clamp(28px, calc(17.333px + 3.333vw), 60px)  画面幅 320→28 / 1280→60
+    var EX = { w1: 320, w2: 1280, s1: 28, s2: 60 };
+    var RMIN = 320, RMAX = 1920;
+
+    // 画面幅の目安ゾーン(色分け)。色は端末カテゴリごとに変える
+    var ZONES = [
+      { min: 320,  max: 480,  label: "スマホ",       c: "oklch(0.9 0.06 232)" },
+      { min: 480,  max: 768,  label: "大型スマホ",   c: "oklch(0.9 0.06 258)" },
+      { min: 768,  max: 1024, label: "タブレット",   c: "oklch(0.89 0.08 280)" },
+      { min: 1024, max: 1440, label: "ノートPC",     c: "oklch(0.89 0.08 305)" },
+      { min: 1440, max: 1920, label: "デスクトップ", c: "oklch(0.89 0.08 330)" }
+    ];
+
+    var range = document.getElementById("pgRange");
+    var zonesEl = document.getElementById("pgZones");
+    var sampleEl = document.getElementById("pgSample");
+    var wEl = document.getElementById("pgW");
+    var sizeEl = document.getElementById("pgSize");
+    var deviceEl = document.getElementById("pgDevice");
+    var explainEl = document.getElementById("pgExplain");
+    if (!range) return;
+
+    function fmt(n, d) {
+      var p = Math.pow(10, d == null ? 2 : d);
+      return String(Math.round(n * p) / p);
+    }
+    function resolved(w) {
+      var slope = (EX.s2 - EX.s1) / (EX.w2 - EX.w1);
+      var b = EX.s1 - slope * EX.w1;
+      return Math.min(EX.s2, Math.max(EX.s1, b + slope * w));
+    }
+    function zoneIndex(w) {
+      for (var i = 0; i < ZONES.length; i++) {
+        if (w < ZONES[i].max || i === ZONES.length - 1) return i;
+      }
+      return ZONES.length - 1;
+    }
+
+    // ゾーンバーは静的 HTML に記述済み(SEO/CLS 対策)。JS は操作時に on を付け替えるだけ
+    var zoneEls = zonesEl.children;
+
+    function paintRange(w) {
+      var p = (w - RMIN) / (RMAX - RMIN) * 100;
+      range.style.background =
+        "linear-gradient(to right, var(--accent-soft) 0%, var(--accent-soft) " + p +
+        "%, var(--line) " + p + "%, var(--line) 100%)";
+    }
+
+    function update() {
+      var w = parseInt(range.value, 10);
+      var size = resolved(w);
+      var zi = zoneIndex(w);
+      var zone = ZONES[zi];
+
+      wEl.textContent = w;
+      sizeEl.textContent = fmt(size) + "px";
+      sampleEl.style.fontSize = size + "px";
+      deviceEl.textContent = zone.label;
+      deviceEl.style.background = zone.c;
+      deviceEl.style.color = "oklch(0.32 0.06 280)";
+
+      for (var i = 0; i < zoneEls.length; i++) {
+        zoneEls[i].classList.toggle("on", i === zi);
+      }
+
+      if (w <= EX.w1) {
+        explainEl.innerHTML = "画面幅が下限(" + EX.w1 + "px)以下なので、サイズは<b>最小値 " + EX.s1 + "px で固定</b>されています。これより画面が狭くなっても、文字はこれ以上小さくなりません。";
+      } else if (w >= EX.w2) {
+        explainEl.innerHTML = "画面幅が上限(" + EX.w2 + "px)以上なので、サイズは<b>最大値 " + EX.s2 + "px で固定</b>されています。これより画面が広くなっても、文字はこれ以上大きくなりません。";
+      } else {
+        explainEl.innerHTML = "画面幅が " + EX.w1 + "〜" + EX.w2 + "px の範囲なので、サイズは画面幅に比例して<b>なめらかに変化中(現在 " + fmt(size) + "px)</b>。これが clamp() の推奨値(vw)が効いている状態です。";
+      }
+      paintRange(w);
+    }
+
+    range.addEventListener("input", update);
+    update();
+  })();
+
+  // ===== ③ スクロール連動フェードイン & スクロール誘導インジケーター =====
+  (function () {
+    "use strict";
+    var reveals = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window && reveals.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+      for (var i = 0; i < reveals.length; i++) io.observe(reveals[i]);
+    } else {
+      // 非対応環境は常時表示(コンテンツが隠れないようフォールバック)
+      for (var j = 0; j < reveals.length; j++) reveals[j].classList.add("in");
+    }
+
+    var cue = document.getElementById("scrollCue");
+    if (cue) {
+      var onScroll = function () {
+        if (window.scrollY > 80) cue.classList.add("hide");
+        else cue.classList.remove("hide");
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
   })();
   </script>
 </body>

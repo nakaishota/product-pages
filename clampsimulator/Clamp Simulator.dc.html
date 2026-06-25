@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    input{font-family:inherit}
+    input:focus{outline:none;border-color:oklch(0.57 0.13 255)}
+    ::selection{background:oklch(0.88 0.06 255)}
+    button{font-family:inherit;cursor:pointer}
+  </style>
+</helmet>
+<div style="height:100vh;display:flex;flex-direction:column;font-family:'Noto Sans JP',system-ui,sans-serif;background:oklch(0.976 0.004 255);color:oklch(0.26 0.02 255);overflow:hidden">
+
+  <header style="background:#fff;border-bottom:1px solid oklch(0.9 0.012 255);flex-shrink:0">
+    <div style="max-width:740px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:15px 22px">
+      <div style="display:flex;align-items:center">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;letter-spacing:-0.01em;color:oklch(0.28 0.02 255)">clamp()<span style="color:oklch(0.55 0.02 255);font-weight:500"> generator</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <sc-if value="{{ showRoot }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:oklch(0.52 0.02 255);font-weight:500">ルート</span>
+          <span style="position:relative;display:flex;align-items:center">
+            <input type="number" value="{{ root }}" onChange="{{ onRoot }}" style="width:70px;padding:7px 28px 7px 10px;border:1px solid oklch(0.88 0.012 255);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff" />
+            <span style="position:absolute;right:9px;font-family:'JetBrains Mono',monospace;font-size:11px;color:oklch(0.55 0.02 255);pointer-events:none">px</span>
+          </span>
+        </div>
+        </sc-if>
+        <div style="display:flex;padding:3px;background:oklch(0.94 0.012 255);border-radius:5px;gap:2px">
+          <button onClick="{{ onUnitPx }}" style="{{ pxBtnStyle }}">px</button>
+          <button onClick="{{ onUnitRem }}" style="{{ remBtnStyle }}">rem</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex:1;overflow:auto;padding:26px 18px;min-height:0">
+    <div style="max-width:740px;margin:0 auto;display:flex;flex-direction:column;gap:16px">
+
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="1">
+        <div style="position:relative;background:#fff;border:1px solid oklch(0.9 0.012 255);border-radius:6px;overflow:hidden">
+
+          <sc-if value="{{ c.canDelete }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ c.onDelete }}" title="削除" style="position:absolute;top:9px;right:9px;z-index:2;width:24px;height:24px;border:none;border-radius:5px;background:transparent;color:oklch(0.6 0.02 255);font-size:15px;display:flex;align-items:center;justify-content:center" style-hover="background:oklch(0.95 0.02 30);color:oklch(0.52 0.15 30)">×</button>
+          </sc-if>
+
+          <div style="display:grid;grid-template-columns:1fr 1px 1fr">
+
+            <div style="padding:22px 20px">
+              <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:18px">
+                <span style="font-size:12.5px;font-weight:600;color:oklch(0.34 0.02 255)">最小側</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.1em;color:oklch(0.62 0.04 255)">MIN</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:15px">
+                <label style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:11.5px;color:oklch(0.5 0.02 255);width:42px;flex-shrink:0">画面幅</span>
+                  <span style="position:relative;display:flex;align-items:center;flex:1;min-width:0">
+                    <input type="number" value="{{ c.w1 }}" onChange="{{ c.onW1 }}" style="width:100%;padding:8px 28px 8px 9px;border:1px solid oklch(0.88 0.012 255);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff" />
+                    <span style="position:absolute;right:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:oklch(0.58 0.02 255);pointer-events:none">px</span>
+                  </span>
+                </label>
+                <label style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:11.5px;color:oklch(0.5 0.02 255);width:42px;flex-shrink:0">サイズ</span>
+                  <span style="position:relative;display:flex;align-items:center;flex:1;min-width:0">
+                    <input type="number" step="{{ c.step }}" value="{{ c.dS1 }}" onChange="{{ c.onS1 }}" style="width:100%;padding:8px 34px 8px 9px;border:1px solid oklch(0.88 0.012 255);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff" />
+                    <span style="position:absolute;right:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:oklch(0.58 0.02 255);pointer-events:none">{{ unitLabel }}</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div style="background:oklch(0.93 0.01 255)"></div>
+
+            <div style="padding:22px 20px">
+              <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:18px">
+                <span style="font-size:12.5px;font-weight:600;color:oklch(0.34 0.02 255)">最大側</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.1em;color:oklch(0.62 0.04 255)">MAX</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:15px">
+                <label style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:11.5px;color:oklch(0.5 0.02 255);width:42px;flex-shrink:0">画面幅</span>
+                  <span style="position:relative;display:flex;align-items:center;flex:1;min-width:0">
+                    <input type="number" value="{{ c.w2 }}" onChange="{{ c.onW2 }}" style="width:100%;padding:8px 28px 8px 9px;border:1px solid oklch(0.88 0.012 255);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff" />
+                    <span style="position:absolute;right:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:oklch(0.58 0.02 255);pointer-events:none">px</span>
+                  </span>
+                </label>
+                <label style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:11.5px;color:oklch(0.5 0.02 255);width:42px;flex-shrink:0">サイズ</span>
+                  <span style="position:relative;display:flex;align-items:center;flex:1;min-width:0">
+                    <input type="number" step="{{ c.step }}" value="{{ c.dS2 }}" onChange="{{ c.onS2 }}" style="width:100%;padding:8px 34px 8px 9px;border:1px solid oklch(0.88 0.012 255);border-radius:5px;font-family:'Inter','Noto Sans JP',sans-serif;font-variant-numeric:tabular-nums;font-size:13px;font-weight:500;background:#fff" />
+                    <span style="position:absolute;right:8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:oklch(0.58 0.02 255);pointer-events:none">{{ unitLabel }}</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 16px 13px 18px;border-top:1px solid oklch(0.9 0.012 255);background:oklch(0.255 0.014 255)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:0.14em;color:oklch(0.66 0.11 255);flex-shrink:0">CSS</span>
+            <code style="flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:oklch(0.89 0.02 255);word-break:break-all;line-height:1.55">{{ c.css }}</code>
+            <button onClick="{{ c.onCopy }}" style="flex-shrink:0;border:1px solid oklch(0.42 0.012 255);background:transparent;color:oklch(0.8 0.015 255);font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:4px" style-hover="border-color:oklch(0.62 0.15 255);background:oklch(0.62 0.15 255);color:#fff">{{ c.copyLabel }}</button>
+          </div>
+        </div>
+      </sc-for>
+
+      <button onClick="{{ onAddCard }}" style="align-self:flex-start;border:none;background:oklch(0.62 0.15 255);color:#fff;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:5px;display:inline-flex;align-items:center;gap:6px" style-hover="background:oklch(0.56 0.15 255)">＋ カードを追加</button>
+
+      <div style="margin-top:14px;padding-top:16px;border-top:1px solid oklch(0.91 0.012 255);display:flex;justify-content:center">
+        <a href="https://nakaicode.com/" target="_blank" rel="noopener noreferrer" style="font-size:12px;color:oklch(0.54 0.02 255);text-decoration:none;display:inline-flex;align-items:center;gap:5px;letter-spacing:0.01em;white-space:nowrap" style-hover="color:oklch(0.55 0.14 255)">
+          Made by nakaicode
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = {
+      unit:'px', root:16, copiedId:null,
+      cards:[ {id:'c1', name:'見出し', w1:320, w2:1280, s1:24, s2:44} ],
+    };
+  }
+  componentDidMount(){
+    try{ const raw=localStorage.getItem('clampsim_v4'); if(raw){ const d=JSON.parse(raw); this.setState({...d, copiedId:null}); } }catch(e){}
+  }
+  persist(){ try{ const {copiedId,...rest}=this.state; localStorage.setItem('clampsim_v4', JSON.stringify(rest)); }catch(e){} }
+  update(p){ this.setState(p, ()=>this.persist()); }
+  num(v){ const n=parseFloat(v); return isFinite(n)?n:0; }
+  toPx(v){ const n=this.num(v); return this.state.unit==='rem'?n*this.state.root:n; }
+
+  setCard(id,patch){ this.setState(st=>({cards:st.cards.map(c=>c.id===id?{...c,...patch}:c)}), ()=>this.persist()); }
+  addCard(){ this.setState(st=>({cards:[...st.cards,{id:'c'+Date.now(),name:'新しいサイズ',w1:320,w2:1280,s1:16,s2:24}]}), ()=>this.persist()); }
+  removeCard(id){ this.setState(st=>({cards:st.cards.filter(c=>c.id!==id)}), ()=>this.persist()); }
+  copy(id,css){ try{navigator.clipboard.writeText(css);}catch(e){} this.setState({copiedId:id}); clearTimeout(this._ct); this._ct=setTimeout(()=>this.setState({copiedId:null}),1300); }
+
+  fmt(n,d){ const p=Math.pow(10,d==null?3:d); let x=Math.round(n*p)/p; if(Object.is(x,-0))x=0; return String(x); }
+  clampCss(c){
+    const {unit,root}=this.state;
+    if(c.w2<=c.w1) return '/* 「画面幅 最小 < 最大」にしてください */';
+    const slope=(c.s2-c.s1)/(c.w2-c.w1);
+    const vw=slope*100, b=c.s1-slope*c.w1;
+    const lo=Math.min(c.s1,c.s2),hi=Math.max(c.s1,c.s2);
+    const u=unit==='rem'?'rem':'px';
+    const conv=x=>unit==='rem'?x/root:x;
+    const B=conv(b), C=unit==='rem'?vw/root:vw;
+    const calc=C>=0?`calc(${this.fmt(B)}${u} + ${this.fmt(C)}vw)`:`calc(${this.fmt(B)}${u} - ${this.fmt(Math.abs(C))}vw)`;
+    return `clamp(${this.fmt(conv(lo))}${u}, ${calc}, ${this.fmt(conv(hi))}${u})`;
+  }
+
+  renderVals(){
+    const s=this.state, unit=s.unit, root=s.root;
+    const unitLabel=unit==='rem'?'rem':'px';
+    const cards=s.cards.map((c,i)=>({
+      id:c.id, name:c.name, idx:String(i+1).padStart(2,'0'),
+      w1:c.w1, w2:c.w2,
+      dS1:unit==='rem'?this.fmt(c.s1/root,4):c.s1,
+      dS2:unit==='rem'?this.fmt(c.s2/root,4):c.s2,
+      step:unit==='rem'?0.05:1,
+      css:this.clampCss(c),
+      copyLabel:s.copiedId===c.id?'コピー済':'コピー',
+      canDelete:s.cards.length>1,
+      onName:e=>this.setCard(c.id,{name:e.target.value}),
+      onW1:e=>this.setCard(c.id,{w1:this.num(e.target.value)}),
+      onW2:e=>this.setCard(c.id,{w2:this.num(e.target.value)}),
+      onS1:e=>this.setCard(c.id,{s1:this.toPx(e.target.value)}),
+      onS2:e=>this.setCard(c.id,{s2:this.toPx(e.target.value)}),
+      onCopy:()=>this.copy(c.id,this.clampCss(c)),
+      onDelete:()=>this.removeCard(c.id),
+    }));
+    const segBase='padding:7px 15px;border:none;border-radius:4px;font-size:13px;font-weight:600;';
+    const active=segBase+'background:#fff;color:oklch(0.38 0.03 255);box-shadow:0 1px 1px oklch(0.5 0.02 255 / 0.14);';
+    const idle=segBase+'background:transparent;color:oklch(0.55 0.02 255);';
+    return {
+      unitLabel, root, showRoot:unit==='rem',
+      onRoot:e=>this.update({root:Math.max(1,this.num(e.target.value))}),
+      pxBtnStyle:unit==='px'?active:idle, remBtnStyle:unit==='rem'?active:idle,
+      onUnitPx:()=>this.update({unit:'px'}), onUnitRem:()=>this.update({unit:'rem'}),
+      cards, onAddCard:()=>this.addCard(),
+    };
+  }
+}
+</script>
+</body>
+</html>
