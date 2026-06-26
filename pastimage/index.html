@@ -3,39 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pastimage — just paste, mark, copy</title>
+  <title>pastimage — 最小手順で画像に注釈してコピー｜ブラウザ完結のスクリーンショット注釈ツール</title>
+  <link rel="canonical" href="https://nakaicode.com/pastimage/" />
   <link rel="icon" type="image/jpeg" href="avatar.jpg" />
   <link rel="apple-touch-icon" href="avatar.jpg" />
+  <meta name="theme-color" content="#0a0a0a" />
   <meta
     name="description"
-    content="ペーストした画像に赤枠とテキストで素早く注釈して、⌘Cでクリップボードに戻すだけの開発者向けWebツール。ログイン不要・サーバ送信なし。"
+    content="クリップボードから画像をペーストして、矩形・テキスト・塗りつぶしで素早く注釈し、⌘C / Ctrl+C でクリップボードへ書き戻せるブラウザ完結のスクリーンショット注釈ツール。ログイン不要・サーバへ画像を送信しません。"
   />
-  <meta property="og:title" content="pastimage — just paste, mark, copy" />
-  <meta
-    property="og:description"
-    content="ペーストした画像に赤枠とテキストで注釈して、⌘Cでクリップボードに戻すだけ。"
-  />
+
+  <!-- OGP -->
+  <meta property="og:site_name" content="nakaicode" />
+  <meta property="og:locale" content="ja_JP" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://nakaicode.com/pastimage/" />
+  <meta property="og:title" content="pastimage — 最小手順で画像に注釈してコピー" />
   <meta
-    property="og:image"
-    content="https://nakaicode.com/pastimage/og-image.png"
+    property="og:description"
+    content="クリップボードから画像をペーストして、矩形・テキスト・塗りつぶしで素早く注釈し、⌘C / Ctrl+C でクリップボードへ書き戻せるブラウザ完結のスクリーンショット注釈ツール。"
   />
+  <meta property="og:image" content="https://nakaicode.com/pastimage/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta
+    property="og:image:alt"
+    content="pastimage — ⌘V → 赤枠で注釈 → ⌘C のキーボードショートカット図解"
+  />
+
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="pastimage — just paste, mark, copy" />
+  <meta name="twitter:title" content="pastimage — 最小手順で画像に注釈してコピー" />
   <meta
     name="twitter:description"
-    content="ペーストした画像に赤枠とテキストで注釈して、⌘Cでクリップボードに戻すだけ。"
+    content="クリップボードから画像をペーストして注釈し、⌘C で書き戻すブラウザ完結のスクリーンショット注釈ツール。ログイン不要・サーバ送信なし。"
   />
-  <meta
-    name="twitter:image"
-    content="https://nakaicode.com/pastimage/og-image.png"
-  />
+  <meta name="twitter:image" content="https://nakaicode.com/pastimage/og-image.png" />
+
+  <!-- 構造化データ: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "pastimage",
+    "alternateName": "ペーストイメージ",
+    "url": "https://nakaicode.com/pastimage/",
+    "description": "クリップボードから画像をペーストして矩形・テキスト・塗りつぶしで素早く注釈し、⌘Cでクリップボードへ書き戻せるブラウザ完結のスクリーンショット注釈ツール。",
+    "applicationCategory": "MultimediaApplication",
+    "applicationSubCategory": "ScreenshotAnnotation",
+    "operatingSystem": "Any (modern browser)",
+    "browserRequirements": "Requires JavaScript and Clipboard API support (Chrome, Edge, Firefox, Safari).",
+    "image": "https://nakaicode.com/pastimage/og-image.png",
+    "inLanguage": "ja",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "なかい",
+      "url": "https://nakaicode.com/"
+    },
+    "creator": {
+      "@type": "Person",
+      "name": "なかい",
+      "url": "https://nakaicode.com/"
+    },
+    "featureList": [
+      "クリップボードからの画像ペースト",
+      "ドラッグ&ドロップでの画像読み込み",
+      "矩形の枠線と塗りつぶしによる注釈",
+      "テキスト注釈（フォントサイズと色を調整可能）",
+      "選択・移動・リサイズ・アンドゥ",
+      "⌘C / Ctrl+C でクリップボードに書き戻し",
+      "PNGとしての名前を付けて保存",
+      "完全クライアントサイド・サーバへの画像送信なし"
+    ]
+  }
+  </script>
+
+  <!-- 構造化データ: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "ポートフォリオ",
+        "item": "https://nakaicode.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "pastimage",
+        "item": "https://nakaicode.com/pastimage/"
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="empty" id="empty">
-    <div class="empty-title">最小手順で画像に注釈してコピー</div>
+    <h1 class="empty-title">最小手順で画像に注釈してコピー</h1>
     <ol class="empty-steps">
       <li><b>1</b>画像をペースト（ドラッグ&ドロップでも可）</li>
       <li><b>2</b>マウスドラッグで矩形を描画</li>
