@@ -754,6 +754,28 @@ document.querySelectorAll(".fill-swatch").forEach((b) => {
 
 saveBtn.addEventListener("click", saveAs);
 
+const SHARE_URL = "https://nakaicode.com/pastimage/";
+const SHARE_TEXT =
+  "pastimage — 最小手順で画像に注釈してコピー / ブラウザ完結のスクショ注釈ツール";
+
+document.getElementById("shareTwitter").addEventListener("click", () => {
+  const url =
+    "https://twitter.com/intent/tweet?text=" +
+    encodeURIComponent(SHARE_TEXT) +
+    "&url=" +
+    encodeURIComponent(SHARE_URL);
+  window.open(url, "_blank", "noopener,noreferrer");
+});
+
+document.getElementById("copyLink").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(SHARE_URL);
+    toast("リンクをコピーしました");
+  } catch (err) {
+    toast("コピー失敗: " + (err.message || err), true);
+  }
+});
+
 let dragCounter = 0;
 document.addEventListener("dragenter", (e) => {
   if (!e.dataTransfer || !Array.from(e.dataTransfer.types || []).includes("Files")) return;
