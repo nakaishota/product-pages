@@ -6,6 +6,8 @@
   <title>なかい | Web Production Engineer — Portfolio</title>
   <meta name="description" content="必要なものだけを、シンプルに。AIを相棒に、最短で形にする。なかいのポートフォリオサイトです。">
   <link rel="canonical" href="https://nakaicode.com/">
+  <link rel="icon" type="image/jpeg" href="./images/avatar.jpg">
+  <link rel="apple-touch-icon" href="./images/avatar.jpg">
   <meta property="og:title" content="なかい | Web Production Engineer — Portfolio">
   <meta property="og:description" content="必要なものだけを、シンプルに。AIを相棒に、最短で形にする。">
   <meta property="og:image" content="https://nakaicode.com/images/hero-room.jpg">
@@ -134,7 +136,7 @@
     }
     main {
       width: 100%;
-      max-width: 760px;
+      max-width: 880px;
       color: #2a2a28;
     }
     .section-title {
@@ -317,23 +319,26 @@
     }
     .works__list {
       display: grid;
+      grid-template-columns: repeat(3, 1fr);
       grid-auto-rows: 1fr;
-      gap: 44px;
+      gap: 24px;
     }
     .work {
       display: flex;
-      gap: 22px;
-      align-items: stretch;
-      padding: 16px;
-      margin: -16px;
+      flex-direction: column;
+      gap: 12px;
+      padding: 14px;
       border-radius: 10px;
       transition: background 0.25s ease;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
     }
     .work:hover {
       background: rgba(40, 50, 70, 0.045);
     }
     .work__thumb {
-      flex: 0 0 172px;
+      width: 100%;
       aspect-ratio: 16 / 10;
       border: 1px solid #e2e6ee;
       border-radius: 6px;
@@ -346,20 +351,12 @@
       object-position: top;
       display: block;
     }
-    /* PC(横並び): サムネをカード高さに合わせて伸ばし、隙間をなくす */
-    @media (min-width: 561px) {
-      .work__thumb {
-        aspect-ratio: auto;
-        align-self: stretch;
-      }
-    }
     .work__body {
       flex: 1;
       min-width: 0;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding-top: 2px;
     }
     .work__title {
       margin: 0;
@@ -368,9 +365,13 @@
     }
     .work__desc {
       margin: 0;
-      font-size: 13px;
+      font-size: 12.5px;
       color: #6f6f69;
       line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
     .work__tags {
       display: flex;
@@ -468,7 +469,7 @@
     }
 
     .license-dialog {
-      width: min(440px, calc(100vw - 32px));
+      width: min(560px, calc(100vw - 32px));
       padding: 0;
       border: 0;
       border-radius: 14px;
@@ -537,21 +538,21 @@
       background: #e7e4dc;
     }
 
+    @media (max-width: 720px) {
+      .works__list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
     @media (max-width: 560px) {
       .fv__inner {
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
       }
-      /* スマホ(縦積み): 高さ統一を解除し、各カードは内容なりの高さに */
+      /* スマホ(縦積み): 1列に、高さ統一を解除 */
       .works__list {
+        grid-template-columns: 1fr;
         grid-auto-rows: auto;
-      }
-      .work {
-        flex-direction: column;
-      }
-      .work__thumb {
-        flex: none;
       }
       .career__summary {
         flex-wrap: wrap;
@@ -615,7 +616,7 @@
               <img src="./images/works/clamp-generator.svg" alt="CSS clamp() ジェネレーターのUIサムネイル" loading="lazy" style="object-position: center;">
             </div>
             <div class="work__body">
-              <h3 class="work__title">CSS clamp() ジェネレーター(自社プロダクト)</h3>
+              <h3 class="work__title">CSS clamp() ジェネレーター</h3>
               <p class="work__desc">画面幅とサイズから、レスポンシブな CSS <code>clamp()</code> の値を自動計算する Web ツール。SEO を意識し、解説コンテンツを静的 HTML に直書きしたうえで、メタタグ・OGP・構造化データ(JSON-LD / FAQPage)・sitemap まで実装。ビルド工程なしの素の HTML/CSS/JS で構築。</p>
               <div class="work__tags">
                 <span class="tag tag--tech">HTML</span>
@@ -630,13 +631,13 @@
           -->
           <!-- /TODO[clamp-generator-hidden] -->
 
-          <article class="work">
+          <a class="work" href="./pastimage/" target="_blank" rel="noopener">
             <div class="work__thumb">
               <img src="./images/works/pastimage.png" alt="pastimage のサムネイル" loading="lazy" style="object-position: center;">
             </div>
             <div class="work__body">
-              <h3 class="work__title">pastimage(自社プロダクト)</h3>
-              <p class="work__desc">画像をペーストして赤枠やテキストで素早く注釈し、もう一度クリップボードに書き戻すだけの開発者向け Web ツール。ログイン不要・サーバへ画像を一切送らない完全クライアントサイド実装。Clipboard API と Canvas API を直接叩いて構築。ビルド工程なしの素の HTML/CSS/JS。</p>
+              <h3 class="work__title">pastimage</h3>
+              <p class="work__desc">画像をペーストして赤枠やテキストで注釈し、⌘C でコピー。3 手で完結する開発者向け Web ツール。画像はサーバへ送らない完全クライアントサイド実装。</p>
               <div class="work__tags">
                 <span class="tag tag--tech">HTML</span>
                 <span class="tag tag--tech">CSS</span>
@@ -645,9 +646,9 @@
                 <span class="tag tag--ai">AI活用</span>
                 <span class="tag tag--status">公開中</span>
               </div>
-              <a class="work__link" href="./pastimage/" target="_blank" rel="noopener">サイトを見る →</a>
+              <span class="work__link">サイトを見る →</span>
             </div>
-          </article>
+          </a>
 
           <!--
             TODO[voiceon-hidden]: 一時的にポートフォリオから非掲載。
@@ -662,7 +663,7 @@
               <img src="./images/works/voiceon.jpg" alt="VoiceOn 録音HUD のスクリーンショット" loading="lazy">
             </div>
             <div class="work__body">
-              <h3 class="work__title">VoiceOn(自社プロダクト・OSS)</h3>
+              <h3 class="work__title">VoiceOn(OSS)</h3>
               <p class="work__desc">「英数」キーを押している間だけ音声入力し、離すとカーソル位置に確定テキストを一括挿入する macOS 常駐アプリ。Apple の Speech で完全無料、認識結果を <code>CGEvent</code> のキー入力として送るのでターミナル含めほぼ全アプリで動作。語彙レビューはローカルの <code>claude</code> CLI で誤変換語を抽出して認識を補強。Swift / SwiftUI 製のオープンソース。</p>
               <div class="work__tags">
                 <span class="tag tag--tech">Swift</span>
@@ -677,13 +678,13 @@
           -->
           <!-- /TODO[voiceon-hidden] -->
 
-          <article class="work">
+          <a class="work" href="https://nakaishota.github.io/kanricost/" target="_blank" rel="noopener">
             <div class="work__thumb">
               <img src="./images/works/kanricost.svg" alt="管理コスト診断のサムネイル" loading="lazy" style="object-position: center;">
             </div>
             <div class="work__body">
-              <h3 class="work__title">管理コスト診断(自社プロダクト)</h3>
-              <p class="work__desc">「モノ・通知・予定・契約を、どれだけ“持ちたくない”か」を日常のシナリオから診断し、ミニマリスト度を占う Web 診断。100問プールからランダム出題し、結果はタイプ分類とスクショ用カードで表示。React + TypeScript で構築。</p>
+              <h3 class="work__title">管理コスト診断</h3>
+              <p class="work__desc">「どれだけ“持ちたくない”か」を 100 問プールからランダム出題するミニマリスト度占い。所要 5〜10 分で診断でき、結果はタイプ分類とスクショ用カードで表示する React + TypeScript 製の Web 診断。</p>
               <div class="work__tags">
                 <span class="tag tag--tech">React</span>
                 <span class="tag tag--tech">TypeScript</span>
@@ -691,57 +692,64 @@
                 <span class="tag tag--ai">AI活用</span>
                 <span class="tag tag--status">公開中</span>
               </div>
-              <a class="work__link" href="https://nakaishota.github.io/kanricost/" target="_blank" rel="noopener">サイトを見る →</a>
+              <span class="work__link">サイトを見る →</span>
             </div>
-          </article>
+          </a>
 
-          <article class="work">
-            <div class="work__thumb">
-              <img src="./images/works/homeride.jpg" alt="HomeRide ランディングページのスクリーンショット" loading="lazy">
-            </div>
-            <div class="work__body">
-              <h3 class="work__title">HomeRide(自社プロダクト)</h3>
-              <p class="work__desc">「ロック画面だけで、乗換が完結。」がコンセプトの iOS 乗換ナビアプリ公式 LP。画面モックを画像なしの CSS のみで描画。</p>
-              <div class="work__tags">
-                <span class="tag tag--ai">AI活用</span>
-                <span class="tag tag--status">アプリ開発中</span>
-              </div>
-              <a class="work__link" href="./homeride/" target="_blank" rel="noopener">サイトを見る →</a>
-            </div>
-          </article>
-
-          <article class="work">
-            <div class="work__thumb">
-              <img src="./images/works/onetimer.jpg" alt="OneTimer ランディングページのスクリーンショット" loading="lazy">
-            </div>
-            <div class="work__body">
-              <h3 class="work__title">OneTimer(自社プロダクト)</h3>
-              <p class="work__desc">ロック画面・コントロールセンターからワンタップでタイマーを開始できる iOS アプリの公式 LP。App Store 公開に向け準備中。</p>
-              <div class="work__tags">
-                <span class="tag tag--ai">AI活用</span>
-                <span class="tag tag--status">アプリ開発中</span>
-              </div>
-              <a class="work__link" href="./onetimer/" target="_blank" rel="noopener">サイトを見る →</a>
-            </div>
-          </article>
-
-          <article class="work">
+          <a class="work" href="./onomichi/" target="_blank" rel="noopener">
             <div class="work__thumb">
               <img src="./images/works/onomichi.jpg" alt="見つけて尾道レトロキャンペーン ランディングページのスクリーンショット" loading="lazy">
             </div>
             <div class="work__body">
-              <h3 class="work__title">尾道レトロキャンペーンLP(サンプル)</h3>
+              <h3 class="work__title">尾道レトロキャンペーンLP(架空)</h3>
               <p class="work__desc">架空の Instagram 投稿キャンペーンのランディングページ。Swiper によるスライダー、モーダル、スクロール演出を実装。</p>
               <div class="work__tags">
                 <span class="tag tag--tech">HTML</span>
                 <span class="tag tag--tech">CSS</span>
                 <span class="tag tag--tech">JavaScript</span>
                 <span class="tag tag--tech">jQuery</span>
-                <span class="tag tag--status">サンプル(架空)</span>
+                <span class="tag tag--status">架空</span>
               </div>
-              <a class="work__link" href="./onomichi/" target="_blank" rel="noopener">サイトを見る →</a>
+              <span class="work__link">サイトを見る →</span>
             </div>
-          </article>
+          </a>
+
+        </div>
+      </section>
+
+      <section class="works reveal">
+        <h2 class="section-title">IN PROGRESS <span>開発中</span></h2>
+        <div class="works__list">
+
+          <a class="work" href="./homeride/" target="_blank" rel="noopener">
+            <div class="work__thumb">
+              <img src="./images/works/homeride.jpg" alt="HomeRide ランディングページのスクリーンショット" loading="lazy">
+            </div>
+            <div class="work__body">
+              <h3 class="work__title">HomeRide</h3>
+              <p class="work__desc">「ロック画面だけで、乗換が完結。」がコンセプトの iOS 乗換ナビアプリ公式 LP。画面モックを画像なしの CSS のみで描画。</p>
+              <div class="work__tags">
+                <span class="tag tag--ai">AI活用</span>
+                <span class="tag tag--status">アプリ開発中</span>
+              </div>
+              <span class="work__link">サイトを見る →</span>
+            </div>
+          </a>
+
+          <a class="work" href="./onetimer/" target="_blank" rel="noopener">
+            <div class="work__thumb">
+              <img src="./images/works/onetimer.jpg" alt="OneTimer ランディングページのスクリーンショット" loading="lazy">
+            </div>
+            <div class="work__body">
+              <h3 class="work__title">OneTimer</h3>
+              <p class="work__desc">ロック画面・コントロールセンターからワンタップでタイマーを開始できる iOS アプリの公式 LP。App Store 公開に向け準備中。</p>
+              <div class="work__tags">
+                <span class="tag tag--ai">AI活用</span>
+                <span class="tag tag--status">アプリ開発中</span>
+              </div>
+              <span class="work__link">サイトを見る →</span>
+            </div>
+          </a>
 
         </div>
       </section>
